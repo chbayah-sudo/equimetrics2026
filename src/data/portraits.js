@@ -1,4 +1,4 @@
-const TOTAL_PORTRAITS = 23;
+const TOTAL_PORTRAITS = 29;
 
 // Deterministic hash so same horse always gets same portrait
 function hashName(name) {

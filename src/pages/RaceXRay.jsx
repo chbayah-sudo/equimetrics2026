@@ -17,6 +17,11 @@ const TRACK_NAMES = {
   PRX: 'Parx', MVR: 'Mahoning Valley',
 };
 
+const RACE_PHOTOS = [
+  '/portraits/horse-24.jpg', '/portraits/horse-25.jpg', '/portraits/horse-26.jpg',
+  '/portraits/horse-27.jpg', '/portraits/horse-28.jpg', '/portraits/horse-29.jpg',
+];
+
 const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
 
 const CustomTip = ({ active, payload, label }) => {
@@ -447,13 +452,13 @@ export default function RaceXRay() {
           <motion.div key="browse" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
             <div className="label" style={{ marginBottom: 16, fontSize: 12 }}>Recent GPS Races</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
-              {topRaces.map(r => {
+              {topRaces.map((r, idx) => {
                 const w = [...r.horses].sort((a, b) => (a.position || 99) - (b.position || 99))[0];
                 return (
                   <button key={r.id} onClick={() => selectRace(r)} className="card"
                     style={{ padding: 0, textAlign: 'left', cursor: 'pointer', background: '#141A10', overflow: 'hidden' }}>
                     <div style={{ position: 'relative', height: 140, overflow: 'hidden' }}>
-                      <img src={w ? getPortrait(w.name) : ''} alt=""
+                      <img src={RACE_PHOTOS[idx % RACE_PHOTOS.length]} alt=""
                         style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', filter: 'brightness(0.4) saturate(0.5)' }} />
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 20%, rgba(20,26,16,0.95) 100%)' }} />
                       <div style={{ position: 'absolute', bottom: 14, left: 16, right: 16 }}>
