@@ -89,18 +89,10 @@ export default function HorseLLM() {
         ...newMessages.slice(-10).map(m => ({ role: m.role, content: m.content })),
       ];
 
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: apiMessages,
-          max_tokens: 400,
-          temperature: 0.7,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: apiMessages }),
       });
 
       const data = await res.json();
