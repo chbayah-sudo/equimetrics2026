@@ -8,6 +8,7 @@ import HorseProfiles from './pages/Profiles';
 import Forecast from './pages/Preview';
 import GPSEdge from './pages/Insights';
 import HorseLLM from './pages/HorseLLM';
+import StableMatch from './pages/StableMatch';
 
 class ErrorBoundary extends Component {
   constructor(props) { super(props); this.state = { hasError: false, error: null }; }
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/forecast" element={<Forecast />} />
             <Route path="/gps-edge" element={<GPSEdge />} />
             <Route path="/horsellm" element={<HorseLLM />} />
+            <Route path="/stable-match" element={<StableMatch />} />
           </Routes>
         </div>
       </Router>
