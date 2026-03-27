@@ -349,34 +349,33 @@ export default function Profiles() {
           /* Browse */
           <motion.div key="browse" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
             <div className="label" style={{ marginBottom: 16, fontSize: 12 }}>Top-rated horses</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16 }}>
               {topHorses.map(p => {
                 const sc = SC[p.style] || '#8A847E';
                 return (
                   <button key={p.name} onClick={() => selectHorse(p.name)} className="card"
                     style={{ padding: 0, textAlign: 'left', cursor: 'pointer', background: '#141A10', overflow: 'hidden' }}>
-                    <div style={{ position: 'relative', height: 130, overflow: 'hidden' }}>
-                      <img src={getPortrait(p.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', filter: 'brightness(0.4) saturate(0.5)' }} />
-                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 20%, rgba(20,26,16,0.95) 100%)' }} />
+                    {/* Square portrait */}
+                    <div style={{ position: 'relative', paddingBottom: '100%', overflow: 'hidden' }}>
+                      <img src={getPortrait(p.name)} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 25%', filter: 'brightness(0.45) saturate(0.55)' }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 30%, rgba(20,26,16,0.97) 100%)' }} />
                       {p.gpsScore != null && (
-                        <div style={{ position: 'absolute', top: 10, right: 10, fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: p.gpsScore >= 85 ? '#C59757' : '#8A847E', background: 'rgba(13,17,10,0.7)', padding: '4px 10px', borderRadius: 3, backdropFilter: 'blur(4px)' }}>
+                        <div style={{ position: 'absolute', top: 12, right: 12, fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 600, color: p.gpsScore >= 85 ? '#C59757' : '#8A847E', background: 'rgba(13,17,10,0.7)', padding: '5px 12px', borderRadius: 3, backdropFilter: 'blur(4px)' }}>
                           {p.gpsScore}
                         </div>
                       )}
-                      <div style={{ position: 'absolute', bottom: 10, left: 14, right: 14 }}>
-                        <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{p.name}</div>
-                      </div>
-                    </div>
-                    <div style={{ padding: '12px 14px 14px' }}>
-                      <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 8 }}>
-                        {p.style && <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color: sc, background: `${sc}12` }}>{p.style === 'Front Runner' ? 'Speed' : p.style}</span>}
-                        <span style={{ fontSize: 12, color: '#5A5550' }}>{p.record}</span>
-                        <span style={{ fontSize: 12, color: '#C59757' }}>${p.totalEarnings?.toLocaleString()}</span>
-                      </div>
-                      <div style={{ display: 'flex', gap: 16, fontSize: 12, color: '#5A5550' }}>
-                        <span>{p.numRaces} races</span>
-                        {p.hasGPS && <span style={{ color: '#52B788' }}>{p.numGPSRaces} GPS</span>}
-                        <span>Avg fin: {p.avgFinish || '—'}</span>
+                      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px 16px 14px' }}>
+                        <div style={{ fontSize: 18, fontWeight: 600, color: '#D6D1CC', marginBottom: 8, textShadow: '0 1px 6px rgba(0,0,0,0.6)' }}>{p.name}</div>
+                        <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 6 }}>
+                          {p.style && <span style={{ fontSize: 10, padding: '3px 8px', borderRadius: 2, color: sc, background: `${sc}15`, backdropFilter: 'blur(4px)' }}>{p.style === 'Front Runner' ? 'Speed' : p.style}</span>}
+                          <span style={{ fontSize: 11, color: '#8A847E' }}>{p.record}</span>
+                          <span style={{ fontSize: 11, color: '#C59757' }}>${p.totalEarnings?.toLocaleString()}</span>
+                        </div>
+                        <div style={{ display: 'flex', gap: 12, fontSize: 11, color: '#5A5550' }}>
+                          <span>{p.numRaces} races</span>
+                          {p.hasGPS && <span style={{ color: '#52B788' }}>{p.numGPSRaces} GPS</span>}
+                          <span>Avg fin: {p.avgFinish || '—'}</span>
+                        </div>
                       </div>
                     </div>
                   </button>
