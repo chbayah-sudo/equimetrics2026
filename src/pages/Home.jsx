@@ -80,8 +80,8 @@ export default function Home() {
             { label: 'Analysis', title: 'Deep Dive', desc: 'Speed traces, stride patterns, and ground loss metrics. See what chart callers with binoculars physically cannot observe.', to: '/deep-dive' },
             { label: 'Profiling', title: 'Horse Profiles', desc: 'Running style classification, stride signatures, and performance radar charts built from each horse\'s GPS history.', to: '/horse-profiles' },
             { label: 'Prediction', title: 'Forecast', desc: 'AI-powered pace projections and value picks for upcoming races based on GPS-derived running styles and patterns.', to: '/forecast' },
-            { label: 'Comparison', title: 'GPS Edge', desc: 'Side-by-side comparison showing exactly what GPS reveals that traditional data misses, illustrated with real examples.', to: '/gps-edge' },
-            { label: 'Detection', title: 'Track Bias', desc: 'Detect rail advantages, speed bias, and surface patterns using granular GPS positioning data across tracks.', to: '/gps-edge' },
+            { label: 'AI Assistant', title: 'HorseLLM', desc: 'Your sharpest friend at the track — ask anything about horses, races, or GPS data and get instant, data-backed answers powered by 12,919 profiles.', to: '/horsellm' },
+            { label: 'Matchmaking', title: 'StableMatch', desc: 'Swipe through upcoming horses like a dating app. Set your style, odds, and GPS preferences — then build a betting stable tailored to you.', to: '/stable-match' },
           ].map((f, i) => (
             <motion.div key={f.title} {...fadeUp} transition={{ delay: i * 0.08, duration: 0.5 }}>
               <Link to={f.to} className="card" style={{ display: 'block', padding: 36, textDecoration: 'none', height: '100%' }}>
