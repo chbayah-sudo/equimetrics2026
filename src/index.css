@@ -41,8 +41,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 18px;
+    line-height: 1.75;
   }
 
   ::-webkit-scrollbar { width: 5px; }
@@ -90,7 +90,7 @@
   }
 
   .label {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 2.5px;
     text-transform: uppercase;
@@ -107,7 +107,7 @@
     background: transparent;
     color: #C59757;
     font-family: var(--font-sans);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     letter-spacing: 1px;
     text-transform: uppercase;

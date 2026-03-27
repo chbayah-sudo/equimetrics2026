@@ -123,11 +123,11 @@ export default function HorseLLM() {
 
       {/* Header */}
       <div style={{ marginBottom: 24, flexShrink: 0 }}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>AI Assistant</div>
+        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>AI Assistant</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>
           Horse<span style={{ color: '#C59757' }}>LLM</span>
         </h1>
-        <p style={{ fontSize: 15, color: '#5A5550' }}>
+        <p style={{ fontSize: 17, color: '#5A5550' }}>
           Ask anything about horses, races, GPS data, or betting insights. Powered by 12,919 horse profiles and real GPS telemetry.
         </p>
       </div>
@@ -136,12 +136,12 @@ export default function HorseLLM() {
       <div style={{ flex: 1, overflowY: 'auto', marginBottom: 16, paddingRight: 8 }}>
         {messages.length === 0 && (
           <div style={{ paddingTop: 20 }}>
-            <div style={{ fontSize: 14, color: '#5A5550', marginBottom: 20 }}>Try asking:</div>
+            <div style={{ fontSize: 16, color: '#5A5550', marginBottom: 20 }}>Try asking:</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {SUGGESTIONS.map(s => (
                 <button key={s} onClick={() => sendMessage(s)}
                   className="card" style={{
-                    padding: '10px 16px', cursor: 'pointer', fontSize: 13,
+                    padding: '10px 16px', cursor: 'pointer', fontSize: 17,
                     color: '#8A847E', background: '#141A10', textAlign: 'left',
                     transition: 'all 250ms',
                   }}
@@ -168,7 +168,7 @@ export default function HorseLLM() {
                   HorseLLM
                 </div>
               )}
-              <div style={{ fontSize: 15, color: '#D6D1CC', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
+              <div style={{ fontSize: 17, color: '#D6D1CC', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
                 {msg.content}
               </div>
             </div>
@@ -194,7 +194,7 @@ export default function HorseLLM() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ duration: 0.25 }}
-                    style={{ fontSize: 14, color: '#8A847E', fontStyle: 'italic' }}
+                    style={{ fontSize: 16, color: '#8A847E', fontStyle: 'italic' }}
                   >
                     {loadingPun}
                   </motion.span>

@@ -79,21 +79,21 @@ export default function Preview() {
 
       {/* Header */}
       <motion.div {...fadeUp}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>Upcoming Races</div>
+        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>Upcoming Races</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 12 }}>
           Forecast
         </h1>
         <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 520, lineHeight: 1.7, marginBottom: 16 }}>
           Pick a date, track, and race to see every horse in the field with GPS insights the odds don't reflect.
         </p>
-        <p style={{ fontSize: 14, color: '#5A5550', marginBottom: 48 }}>
+        <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 48 }}>
           {allRacesRaw.length} races · {dates.length} race days · {new Set(allRacesRaw.map(r => r.track)).size} tracks
         </p>
       </motion.div>
 
       {/* ── DATE SELECTOR ── */}
       <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 28 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race Day</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race Day</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {dates.map(d => {
             const dayName = new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -107,8 +107,8 @@ export default function Preview() {
                   border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
                   color: isActive ? '#C59757' : '#5A5550',
                 }}>
-                <div style={{ fontSize: 14, fontWeight: 500 }}>{dayName}</div>
-                <div style={{ fontSize: 11, color: '#5A5550', marginTop: 2 }}>{count} races</div>
+                <div style={{ fontSize: 16, fontWeight: 500 }}>{dayName}</div>
+                <div style={{ fontSize: 17, color: '#5A5550', marginTop: 2 }}>{count} races</div>
               </button>
             );
           })}
@@ -117,7 +117,7 @@ export default function Preview() {
 
       {/* ── TRACK SELECTOR ── */}
       <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 28 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Track</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Track</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {tracks.map(t => {
             const tRaces = dayRaces.filter(r => r.track === t);
@@ -132,7 +132,7 @@ export default function Preview() {
                   border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
                   color: isActive ? '#D6D1CC' : '#5A5550',
                 }}>
-                <div style={{ fontSize: 14, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ fontSize: 16, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 8 }}>
                   {name}
                   {tAvgGps >= 70 && (
                     <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', padding: '1px 5px', borderRadius: 2, background: 'rgba(82,183,136,0.1)', color: '#52B788' }}>
@@ -140,7 +140,7 @@ export default function Preview() {
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: 11, color: '#5A5550', marginTop: 2 }}>{tRaces.length} races · {tAvgGps}% GPS</div>
+                <div style={{ fontSize: 17, color: '#5A5550', marginTop: 2 }}>{tRaces.length} races · {tAvgGps}% GPS</div>
               </button>
             );
           })}
@@ -149,7 +149,7 @@ export default function Preview() {
 
       {/* ── RACE NUMBER SELECTOR ── */}
       <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 40 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race</div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           {trackRaces.map(r => {
             const isActive = r.raceNumber === activeRaceNum;
@@ -188,11 +188,11 @@ export default function Preview() {
                 {trackName} Race {activeRace.raceNumber}
               </h2>
               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <span style={{ fontSize: 14, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>
+                <span style={{ fontSize: 16, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>
                   {activeRace.fieldSize} horses
                 </span>
                 <span style={{
-                  fontSize: 12, fontFamily: 'var(--font-mono)', padding: '3px 8px', borderRadius: 3,
+                  fontSize: 16, fontFamily: 'var(--font-mono)', padding: '3px 8px', borderRadius: 3,
                   background: activeRace.gpsPct >= 80 ? 'rgba(82,183,136,0.1)' : activeRace.gpsPct >= 40 ? 'rgba(232,184,109,0.1)' : 'rgba(90,85,80,0.1)',
                   color: activeRace.gpsPct >= 80 ? '#52B788' : activeRace.gpsPct >= 40 ? '#E8B86D' : '#5A5550',
                 }}>
@@ -208,7 +208,7 @@ export default function Preview() {
                 <div className="card-flat" style={{ padding: 28, marginBottom: 24 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
                     <div>
-                      <div className="label" style={{ color: scenarioColors[featured.paceAnalysis.scenario], marginBottom: 8, fontSize: 11 }}>Pace Scenario</div>
+                      <div className="label" style={{ color: scenarioColors[featured.paceAnalysis.scenario], marginBottom: 8, fontSize: 13 }}>Pace Scenario</div>
                       <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>{featured.paceAnalysis.label}</div>
                     </div>
                     <div style={{ display: 'flex', gap: 14 }}>
@@ -225,20 +225,20 @@ export default function Preview() {
                       <div key={style} style={{ flex: count, background: styleColors[style], transition: 'flex 500ms ease' }} />
                     ))}
                   </div>
-                  <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.7 }}>{featured.paceAnalysis.detail}</p>
+                  <p style={{ fontSize: 17, color: '#8A847E', lineHeight: 1.7 }}>{featured.paceAnalysis.detail}</p>
                 </div>
 
                 {/* GPS Edge picks */}
                 <div style={{ marginBottom: 32 }}>
-                  <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 11 }}>GPS Edge Picks</div>
+                  <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 13 }}>GPS Edge Picks</div>
                   {featured.gpsEdgePicks.map((pick) => (
                     <div key={pick.name} style={{ borderLeft: '3px solid #C59757', paddingLeft: 20, marginBottom: 24 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
                         <span style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#C59757' }}>{pick.name}</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#5A5550' }}>{pick.odds}</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: '#5A5550' }}>{pick.odds}</span>
                       </div>
-                      <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC', marginBottom: 6 }}>{pick.headline}</div>
-                      <p style={{ fontSize: 14, color: '#8A847E', lineHeight: 1.7 }}>{pick.analysis}</p>
+                      <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC', marginBottom: 6 }}>{pick.headline}</div>
+                      <p style={{ fontSize: 16, color: '#8A847E', lineHeight: 1.7 }}>{pick.analysis}</p>
                     </div>
                   ))}
                 </div>
@@ -252,7 +252,7 @@ export default function Preview() {
                   Race Card
                 </h3>
                 {!featured && activeRace.gpsPct < 50 && (
-                  <span style={{ fontSize: 12, color: '#5A5550', fontStyle: 'italic' }}>Limited GPS data for this race</span>
+                  <span style={{ fontSize: 16, color: '#5A5550', fontStyle: 'italic' }}>Limited GPS data for this race</span>
                 )}
               </div>
 
@@ -290,7 +290,7 @@ export default function Preview() {
 
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
-                        <span style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</span>
+                        <span style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</span>
                         {featured && horse.style && (
                           <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color, background: `${color}12`, border: `1px solid ${color}20` }}>
                             {horse.style === 'Front Runner' ? 'Speed' : horse.style}
@@ -302,25 +302,25 @@ export default function Preview() {
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: 12, color: '#5A5550' }}>
+                      <div style={{ fontSize: 16, color: '#5A5550' }}>
                         J: {horse.jockey} · T: {horse.trainer}
                       </div>
                     </div>
 
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#8A847E' }}>{horse.odds}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#8A847E' }}>{horse.odds}</div>
 
                     <div>
                       {featured && horse.gpsScore != null ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: horse.gpsScore >= 85 ? '#C59757' : horse.gpsScore >= 70 ? '#D6D1CC' : '#5A5550' }}>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 17, fontWeight: 600, color: horse.gpsScore >= 85 ? '#C59757' : horse.gpsScore >= 70 ? '#D6D1CC' : '#5A5550' }}>
                             {horse.gpsScore}
                           </span>
                           {horse.speeds?.length > 0 && <MiniSparkline data={horse.speeds} color={color} />}
                         </div>
                       ) : hasGPS ? (
-                        <span style={{ fontSize: 12, color: '#52B788' }}>GPS</span>
+                        <span style={{ fontSize: 16, color: '#52B788' }}>GPS</span>
                       ) : (
-                        <span style={{ fontSize: 11, color: '#8A847E' }}>Trad.</span>
+                        <span style={{ fontSize: 17, color: '#8A847E' }}>Trad.</span>
                       )}
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function Preview() {
                   <div key={item.label} className="card-flat" style={{ padding: 20 }}>
                     <div className="label" style={{ marginBottom: 8, fontSize: 10 }}>{item.label}</div>
                     <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: '#C59757', marginBottom: 2 }}>{item.val?.name || '—'}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#8A847E' }}>{item.val ? item.m(item.val) : '—'}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: '#8A847E' }}>{item.val ? item.m(item.val) : '—'}</div>
                   </div>
                 ))}
               </div>

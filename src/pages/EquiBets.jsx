@@ -126,11 +126,11 @@ function MarketCard({ market, onBet }) {
       <div style={{ padding: '24px 28px 18px', borderBottom: '1px solid rgba(197,151,87,0.04)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: '1.5px', color: catColor, textTransform: 'uppercase' }}>
+            <span style={{ fontSize: 17, fontWeight: 600, letterSpacing: '1.5px', color: catColor, textTransform: 'uppercase' }}>
               {market.category}
             </span>
             {market.isLive && (
-              <span style={{ fontSize: 11, padding: '3px 10px', borderRadius: 3, background: 'rgba(239,91,91,0.12)', color: '#EF5B5B', fontWeight: 600, letterSpacing: '0.5px' }}>
+              <span style={{ fontSize: 17, padding: '3px 10px', borderRadius: 3, background: 'rgba(239,91,91,0.12)', color: '#EF5B5B', fontWeight: 600, letterSpacing: '0.5px' }}>
                 LIVE
               </span>
             )}
@@ -140,7 +140,7 @@ function MarketCard({ market, onBet }) {
         <h3 style={{ fontSize: 19, fontWeight: 600, color: '#D6D1CC', lineHeight: 1.4, marginBottom: 6 }}>
           {market.title}
         </h3>
-        <p style={{ fontSize: 14, color: '#5A5550' }}>{market.subtitle}</p>
+        <p style={{ fontSize: 16, color: '#5A5550' }}>{market.subtitle}</p>
       </div>
 
       {/* Options */}
@@ -154,7 +154,7 @@ function MarketCard({ market, onBet }) {
             )}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 16, fontWeight: 500, color: '#D6D1CC' }}>{opt.name}</div>
-              {opt.odds && <div style={{ fontSize: 13, color: '#5A5550', fontFamily: 'var(--font-mono)' }}>{opt.odds}</div>}
+              {opt.odds && <div style={{ fontSize: 17, color: '#5A5550', fontFamily: 'var(--font-mono)' }}>{opt.odds}</div>}
             </div>
 
             {/* Progress bar */}
@@ -168,7 +168,7 @@ function MarketCard({ market, onBet }) {
 
             <button onClick={() => onBet(market, opt)}
               style={{
-                padding: '8px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 13, fontWeight: 600,
+                padding: '8px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 17, fontWeight: 600,
                 background: 'rgba(82,183,136,0.1)', border: '1px solid rgba(82,183,136,0.25)',
                 color: '#52B788', transition: 'all 200ms', flexShrink: 0,
               }}
@@ -183,10 +183,10 @@ function MarketCard({ market, onBet }) {
 
       {/* Footer */}
       <div style={{ padding: '14px 28px', borderTop: '1px solid rgba(197,151,87,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, color: '#5A5550' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 16, color: '#5A5550' }}>
           <Hay size={16} /> <span style={{ fontFamily: 'var(--font-mono)' }}>{market.volume.toLocaleString()}</span> vol.
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 14, color: '#5A5550' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 16, color: '#5A5550' }}>
           <Users style={{ width: 14, height: 14 }} /> {Math.floor(Math.random() * 30 + 10)} bettors
         </div>
       </div>
@@ -214,7 +214,7 @@ function BetModal({ market, option, onClose, onConfirm }) {
           <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC', marginBottom: 6 }}>
             Place Your Bet
           </h3>
-          <p style={{ fontSize: 14, color: '#5A5550' }}>{market.title}</p>
+          <p style={{ fontSize: 16, color: '#5A5550' }}>{market.title}</p>
         </div>
 
         <div style={{ padding: 16, borderRadius: 4, background: 'rgba(197,151,87,0.04)', border: '1px solid rgba(197,151,87,0.08)', marginBottom: 20 }}>
@@ -226,20 +226,20 @@ function BetModal({ market, option, onClose, onConfirm }) {
             )}
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 17, fontWeight: 600, color: '#C59757' }}>{option.name}</div>
-              <div style={{ fontSize: 13, color: '#5A5550' }}>{option.pct}% chance</div>
+              <div style={{ fontSize: 17, color: '#5A5550' }}>{option.pct}% chance</div>
             </div>
           </div>
         </div>
 
         {/* Amount */}
         <div style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 12, color: '#5A5550', marginBottom: 10, fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 16, color: '#5A5550', marginBottom: 10, fontWeight: 500, letterSpacing: '1px', textTransform: 'uppercase' }}>
             Wager Amount
           </div>
           <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
             {[25, 50, 100, 250].map(a => (
               <button key={a} onClick={() => setAmount(a)} style={{
-                flex: 1, padding: '10px 0', borderRadius: 3, cursor: 'pointer', fontSize: 14, fontWeight: 600,
+                flex: 1, padding: '10px 0', borderRadius: 3, cursor: 'pointer', fontSize: 16, fontWeight: 600,
                 fontFamily: 'var(--font-mono)', transition: 'all 200ms',
                 background: amount === a ? 'rgba(197,151,87,0.12)' : 'transparent',
                 border: amount === a ? '1px solid rgba(197,151,87,0.25)' : '1px solid rgba(197,151,87,0.06)',
@@ -255,13 +255,13 @@ function BetModal({ market, option, onClose, onConfirm }) {
         {/* Payout */}
         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 16px', borderRadius: 4, background: '#1C2418', marginBottom: 24 }}>
           <div>
-            <div style={{ fontSize: 11, color: '#5A5550', marginBottom: 4 }}>You risk</div>
+            <div style={{ fontSize: 17, color: '#5A5550', marginBottom: 4 }}>You risk</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: '#D6D1CC', display: 'flex', alignItems: 'center', gap: 6 }}>
               {amount} <Hay size={16} />
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 11, color: '#5A5550', marginBottom: 4 }}>Potential payout</div>
+            <div style={{ fontSize: 17, color: '#5A5550', marginBottom: 4 }}>Potential payout</div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: '#52B788', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
               +{payout} <Hay size={16} />
             </div>
@@ -270,13 +270,13 @@ function BetModal({ market, option, onClose, onConfirm }) {
 
         <div style={{ display: 'flex', gap: 12 }}>
           <button onClick={onClose} style={{
-            flex: 1, padding: '14px', borderRadius: 4, cursor: 'pointer', fontSize: 14, fontWeight: 500,
+            flex: 1, padding: '14px', borderRadius: 4, cursor: 'pointer', fontSize: 16, fontWeight: 500,
             background: 'transparent', border: '1px solid rgba(197,151,87,0.1)', color: '#5A5550',
           }}>
             Cancel
           </button>
           <button onClick={() => onConfirm(amount)} style={{
-            flex: 2, padding: '14px', borderRadius: 4, cursor: 'pointer', fontSize: 14, fontWeight: 600,
+            flex: 2, padding: '14px', borderRadius: 4, cursor: 'pointer', fontSize: 16, fontWeight: 600,
             background: 'rgba(82,183,136,0.15)', border: '1px solid rgba(82,183,136,0.3)', color: '#52B788',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'all 200ms',
           }}
@@ -321,7 +321,7 @@ export default function EquiBets() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14 }}>
           <img src="/horse.gif" alt="" style={{ width: 120, height: 120, borderRadius: 10 }} />
           <div>
-            <div className="label" style={{ color: '#C59757', marginBottom: 6, fontSize: 12 }}>Prediction Markets</div>
+            <div className="label" style={{ color: '#C59757', marginBottom: 6, fontSize: 16 }}>Prediction Markets</div>
             <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC' }}>
               Equi<span style={{ color: '#C59757' }}>Bets</span>
             </h1>
@@ -330,7 +330,7 @@ export default function EquiBets() {
         <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 600, lineHeight: 1.7, marginBottom: 12 }}>
           Bet on races, GPS outcomes, and live events with haysticks. Compete with friends, climb the leaderboard, and earn tickets to real races.
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: '#5A5550', marginBottom: 36 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 16, color: '#5A5550', marginBottom: 36 }}>
           <Hay size={18} /> <span style={{ fontFamily: 'var(--font-mono)', color: '#C59757', fontWeight: 600 }}>1,000</span> haysticks to start · Earn more by winning bets
         </div>
       </motion.div>
@@ -346,7 +346,7 @@ export default function EquiBets() {
           return (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
               display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 3,
-              cursor: 'pointer', fontSize: 14, fontWeight: 500, transition: 'all 250ms',
+              cursor: 'pointer', fontSize: 16, fontWeight: 500, transition: 'all 250ms',
               background: active ? '#141A10' : 'transparent',
               border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
               color: active ? '#C59757' : '#5A5550',
@@ -367,7 +367,7 @@ export default function EquiBets() {
                 const active = category === c;
                 return (
                   <button key={c} onClick={() => setCategory(c)} style={{
-                    padding: '8px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 13, fontWeight: 500,
+                    padding: '8px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 17, fontWeight: 500,
                     transition: 'all 250ms',
                     background: active ? '#141A10' : 'transparent',
                     border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
@@ -377,7 +377,7 @@ export default function EquiBets() {
                   </button>
                 );
               })}
-              <div style={{ marginLeft: 'auto', fontSize: 13, color: '#5A5550', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ marginLeft: 'auto', fontSize: 17, color: '#5A5550', display: 'flex', alignItems: 'center', gap: 4 }}>
                 {filtered.length} market{filtered.length !== 1 ? 's' : ''}
               </div>
             </div>
@@ -420,9 +420,9 @@ export default function EquiBets() {
                     }}>
                       {isFirst && <Crown style={{ width: 28, height: 28, color: '#C59757' }} />}
                       <span style={{ fontFamily: 'var(--font-serif)', fontSize: isFirst ? 32 : 24, fontWeight: 500, color: podiumColor }}>{rankLabel}</span>
-                      <span style={{ fontSize: 11, color: '#5A5550' }}>{u.betsWon}W - {u.betsLost}L</span>
+                      <span style={{ fontSize: 17, color: '#5A5550' }}>{u.betsWon}W - {u.betsLost}L</span>
                       {u.streak > 0 && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#E8B86D' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 17, color: '#E8B86D' }}>
                           <Flame style={{ width: 12, height: 12 }} /> {u.streak} streak
                         </div>
                       )}
@@ -436,7 +436,7 @@ export default function EquiBets() {
             <div className="card-flat" style={{ overflow: 'hidden' }}>
               <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC' }}>Full Rankings</h3>
-                <span style={{ fontSize: 12, color: '#5A5550' }}>Group: {GROUP.name}</span>
+                <span style={{ fontSize: 16, color: '#5A5550' }}>Group: {GROUP.name}</span>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '50px 1fr 100px 100px 80px 80px', padding: '10px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
@@ -459,23 +459,23 @@ export default function EquiBets() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                       <span style={{ fontSize: 24 }}>{u.avatar}</span>
-                      <span style={{ fontSize: 15, fontWeight: i === 0 ? 600 : 500, color: '#D6D1CC' }}>{u.name}</span>
+                      <span style={{ fontSize: 17, fontWeight: i === 0 ? 600 : 500, color: '#D6D1CC' }}>{u.name}</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <Hay size={14} />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: '#C59757' }}>{u.haysticks.toLocaleString()}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 17, fontWeight: 600, color: '#C59757' }}>{u.haysticks.toLocaleString()}</span>
                     </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#8A847E' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#8A847E' }}>
                       {u.betsWon}W - {u.betsLost}L
                     </div>
                     <div>
                       {u.streak > 0 ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, color: '#E8B86D' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 17, color: '#E8B86D' }}>
                           <Flame style={{ width: 14, height: 14 }} /> {u.streak}
                         </div>
-                      ) : <span style={{ fontSize: 13, color: '#5A5550' }}>—</span>}
+                      ) : <span style={{ fontSize: 17, color: '#5A5550' }}>—</span>}
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 13, fontFamily: 'var(--font-mono)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 17, fontFamily: 'var(--font-mono)' }}>
                       {change > 0 ? (
                         <><ArrowUpRight style={{ width: 14, height: 14, color: '#52B788' }} /><span style={{ color: '#52B788' }}>+{change}</span></>
                       ) : (
@@ -495,7 +495,7 @@ export default function EquiBets() {
                   <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC', marginBottom: 6 }}>
                     Redeem Haysticks for Real Tickets
                   </h3>
-                  <p style={{ fontSize: 14, color: '#8A847E', lineHeight: 1.7 }}>
+                  <p style={{ fontSize: 16, color: '#8A847E', lineHeight: 1.7 }}>
                     Top performers can convert haysticks into tickets for live horse racing events at tracks near you.
                     5,000 <Hay size={13} style={{ margin: '0 2px' }} /> = 1 general admission ticket.
                   </p>
@@ -512,11 +512,11 @@ export default function EquiBets() {
             <div className="card-flat" style={{ padding: 28, marginBottom: 28, borderColor: 'rgba(197,151,87,0.12)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
                 <div>
-                  <div className="label" style={{ fontSize: 11, color: '#C59757', marginBottom: 10 }}>Your Group</div>
+                  <div className="label" style={{ fontSize: 17, color: '#C59757', marginBottom: 10 }}>Your Group</div>
                   <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>
                     {GROUP.name}
                   </h2>
-                  <p style={{ fontSize: 14, color: '#5A5550' }}>
+                  <p style={{ fontSize: 16, color: '#5A5550' }}>
                     Created {GROUP.created} · {GROUP.totalBets} total bets placed
                   </p>
                 </div>
@@ -528,7 +528,7 @@ export default function EquiBets() {
                   ].map(s => (
                     <div key={s.label} style={{ textAlign: 'center' }}>
                       <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 400, color: '#C59757' }}>{s.value}</div>
-                      <div style={{ fontSize: 11, color: '#5A5550', fontWeight: 500 }}>{s.label}</div>
+                      <div style={{ fontSize: 17, color: '#5A5550', fontWeight: 500 }}>{s.label}</div>
                     </div>
                   ))}
                 </div>
@@ -536,7 +536,7 @@ export default function EquiBets() {
             </div>
 
             {/* Members grid */}
-            <div className="label" style={{ marginBottom: 16, fontSize: 12 }}>Members</div>
+            <div className="label" style={{ marginBottom: 16, fontSize: 16 }}>Members</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16, marginBottom: 32 }}>
               {DEMO_USERS.map((u, i) => {
                 const change = u.haysticks - 1000;
@@ -555,7 +555,7 @@ export default function EquiBets() {
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 16, fontWeight: 600, color: '#D6D1CC', marginBottom: 4 }}>{u.name}</div>
-                      <div style={{ display: 'flex', gap: 12, fontSize: 12, color: '#5A5550' }}>
+                      <div style={{ display: 'flex', gap: 12, fontSize: 16, color: '#5A5550' }}>
                         <span>{u.betsWon + u.betsLost} bets</span>
                         <span style={{ color: '#52B788' }}>{u.betsWon}W</span>
                         <span style={{ color: '#C2653A' }}>{u.betsLost}L</span>
@@ -566,7 +566,7 @@ export default function EquiBets() {
                         <Hay size={16} />
                         <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600, color: '#C59757' }}>{u.haysticks.toLocaleString()}</span>
                       </div>
-                      <div style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: change > 0 ? '#52B788' : '#C2653A', marginTop: 2 }}>
+                      <div style={{ fontSize: 16, fontFamily: 'var(--font-mono)', color: change > 0 ? '#52B788' : '#C2653A', marginTop: 2 }}>
                         {change > 0 ? '+' : ''}{change}
                       </div>
                     </div>
@@ -582,7 +582,7 @@ export default function EquiBets() {
               </button>
               <button style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                padding: '16px 28px', borderRadius: 4, cursor: 'pointer', fontSize: 14, fontWeight: 500,
+                padding: '16px 28px', borderRadius: 4, cursor: 'pointer', fontSize: 16, fontWeight: 500,
                 background: 'transparent', border: '1px solid rgba(197,151,87,0.1)', color: '#5A5550',
                 letterSpacing: '1px', textTransform: 'uppercase',
               }}>
@@ -612,7 +612,7 @@ export default function EquiBets() {
               display: 'flex', alignItems: 'center', gap: 10, zIndex: 200,
             }}>
             <Check style={{ width: 18, height: 18, color: '#52B788' }} />
-            <span style={{ fontSize: 15, color: '#D6D1CC', fontWeight: 500 }}>{toast}</span>
+            <span style={{ fontSize: 17, color: '#D6D1CC', fontWeight: 500 }}>{toast}</span>
           </motion.div>
         )}
       </AnimatePresence>

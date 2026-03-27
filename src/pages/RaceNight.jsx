@@ -29,19 +29,19 @@ export default function RaceNight() {
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
       <motion.div {...fadeUp}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>Replay</div>
+        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>Replay</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 4.5vw, 44px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>Live Replay</h1>
         <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 12 }}>
           Choose a race and watch it unfold gate by gate with GPS tracking.
         </p>
-        <p style={{ fontSize: 14, color: '#5A5550', marginBottom: 40 }}>
+        <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 40 }}>
           {replayRaces.length} races · {new Set(replayRaces.map(r => r.track)).size} tracks · {dates.length} race days
         </p>
       </motion.div>
 
       {/* Date selector */}
       <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 24 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race Day</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race Day</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {dates.map(d => {
             const dayName = new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -51,7 +51,7 @@ export default function RaceNight() {
                 style={{ padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
                   background: active ? '#141A10' : 'transparent',
                   border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
-                  color: active ? '#C59757' : '#5A5550', fontSize: 14, fontWeight: 500 }}>
+                  color: active ? '#C59757' : '#5A5550', fontSize: 16, fontWeight: 500 }}>
                 {dayName}
               </button>
             );
@@ -61,7 +61,7 @@ export default function RaceNight() {
 
       {/* Track selector */}
       <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 24 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Track</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Track</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {tracks.map(t => {
             const active = t === activeTrack;
@@ -70,7 +70,7 @@ export default function RaceNight() {
                 style={{ padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
                   background: active ? '#141A10' : 'transparent',
                   border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
-                  color: active ? '#D6D1CC' : '#5A5550', fontSize: 14, fontWeight: 500 }}>
+                  color: active ? '#D6D1CC' : '#5A5550', fontSize: 16, fontWeight: 500 }}>
                 {TRACK_NAMES[t] || t}
               </button>
             );
@@ -80,7 +80,7 @@ export default function RaceNight() {
 
       {/* Race number selector */}
       <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 36 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {trackRaces.map(r => {
             const active = activeRace?.id === r.id;
@@ -123,9 +123,9 @@ export default function RaceNight() {
                     <div style={{ width: 30, height: 30, borderRadius: 4, overflow: 'hidden', border: `1px solid ${color}40` }}>
                       <img src={getPortrait(horse.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
-                    <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#5A5550' }}>Post {horse.post}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#8A847E' }}>{horse.odds}</div>
+                    <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#5A5550' }}>Post {horse.post}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#8A847E' }}>{horse.odds}</div>
                   </div>
                 );
               })}

@@ -24,13 +24,13 @@ export default function Insights() {
             <p style={{ fontSize: 16, color: '#8A847E', marginBottom: 24 }}>{comparisonData.traditional.label}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
               {comparisonData.traditional.metrics.map(m => (
-                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 15, color: '#5A5550' }}>
+                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 17, color: '#5A5550' }}>
                   <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#5A5550' }} />{m}
                 </div>
               ))}
             </div>
             <div style={{ padding: 16, borderRadius: 3, background: '#1C2418' }}>
-              <p style={{ fontSize: 13, color: '#5A5550', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.traditional.example}"</p>
+              <p style={{ fontSize: 17, color: '#5A5550', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.traditional.example}"</p>
             </div>
             <p style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: '#5A5550', marginTop: 12 }}>{comparisonData.traditional.precision}</p>
           </div>
@@ -46,13 +46,13 @@ export default function Insights() {
             <p style={{ fontSize: 16, color: '#8A847E', marginBottom: 24 }}>{comparisonData.gps.label}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
               {comparisonData.gps.metrics.map(m => (
-                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#C59757', opacity: 0.7 }}>
+                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 17, color: '#C59757', opacity: 0.7 }}>
                   <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#C59757' }} />{m}
                 </div>
               ))}
             </div>
             <div style={{ padding: 16, borderRadius: 3, background: 'rgba(197,151,87,0.06)' }}>
-              <p style={{ fontSize: 14, color: '#8A847E', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.gps.example}"</p>
+              <p style={{ fontSize: 16, color: '#8A847E', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.gps.example}"</p>
             </div>
             <p style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: '#C59757', opacity: 0.5, marginTop: 12 }}>{comparisonData.gps.precision}</p>
           </div>
@@ -84,7 +84,7 @@ export default function Insights() {
               <div className="card" style={{ padding: 28 }}>
                 <div className="gold-line" style={{ marginBottom: 16 }} />
                 <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>{c.title}</h3>
-                <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.7 }}>{c.desc}</p>
+                <p style={{ fontSize: 17, color: '#8A847E', lineHeight: 1.7 }}>{c.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -109,12 +109,12 @@ export default function Insights() {
             ].map(s => (
               <div key={s.label} style={{ padding: 20, borderRadius: 3, background: '#1C2418' }}>
                 <div style={{ fontFamily: 'var(--font-serif)', fontSize: 32, fontWeight: 400, color: '#C59757', marginBottom: 8 }}>{s.value}</div>
-                <div style={{ fontSize: 13, fontWeight: 500, color: '#D6D1CC' }}>{s.label}</div>
-                <div style={{ fontSize: 13, color: '#5A5550', marginTop: 4 }}>{s.sub}</div>
+                <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{s.label}</div>
+                <div style={{ fontSize: 17, color: '#5A5550', marginTop: 4 }}>{s.sub}</div>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 13, color: '#5A5550', marginTop: 24, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 17, color: '#5A5550', marginTop: 24, lineHeight: 1.7 }}>
             By training on races with both GPS and traditional data, we build a translation model that generates synthetic GPS-like metrics. This quantifies the business case for GPS expansion.
           </p>
         </div>

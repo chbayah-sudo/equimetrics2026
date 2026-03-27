@@ -16,7 +16,7 @@ const profileList = Object.values(allProfiles).sort((a, b) => (b.gpsScore || 0) 
 const CustomTip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div style={{ background: '#141A10', border: '1px solid rgba(197,151,87,0.15)', borderRadius: 3, padding: '8px 12px', fontSize: 12 }}>
+    <div style={{ background: '#141A10', border: '1px solid rgba(197,151,87,0.15)', borderRadius: 3, padding: '8px 12px', fontSize: 16 }}>
       <div style={{ color: '#C59757', fontFamily: 'var(--font-mono)', marginBottom: 4 }}>{label}</div>
       {payload.map(p => <div key={p.name} style={{ color: '#D6D1CC' }}>{p.name}: <strong>{p.value}</strong></div>)}
     </div>
@@ -49,26 +49,26 @@ function RaceRow({ race, color, isExpanded, onToggle }) {
         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC' }}>{race.track} R{race.raceNum}</span>
-            <span style={{ fontSize: 12, color: '#5A5550' }}>{race.distance} {race.surface}</span>
+            <span style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{race.track} R{race.raceNum}</span>
+            <span style={{ fontSize: 16, color: '#5A5550' }}>{race.distance} {race.surface}</span>
             {race.hasGPS ? (
               <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 2, color: '#52B788', background: 'rgba(82,183,136,0.1)' }}>GPS</span>
             ) : (
               <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 2, color: '#8A847E', background: 'rgba(138,132,126,0.08)' }}>Trad</span>
             )}
           </div>
-          <div style={{ fontSize: 12, color: '#5A5550', marginTop: 2 }}>{race.date} · {race.raceType}</div>
+          <div style={{ fontSize: 16, color: '#5A5550', marginTop: 2 }}>{race.date} · {race.raceType}</div>
         </div>
         <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: posColor }}>
-          {race.position || '—'}<span style={{ fontSize: 11, color: '#5A5550' }}>/{race.fieldSize || '?'}</span>
+          {race.position || '—'}<span style={{ fontSize: 17, color: '#5A5550' }}>/{race.fieldSize || '?'}</span>
         </div>
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#C59757' }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#C59757' }}>
           ${race.earnings?.toLocaleString() || '0'}
         </div>
         <div>
           {race.positions?.length > 0 ? (
             <div style={{ width: 70, height: 28 }}><PositionFlow positions={race.positions} color={color} height={28} /></div>
-          ) : <span style={{ fontSize: 11, color: '#5A5550' }}>—</span>}
+          ) : <span style={{ fontSize: 17, color: '#5A5550' }}>—</span>}
         </div>
         <div style={{ color: '#5A5550', display: 'flex', justifyContent: 'center' }}>
           {isExpanded ? <ChevronUp style={{ width: 14, height: 14 }} /> : <ChevronDown style={{ width: 14, height: 14 }} />}
@@ -108,19 +108,19 @@ function RaceRow({ race, color, isExpanded, onToggle }) {
                             <Bar dataKey="v" radius={[2, 2, 0, 0]}>{race.strideLengths.map((_, i) => <Cell key={i} fill={`${color}${i >= race.strideLengths.length - 2 ? '80' : '30'}`} />)}</Bar>
                           </BarChart>
                         </ResponsiveContainer>
-                      ) : <span style={{ fontSize: 12, color: '#5A5550' }}>—</span>}
+                      ) : <span style={{ fontSize: 16, color: '#5A5550' }}>—</span>}
                     </div>
                   </div>
                 </div>
               ) : (
-                <div style={{ paddingTop: 16, borderTop: '1px solid rgba(197,151,87,0.04)', fontSize: 13, color: '#5A5550' }}>
+                <div style={{ paddingTop: 16, borderTop: '1px solid rgba(197,151,87,0.04)', fontSize: 17, color: '#5A5550' }}>
                   Traditional data only — no GPS telemetry available for this race.
                 </div>
               )}
               {race.hasGPS && (
                 <div style={{ display: 'flex', gap: 20, marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(197,151,87,0.04)' }}>
                   {[['Peak', race.peakMPH ? `${race.peakMPH} mph` : '—'], ['Closing', race.closingMPH ? `${race.closingMPH} mph` : '—'], ['Ground Loss', race.groundLoss != null ? `+${race.groundLoss}m` : '—'], ['Purse', `$${race.purse?.toLocaleString()}`]].map(([l, v]) => (
-                    <div key={l}><div style={{ fontSize: 11, color: '#5A5550' }}>{l}</div><div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#D6D1CC', marginTop: 2 }}>{v}</div></div>
+                    <div key={l}><div style={{ fontSize: 17, color: '#5A5550' }}>{l}</div><div style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: '#D6D1CC', marginTop: 2 }}>{v}</div></div>
                   ))}
                 </div>
               )}
@@ -167,7 +167,7 @@ export default function Profiles() {
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>Profiling</div>
+        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>Profiling</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 12 }}>Horse Profiles</h1>
         <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 520, lineHeight: 1.7, marginBottom: 12 }}>
           Search {profileList.length.toLocaleString()} horses — GPS and traditional — to see race history, earnings, and performance data.
@@ -196,8 +196,8 @@ export default function Profiles() {
                     <img src={getPortrait(p.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC' }}>{p.name}</div>
-                    <div style={{ fontSize: 12, color: '#5A5550', marginTop: 2 }}>
+                    <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{p.name}</div>
+                    <div style={{ fontSize: 16, color: '#5A5550', marginTop: 2 }}>
                       {p.record} · {p.numRaces} races · ${p.totalEarnings?.toLocaleString()}
                       {p.hasGPS && <span style={{ color: '#52B788', marginLeft: 6 }}>GPS</span>}
                     </div>
@@ -205,7 +205,7 @@ export default function Profiles() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   {p.style && <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color: SC[p.style] || '#8A847E', background: `${(SC[p.style] || '#8A847E')}12` }}>{p.style === 'Front Runner' ? 'Speed' : p.style}</span>}
-                  {p.gpsScore != null && <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, color: p.gpsScore >= 85 ? '#C59757' : '#8A847E' }}>{p.gpsScore}</span>}
+                  {p.gpsScore != null && <span style={{ fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 600, color: p.gpsScore >= 85 ? '#C59757' : '#8A847E' }}>{p.gpsScore}</span>}
                 </div>
               </button>
             ))}
@@ -229,12 +229,12 @@ export default function Profiles() {
                     <div>
                       <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 34, fontWeight: 500, color: '#D6D1CC' }}>{h.name}</h2>
                       <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
-                        {h.style && <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 3, color: SC[h.style] || '#8A847E', background: `${(SC[h.style] || '#8A847E')}18`, backdropFilter: 'blur(4px)' }}>{h.style === 'Front Runner' ? 'Speed' : h.style}</span>}
-                        <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 3, color: '#8A847E', background: 'rgba(28,36,24,0.8)' }}>{h.record}</span>
+                        {h.style && <span style={{ fontSize: 16, padding: '3px 10px', borderRadius: 3, color: SC[h.style] || '#8A847E', background: `${(SC[h.style] || '#8A847E')}18`, backdropFilter: 'blur(4px)' }}>{h.style === 'Front Runner' ? 'Speed' : h.style}</span>}
+                        <span style={{ fontSize: 16, padding: '3px 10px', borderRadius: 3, color: '#8A847E', background: 'rgba(28,36,24,0.8)' }}>{h.record}</span>
                         {h.hasGPS ? (
-                          <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 3, color: '#52B788', background: 'rgba(82,183,136,0.1)' }}>GPS · {h.numGPSRaces} races</span>
+                          <span style={{ fontSize: 16, padding: '3px 10px', borderRadius: 3, color: '#52B788', background: 'rgba(82,183,136,0.1)' }}>GPS · {h.numGPSRaces} races</span>
                         ) : (
-                          <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 3, color: '#8A847E', background: 'rgba(138,132,126,0.08)' }}>Traditional</span>
+                          <span style={{ fontSize: 16, padding: '3px 10px', borderRadius: 3, color: '#8A847E', background: 'rgba(138,132,126,0.08)' }}>Traditional</span>
                         )}
                       </div>
                     </div>
@@ -242,7 +242,7 @@ export default function Profiles() {
                   {h.gpsScore != null && (
                     <div style={{ textAlign: 'right' }}>
                       <div style={{ fontFamily: 'var(--font-mono)', fontSize: 32, fontWeight: 600, color: '#C59757' }}>{h.gpsScore}</div>
-                      <div style={{ fontSize: 11, color: '#5A5550' }}>GPS Score</div>
+                      <div style={{ fontSize: 17, color: '#5A5550' }}>GPS Score</div>
                     </div>
                   )}
                 </div>
@@ -261,7 +261,7 @@ export default function Profiles() {
                   ['Total Starts', `${h.numRaces}`, '#D6D1CC'],
                 ].map(([l, v, c]) => (
                   <div key={l}>
-                    <div style={{ fontSize: 11, color: '#5A5550', marginBottom: 4 }}>{l}</div>
+                    <div style={{ fontSize: 17, color: '#5A5550', marginBottom: 4 }}>{l}</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 500, color: c }}>{v}</div>
                   </div>
                 ))}
@@ -271,12 +271,12 @@ export default function Profiles() {
             {/* Radar for GPS horses */}
             {h.hasGPS && radarData.length > 0 && (
               <div className="card-flat" style={{ padding: 28, marginBottom: 24 }}>
-                <div className="label" style={{ fontSize: 11, marginBottom: 12 }}>GPS Performance Radar</div>
+                <div className="label" style={{ fontSize: 17, marginBottom: 12 }}>GPS Performance Radar</div>
                 <div style={{ height: 220, maxWidth: 320, margin: '0 auto' }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="72%">
                       <PolarGrid stroke="rgba(197,151,87,0.06)" />
-                      <PolarAngleAxis dataKey="t" tick={{ fontSize: 12, fill: '#5A5550', fontFamily: 'var(--font-mono)' }} />
+                      <PolarAngleAxis dataKey="t" tick={{ fontSize: 16, fill: '#5A5550', fontFamily: 'var(--font-mono)' }} />
                       <Radar dataKey="v" stroke={color} fill={color} fillOpacity={0.08} strokeWidth={1.5} />
                     </RadarChart>
                   </ResponsiveContainer>
@@ -293,7 +293,7 @@ export default function Profiles() {
             <div style={{ display: 'flex', gap: 4, marginBottom: 24 }}>
               {[['races', `All Races (${h.numRaces})`], ['earnings', 'Earnings']].map(([key, label]) => (
                 <button key={key} onClick={() => setActiveTab(key)} style={{
-                  padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 14, fontWeight: 500, transition: 'all 250ms',
+                  padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 16, fontWeight: 500, transition: 'all 250ms',
                   background: activeTab === key ? '#141A10' : 'transparent',
                   border: activeTab === key ? '1px solid rgba(197,151,87,0.15)' : '1px solid rgba(197,151,87,0.04)',
                   color: activeTab === key ? '#C59757' : '#5A5550',
@@ -318,15 +318,15 @@ export default function Profiles() {
                   <div className="card-flat" style={{ padding: 32 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28 }}>
                       <div>
-                        <div className="label" style={{ fontSize: 11, marginBottom: 8 }}>Career Earnings</div>
+                        <div className="label" style={{ fontSize: 17, marginBottom: 8 }}>Career Earnings</div>
                         <div style={{ fontFamily: 'var(--font-serif)', fontSize: 42, fontWeight: 400, color: '#C59757' }}>${h.totalEarnings?.toLocaleString() || '0'}</div>
-                        <div style={{ fontSize: 14, color: '#5A5550', marginTop: 4 }}>from {h.numRaces} starts</div>
+                        <div style={{ fontSize: 16, color: '#5A5550', marginTop: 4 }}>from {h.numRaces} starts</div>
                       </div>
                       <div style={{ display: 'flex', gap: 20 }}>
                         {[['Wins', h.wins, '#52B788'], ['Places', h.places, '#E8B86D'], ['Starts', h.numRaces, '#8A847E']].map(([l, v, c]) => (
                           <div key={l} style={{ textAlign: 'center' }}>
                             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, color: c }}>{v}</div>
-                            <div style={{ fontSize: 11, color: '#5A5550' }}>{l}</div>
+                            <div style={{ fontSize: 17, color: '#5A5550' }}>{l}</div>
                           </div>
                         ))}
                       </div>
@@ -354,7 +354,7 @@ export default function Profiles() {
         ) : (
           /* Browse */
           <motion.div key="browse" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <div className="label" style={{ marginBottom: 16, fontSize: 12 }}>Top-rated horses</div>
+            <div className="label" style={{ marginBottom: 16, fontSize: 16 }}>Top-rated horses</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16 }}>
               {topHorses.map(p => {
                 const sc = SC[p.style] || '#8A847E';
@@ -374,10 +374,10 @@ export default function Profiles() {
                         <div style={{ fontSize: 18, fontWeight: 600, color: '#D6D1CC', marginBottom: 8, textShadow: '0 1px 6px rgba(0,0,0,0.6)' }}>{p.name}</div>
                         <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 6 }}>
                           {p.style && <span style={{ fontSize: 10, padding: '3px 8px', borderRadius: 2, color: sc, background: `${sc}15`, backdropFilter: 'blur(4px)' }}>{p.style === 'Front Runner' ? 'Speed' : p.style}</span>}
-                          <span style={{ fontSize: 11, color: '#8A847E' }}>{p.record}</span>
-                          <span style={{ fontSize: 11, color: '#C59757' }}>${p.totalEarnings?.toLocaleString()}</span>
+                          <span style={{ fontSize: 17, color: '#8A847E' }}>{p.record}</span>
+                          <span style={{ fontSize: 17, color: '#C59757' }}>${p.totalEarnings?.toLocaleString()}</span>
                         </div>
-                        <div style={{ display: 'flex', gap: 12, fontSize: 11, color: '#5A5550' }}>
+                        <div style={{ display: 'flex', gap: 12, fontSize: 17, color: '#5A5550' }}>
                           <span>{p.numRaces} races</span>
                           {p.hasGPS && <span style={{ color: '#52B788' }}>{p.numGPSRaces} GPS</span>}
                           <span>Avg fin: {p.avgFinish || '—'}</span>

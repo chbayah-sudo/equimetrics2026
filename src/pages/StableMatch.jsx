@@ -112,14 +112,14 @@ function SwipeCard({ horse, onSwipe, isTop, exitDirection }) {
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {horse.style && (
                     <span style={{
-                      fontSize: 11, padding: '3px 10px', borderRadius: 3,
+                      fontSize: 17, padding: '3px 10px', borderRadius: 3,
                       color, background: `${color}18`, backdropFilter: 'blur(4px)',
                     }}>
                       {horse.style === 'Front Runner' ? 'Speed' : horse.style}
                     </span>
                   )}
                   <span style={{
-                    fontSize: 11, padding: '3px 10px', borderRadius: 3,
+                    fontSize: 17, padding: '3px 10px', borderRadius: 3,
                     color: '#8A847E', background: 'rgba(28,36,24,0.8)',
                   }}>
                     {horse.raceName}
@@ -171,13 +171,13 @@ function SwipeCard({ horse, onSwipe, isTop, exitDirection }) {
                 padding: '6px 12px', borderRadius: 3,
                 background: 'rgba(197,151,87,0.04)', border: '1px solid rgba(197,151,87,0.06)',
               }}>
-                <span style={{ fontSize: 11, color: '#5A5550', marginRight: 6 }}>{s.label}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#D6D1CC' }}>{s.value}</span>
+                <span style={{ fontSize: 17, color: '#5A5550', marginRight: 6 }}>{s.label}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: '#D6D1CC' }}>{s.value}</span>
               </div>
             ))}
           </div>
 
-          <div style={{ marginTop: 12, textAlign: 'center', fontSize: 12, color: '#5A5550' }}>
+          <div style={{ marginTop: 12, textAlign: 'center', fontSize: 16, color: '#5A5550' }}>
             J: {horse.jockey} &middot; T: {horse.trainer}
           </div>
         </div>
@@ -207,21 +207,21 @@ function PreferencesScreen({ onStart }) {
         }}>
           Set Your Preferences
         </h2>
-        <p style={{ fontSize: 15, color: '#5A5550', maxWidth: 380, margin: '0 auto' }}>
+        <p style={{ fontSize: 17, color: '#5A5550', maxWidth: 380, margin: '0 auto' }}>
           Tell us what you like in a horse. We'll show you matches from upcoming races.
         </p>
       </div>
 
       {/* Running Style */}
       <div style={{ marginBottom: 32 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Running Style</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Running Style</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {STYLE_OPTIONS.map(s => {
             const active = style === s;
             const col = s !== 'Any' ? styleColors[s] : '#C59757';
             return (
               <button key={s} onClick={() => setStyle(s)} style={{
-                padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 14, fontWeight: 500,
+                padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 16, fontWeight: 500,
                 transition: 'all 250ms',
                 background: active ? `${col}15` : 'transparent',
                 border: active ? `1px solid ${col}40` : '1px solid rgba(197,151,87,0.06)',
@@ -236,13 +236,13 @@ function PreferencesScreen({ onStart }) {
 
       {/* Odds Range */}
       <div style={{ marginBottom: 32 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Odds Range</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Odds Range</div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {ODDS_RANGES.map((r, i) => {
             const active = odds === i;
             return (
               <button key={r.label} onClick={() => setOdds(i)} style={{
-                padding: '10px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 13, fontWeight: 500,
+                padding: '10px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 17, fontWeight: 500,
                 transition: 'all 250ms',
                 background: active ? '#141A10' : 'transparent',
                 border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
@@ -257,13 +257,13 @@ function PreferencesScreen({ onStart }) {
 
       {/* Surface */}
       <div style={{ marginBottom: 32 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Surface</div>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Surface</div>
         <div style={{ display: 'flex', gap: 8 }}>
           {SURFACE_OPTIONS.map(s => {
             const active = surface === s;
             return (
               <button key={s} onClick={() => setSurface(s)} style={{
-                padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 14, fontWeight: 500,
+                padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 16, fontWeight: 500,
                 transition: 'all 250ms',
                 background: active ? '#141A10' : 'transparent',
                 border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
@@ -278,7 +278,7 @@ function PreferencesScreen({ onStart }) {
 
       {/* Min GPS Score */}
       <div style={{ marginBottom: 48 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>
+        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>
           Minimum GPS Score: <span style={{ color: '#C59757', fontFamily: 'var(--font-mono)' }}>{minGPS || 'Any'}</span>
         </div>
         <input
@@ -290,13 +290,13 @@ function PreferencesScreen({ onStart }) {
             borderRadius: 2, accentColor: '#C59757',
           }}
         />
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: '#5A5550', marginTop: 6 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 17, color: '#5A5550', marginTop: 6 }}>
           <span>Any</span><span>90+</span>
         </div>
       </div>
 
       <div style={{ marginBottom: 32, padding: '16px 20px', borderRadius: 3, background: 'rgba(232,184,109,0.06)', border: '1px solid rgba(232,184,109,0.12)' }}>
-        <p style={{ fontSize: 14, color: '#E8B86D', fontWeight: 600, lineHeight: 1.7, margin: 0 }}>
+        <p style={{ fontSize: 16, color: '#E8B86D', fontWeight: 600, lineHeight: 1.7, margin: 0 }}>
           Fun fact: A horse's left heart ventricle size is one of the strongest predictors of racing success — bigger chamber, more blood per beat, more speed when it counts.
         </p>
       </div>
@@ -304,7 +304,7 @@ function PreferencesScreen({ onStart }) {
       <button
         onClick={() => onStart({ style, odds: ODDS_RANGES[odds], surface, minGPS })}
         className="btn-primary"
-        style={{ width: '100%', justifyContent: 'center', padding: '16px 28px', fontSize: 15 }}
+        style={{ width: '100%', justifyContent: 'center', padding: '16px 28px', fontSize: 17 }}
       >
         Find My Horses <ChevronRight style={{ width: 18, height: 18 }} />
       </button>
@@ -327,7 +327,7 @@ function MatchesScreen({ matches, onReset }) {
         }}>
           {matches.length > 0 ? 'Your Stable' : 'No Matches'}
         </h2>
-        <p style={{ fontSize: 15, color: '#5A5550' }}>
+        <p style={{ fontSize: 17, color: '#5A5550' }}>
           {matches.length > 0
             ? `You matched with ${matches.length} horse${matches.length > 1 ? 's' : ''} for upcoming races.`
             : 'You passed on everyone. Try again with different preferences.'}
@@ -370,7 +370,7 @@ function MatchesScreen({ matches, onReset }) {
                       </span>
                     )}
                   </div>
-                  <div style={{ fontSize: 12, color: '#5A5550' }}>
+                  <div style={{ fontSize: 16, color: '#5A5550' }}>
                     {horse.raceName} &middot; J: {horse.jockey}
                   </div>
                 </div>
@@ -408,7 +408,7 @@ function MatchesScreen({ matches, onReset }) {
       )}
 
       <button onClick={onReset} className="btn-primary"
-        style={{ width: '100%', justifyContent: 'center', padding: '16px 28px', fontSize: 15, gap: 10 }}>
+        style={{ width: '100%', justifyContent: 'center', padding: '16px 28px', fontSize: 17, gap: 10 }}>
         <RotateCcw style={{ width: 16, height: 16 }} /> Start Over
       </button>
     </motion.div>
@@ -489,7 +489,7 @@ export default function StableMatch() {
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>
+        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>
           <SlidersHorizontal style={{ width: 12, height: 12, display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
           Matchmaking
         </div>
@@ -519,14 +519,14 @@ export default function StableMatch() {
           >
             {/* Progress */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <span style={{ fontSize: 13, color: '#5A5550' }}>
+              <span style={{ fontSize: 17, color: '#5A5550' }}>
                 {remaining > 0 ? `${remaining} horse${remaining > 1 ? 's' : ''} remaining` : 'All done!'}
               </span>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span style={{ fontSize: 12, color: '#52B788' }}>
+                <span style={{ fontSize: 16, color: '#52B788' }}>
                   <Heart style={{ width: 12, height: 12, display: 'inline', verticalAlign: 'middle', fill: '#52B788' }} /> {matches.length}
                 </span>
-                <span style={{ fontSize: 12, color: '#C2653A' }}>
+                <span style={{ fontSize: 16, color: '#C2653A' }}>
                   <X style={{ width: 12, height: 12, display: 'inline', verticalAlign: 'middle' }} /> {passed.length}
                 </span>
               </div>
