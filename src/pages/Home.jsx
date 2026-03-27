@@ -32,6 +32,9 @@ export default function Home() {
               <Link to="/stable-match" className="btn-primary" style={{ fontSize: 14 }}>
                 StableMatch <ArrowRight style={{ width: 15, height: 15 }} />
               </Link>
+              <Link to="/equibets" className="btn-primary" style={{ fontSize: 14 }}>
+                EquiBets <ArrowRight style={{ width: 15, height: 15 }} />
+              </Link>
             </div>
           </motion.div>
 

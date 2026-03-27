@@ -11,6 +11,7 @@ const navItems = [
   { path: '/gps-edge', label: 'GPS Edge' },
   { path: '/horsellm', label: 'HorseLLM' },
   { path: '/stable-match', label: 'StableMatch' },
+  { path: '/equibets', label: 'EquiBets' },
 ];
 
 export default function Navbar() {

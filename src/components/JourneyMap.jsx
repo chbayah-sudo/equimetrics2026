@@ -2,7 +2,7 @@ import { useRef, useEffect, useMemo, memo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || 'MAPBOX_TOKEN_REMOVED';
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN || '';
 
 const TRACK_COORDS = {
   AQU: [-73.8235, 40.6722, 'Aqueduct', 'Queens, NY'],
