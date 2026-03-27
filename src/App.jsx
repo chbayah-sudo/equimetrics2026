@@ -9,24 +9,14 @@ import Preview from './pages/Preview';
 import Insights from './pages/Insights';
 
 class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-  static getDerivedStateFromError(error) {
-    return { hasError: true, error };
-  }
+  constructor(props) { super(props); this.state = { hasError: false, error: null }; }
+  static getDerivedStateFromError(error) { return { hasError: true, error }; }
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: 40, color: '#EF5B5B', background: '#07080C', minHeight: '100vh', fontFamily: 'monospace' }}>
-          <h1 style={{ fontSize: 24, marginBottom: 16 }}>Render Error</h1>
-          <pre style={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#F0EDE8' }}>
-            {this.state.error?.message}
-          </pre>
-          <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12, color: '#8A8592', marginTop: 12 }}>
-            {this.state.error?.stack}
-          </pre>
+        <div style={{ padding: 60, color: '#C59757', background: '#0C0A09', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+          <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: 28, marginBottom: 20 }}>Something went wrong</h1>
+          <pre style={{ whiteSpace: 'pre-wrap', fontSize: 13, color: '#8A847E' }}>{this.state.error?.message}</pre>
         </div>
       );
     }
@@ -38,7 +28,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Router>
-        <div className="min-h-screen bg-bg-primary text-text-primary">
+        <div style={{ minHeight: '100vh', backgroundColor: '#0C0A09', color: '#D6D1CC' }}>
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
