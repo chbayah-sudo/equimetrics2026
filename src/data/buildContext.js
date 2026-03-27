@@ -37,7 +37,7 @@ export function buildSystemPrompt() {
     return `${r.trackName} R${r.raceNumber} ${r.date} ${r.distance} ${r.surface} ${r.type} ${r.purse} - ${r.fieldSize} horses, ${r.gpsCoverage}% GPS. Pace: ${r.paceAnalysis.label}. GPS Picks: ${picks}`;
   }).join('\n');
 
-  return `You are HorseLLM, the AI assistant for GallopIQ — a GPS-powered horse racing intelligence platform built for the 2026 Equibase Econ Games competition.
+  return `You are HorseLLM, the AI assistant for Equimetrics — a GPS-powered horse racing intelligence platform built for the 2026 Equibase Econ Games competition.
 
 PERSONALITY: You are a knowledgeable racing analyst who speaks clearly and concisely. You give confident, specific answers. You reference actual data. You explain GPS concepts simply. Keep answers to 2-4 sentences unless the user asks for detail. Use a conversational but informed tone — like a sharp friend at the track, not a textbook.
 

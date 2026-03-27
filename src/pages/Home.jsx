@@ -22,18 +22,17 @@ export default function Home() {
         <div style={{ position: 'relative', zIndex: 10, maxWidth: 620, padding: '0 32px', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
             <div className="gold-line" style={{ margin: '0 auto 28px' }} />
-            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(56px, 9vw, 82px)', fontWeight: 500, color: '#D6D1CC', letterSpacing: '-1px', lineHeight: 1.05, marginBottom: 28 }}>
-              GallopIQ
+            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(56px, 9vw, 82px)', fontWeight: 500, color: '#D6D1CC', letterSpacing: '-1px', lineHeight: 1.05, marginBottom: 52 }}>
+              Equimetrics
             </h1>
-            <p style={{ fontSize: 20, color: '#8A847E', marginBottom: 14, lineHeight: 1.6 }}>
-              See horse races like never before.
-            </p>
-            <p style={{ fontSize: 15, color: '#5A5550', maxWidth: 440, margin: '0 auto 52px', lineHeight: 1.7 }}>
-              GPS-powered race intelligence that reveals ground loss, true speed, stride fatigue, and predictive pace scenarios.
-            </p>
-            <Link to="/live-replay" className="btn-primary" style={{ fontSize: 14 }}>
-              Watch a Race <ArrowRight style={{ width: 15, height: 15 }} />
-            </Link>
+            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link to="/horsellm" className="btn-primary" style={{ fontSize: 14 }}>
+                Ask HorseLLM <ArrowRight style={{ width: 15, height: 15 }} />
+              </Link>
+              <Link to="/stable-match" className="btn-primary" style={{ fontSize: 14 }}>
+                StableMatch <ArrowRight style={{ width: 15, height: 15 }} />
+              </Link>
+            </div>
           </motion.div>
 
           <motion.div
@@ -138,7 +137,7 @@ export default function Home() {
       <footer style={{ borderTop: '1px solid rgba(197, 151, 87, 0.06)', padding: '48px 0' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
           <span style={{ fontSize: 15, fontWeight: 600, color: '#D6D1CC' }}>
-            GALLOP<span style={{ color: '#C59757' }}>IQ</span>
+            EQUI<span style={{ color: '#C59757' }}>METRICS</span>
           </span>
           <p style={{ fontSize: 13, color: '#5A5550' }}>
             985,000+ GPS data points &middot; 32 tracks &middot; Data by Equibase &middot; 2026 Econ Games

@@ -39,10 +39,10 @@ export default function Navbar() {
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: 0 }}>
           <span style={{ fontFamily: 'var(--font-sans)', fontSize: 17, fontWeight: 600, color: '#D6D1CC', letterSpacing: '0.5px' }}>
-            GALLOP
+            EQUI
           </span>
           <span style={{ fontFamily: 'var(--font-sans)', fontSize: 17, fontWeight: 600, color: '#C59757', letterSpacing: '0.5px' }}>
-            IQ
+            METRICS
           </span>
         </Link>
 

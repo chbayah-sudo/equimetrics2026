@@ -99,7 +99,7 @@ export default function Insights() {
             Non-GPS tracks
           </h3>
           <p style={{ fontSize: 16, color: '#8A847E', lineHeight: 1.8, marginBottom: 32 }}>
-            Only 32 of 117 tracks currently have GPS. GallopIQ is designed to work everywhere.
+            Only 32 of 117 tracks currently have GPS. Equimetrics is designed to work everywhere.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
             {[
