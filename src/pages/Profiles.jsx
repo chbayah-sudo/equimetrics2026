@@ -8,6 +8,7 @@ import {
 import { Search, X, ChevronDown, ChevronUp } from 'lucide-react';
 import allProfiles from '../data/horseProfiles.json';
 import { getPortrait } from '../data/portraits';
+import JourneyMap from '../components/JourneyMap';
 
 const SC = { 'Front Runner': '#52B788', Stalker: '#E8B86D', Closer: '#9B72CF' };
 const profileList = Object.values(allProfiles).sort((a, b) => (b.gpsScore || 0) - (a.gpsScore || 0));
@@ -281,6 +282,11 @@ export default function Profiles() {
                   </ResponsiveContainer>
                 </div>
               </div>
+            )}
+
+            {/* Journey Map */}
+            {h.races?.length > 0 && (
+              <JourneyMap races={h.races} horseName={h.name} />
             )}
 
             {/* Tabs */}
