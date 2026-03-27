@@ -7,6 +7,7 @@ import {
 } from 'recharts';
 import { Search, X, ChevronDown, ChevronUp } from 'lucide-react';
 import allProfiles from '../data/horseProfiles.json';
+import { getPortrait } from '../data/portraits';
 
 const SC = { 'Front Runner': '#52B788', Stalker: '#E8B86D', Closer: '#9B72CF' };
 const profileList = Object.values(allProfiles).sort((a, b) => (b.gpsScore || 0) - (a.gpsScore || 0));
@@ -245,26 +246,42 @@ export default function Profiles() {
           <motion.div key={h.name} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}>
 
             {/* ── PROFILE HEADER ── */}
-            <div className="card-flat" style={{ padding: 36, marginBottom: 24 }}>
+            <div className="card-flat" style={{ overflow: 'hidden', marginBottom: 24 }}>
+              {/* Hero portrait banner */}
+              <div style={{ position: 'relative', height: 200, overflow: 'hidden' }}>
+                <img src={getPortrait(h.name)} alt={h.name}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', filter: 'brightness(0.5) saturate(0.7)' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(13,17,10,0.3) 0%, rgba(13,17,10,0.95) 100%)' }} />
+                <div style={{ position: 'absolute', bottom: 20, left: 36, display: 'flex', alignItems: 'center', gap: 16 }}>
+                  <div style={{ width: 64, height: 64, borderRadius: 6, overflow: 'hidden', border: '2px solid rgba(197,151,87,0.3)', flexShrink: 0 }}>
+                    <img src={getPortrait(h.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div>
+                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 32, fontWeight: 500, color: '#D6D1CC', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>{h.name}</h2>
+                    <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
+                      <span style={{ fontSize: 12, padding: '3px 10px', borderRadius: 3, color, background: `${color}20`, border: `1px solid ${color}30`, backdropFilter: 'blur(4px)' }}>
+                        {h.style === 'Front Runner' ? 'Speed' : h.style}
+                      </span>
+                      {h.gpsScore != null && (
+                        <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', padding: '3px 10px', borderRadius: 3, color: '#C59757', background: 'rgba(197,151,87,0.15)', backdropFilter: 'blur(4px)' }}>
+                          GPS {h.gpsScore}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ padding: 36 }}>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 36 }}>
                 <div style={{ flex: '1 1 400px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: color }} />
-                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 32, fontWeight: 500, color: '#C59757' }}>{h.name}</h2>
-                  </div>
-
                   <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 12, padding: '4px 10px', borderRadius: 3, color, background: `${color}12`, border: `1px solid ${color}20` }}>
-                      {h.style === 'Front Runner' ? 'Speed' : h.style}
-                    </span>
                     <span style={{ fontSize: 12, padding: '4px 10px', borderRadius: 3, color: '#8A847E', background: '#1C2418' }}>
                       {h.record} record
                     </span>
-                    {h.gpsScore != null && (
-                      <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', padding: '4px 10px', borderRadius: 3, color: '#C59757', background: 'rgba(197,151,87,0.08)', border: '1px solid rgba(197,151,87,0.15)' }}>
-                        GPS {h.gpsScore}
-                      </span>
-                    )}
+                    <span style={{ fontSize: 12, padding: '4px 10px', borderRadius: 3, color: '#C59757', background: 'rgba(197,151,87,0.08)' }}>
+                      ${h.totalEarnings?.toLocaleString() || '0'} earned
+                    </span>
                   </div>
 
                   {/* Headline stats */}
@@ -295,6 +312,7 @@ export default function Profiles() {
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
+              </div>
               </div>
             </div>
 
@@ -429,24 +447,34 @@ export default function Profiles() {
                 const sc = SC[p.style] || '#5A5550';
                 return (
                   <button key={p.name} onClick={() => selectHorse(p.name)}
-                    className="card" style={{ padding: 20, textAlign: 'left', cursor: 'pointer', background: '#141A10' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                      <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC' }}>{p.name}</div>
-                      {p.gpsScore != null && <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, color: p.gpsScore >= 85 ? '#C59757' : '#8A847E' }}>{p.gpsScore}</span>}
-                    </div>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-                      <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color: sc, background: `${sc}12` }}>
-                        {p.style === 'Front Runner' ? 'Speed' : p.style}
-                      </span>
-                      <span style={{ fontSize: 12, color: '#5A5550' }}>{p.record}</span>
-                      <span style={{ fontSize: 12, color: '#C59757' }}>${p.totalEarnings?.toLocaleString()}</span>
-                    </div>
-                    {/* Position flow from latest race */}
-                    {p.races?.[0]?.positions?.length > 0 && (
-                      <div style={{ height: 32, marginTop: 4 }}>
-                        <PositionFlow positions={p.races[0].positions} color={sc} height={32} />
+                    className="card" style={{ padding: 0, textAlign: 'left', cursor: 'pointer', background: '#141A10', overflow: 'hidden' }}>
+                    {/* Portrait */}
+                    <div style={{ position: 'relative', height: 110, overflow: 'hidden' }}>
+                      <img src={getPortrait(p.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', filter: 'brightness(0.45) saturate(0.6)' }} />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 30%, rgba(20,26,16,0.95) 100%)' }} />
+                      {p.gpsScore != null && (
+                        <div style={{ position: 'absolute', top: 8, right: 8, fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: p.gpsScore >= 85 ? '#C59757' : '#8A847E', background: 'rgba(13,17,10,0.7)', padding: '3px 8px', borderRadius: 3, backdropFilter: 'blur(4px)' }}>
+                          {p.gpsScore}
+                        </div>
+                      )}
+                      <div style={{ position: 'absolute', bottom: 8, left: 12, right: 12 }}>
+                        <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{p.name}</div>
                       </div>
-                    )}
+                    </div>
+                    <div style={{ padding: '10px 12px 12px' }}>
+                      <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
+                        <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color: sc, background: `${sc}12` }}>
+                          {p.style === 'Front Runner' ? 'Speed' : p.style}
+                        </span>
+                        <span style={{ fontSize: 11, color: '#5A5550' }}>{p.record}</span>
+                        <span style={{ fontSize: 11, color: '#C59757' }}>${p.totalEarnings?.toLocaleString()}</span>
+                      </div>
+                      {p.races?.[0]?.positions?.length > 0 && (
+                        <div style={{ height: 30 }}>
+                          <PositionFlow positions={p.races[0].positions} color={sc} height={30} />
+                        </div>
+                      )}
+                    </div>
                   </button>
                 );
               })}

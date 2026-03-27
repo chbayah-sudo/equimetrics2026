@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import allRacesRaw from '../data/allRaces.json';
 import { forecastRaces, styleColors, scenarioColors } from '../data/forecastData';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
+import { getPortrait } from '../data/portraits';
 
 // Track full names
 const TRACK_NAMES = {
@@ -256,8 +257,8 @@ export default function Preview() {
               </div>
 
               {/* Header row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '40px 1fr 70px 80px', padding: '8px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
-                {['Post', 'Horse', 'Odds', 'GPS'].map(h => (
+              <div style={{ display: 'grid', gridTemplateColumns: '40px 40px 1fr 70px 80px', padding: '8px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
+                {['#', '', 'Horse', 'Odds', 'Data'].map(h => (
                   <div key={h} className="label" style={{ fontSize: 10 }}>{h}</div>
                 ))}
               </div>
@@ -271,17 +272,21 @@ export default function Preview() {
                   <div key={horse.name}
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: '40px 1fr 70px 80px',
+                      gridTemplateColumns: '40px 40px 1fr 70px 80px',
                       alignItems: 'center',
                       padding: '12px 24px',
                       borderBottom: '1px solid rgba(197,151,87,0.03)',
-                      opacity: hasGPS ? 1 : 0.4,
                       transition: 'background 250ms',
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(197,151,87,0.02)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
                     <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: '#5A5550' }}>{horse.post}</div>
+
+                    {/* Portrait thumbnail */}
+                    <div style={{ width: 32, height: 32, borderRadius: 4, overflow: 'hidden', border: '1px solid rgba(197,151,87,0.1)' }}>
+                      <img src={getPortrait(horse.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
 
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
@@ -291,7 +296,11 @@ export default function Preview() {
                             {horse.style === 'Front Runner' ? 'Speed' : horse.style}
                           </span>
                         )}
-                        {!hasGPS && <span style={{ fontSize: 10, color: '#5A5550', fontStyle: 'italic' }}>No GPS</span>}
+                        {!hasGPS && (
+                          <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color: '#8A847E', background: 'rgba(138,132,126,0.08)', border: '1px solid rgba(138,132,126,0.15)' }}>
+                            Traditional
+                          </span>
+                        )}
                       </div>
                       <div style={{ fontSize: 12, color: '#5A5550' }}>
                         J: {horse.jockey} · T: {horse.trainer}
@@ -309,9 +318,9 @@ export default function Preview() {
                           {horse.speeds?.length > 0 && <MiniSparkline data={horse.speeds} color={color} />}
                         </div>
                       ) : hasGPS ? (
-                        <span style={{ fontSize: 12, color: '#52B788' }}>Available</span>
+                        <span style={{ fontSize: 12, color: '#52B788' }}>GPS</span>
                       ) : (
-                        <span style={{ fontSize: 12, color: '#5A5550' }}>—</span>
+                        <span style={{ fontSize: 11, color: '#8A847E' }}>Trad.</span>
                       )}
                     </div>
                   </div>
@@ -337,17 +346,6 @@ export default function Preview() {
               </div>
             )}
 
-            {/* How-to for non-featured */}
-            {!featured && (
-              <div className="card-flat" style={{ padding: 24, marginTop: 24, borderColor: 'rgba(197,151,87,0.1)' }}>
-                <div style={{ borderLeft: '3px solid #C59757', paddingLeft: 16 }}>
-                  <p style={{ fontSize: 14, color: '#8A847E', lineHeight: 1.7 }}>
-                    <span style={{ color: '#C59757' }}>Note:</span> Full GPS analysis (pace scenarios, edge picks, speed profiles) is available for our 3 featured demo races.
-                    Select <strong style={{ color: '#D6D1CC' }}>Tampa Bay R7 (Mar 28)</strong>, <strong style={{ color: '#D6D1CC' }}>Aqueduct R9 (Mar 28)</strong>, or <strong style={{ color: '#D6D1CC' }}>Tampa Bay R5 (Mar 27)</strong> to see the complete analysis.
-                  </p>
-                </div>
-              </div>
-            )}
 
           </motion.div>
         </AnimatePresence>
