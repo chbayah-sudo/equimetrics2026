@@ -6,7 +6,7 @@ const navItems = [
   { path: '/', label: 'Home' },
   { path: '/live-replay', label: 'Live Replay' },
   { path: '/deep-dive', label: 'Deep Dive' },
-  { path: '/horse-dna', label: 'Horse DNA' },
+  { path: '/horse-profiles', label: 'Horse Profiles' },
   { path: '/forecast', label: 'Forecast' },
   { path: '/gps-edge', label: 'GPS Edge' },
 ];

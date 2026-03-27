@@ -4,7 +4,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import LiveReplay from './pages/RaceNight';
 import DeepDive from './pages/RaceXRay';
-import HorseDNA from './pages/Profiles';
+import HorseProfiles from './pages/Profiles';
 import Forecast from './pages/Preview';
 import GPSEdge from './pages/Insights';
 
@@ -34,7 +34,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/live-replay" element={<LiveReplay />} />
             <Route path="/deep-dive" element={<DeepDive />} />
-            <Route path="/horse-dna" element={<HorseDNA />} />
+            <Route path="/horse-profiles" element={<HorseProfiles />} />
             <Route path="/forecast" element={<Forecast />} />
             <Route path="/gps-edge" element={<GPSEdge />} />
           </Routes>

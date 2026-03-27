@@ -83,7 +83,7 @@ export default function Home() {
           {[
             { label: 'Replay', title: 'Live Replay', desc: 'Gate-by-gate GPS tracking. Watch positions evolve in real time with animated telemetry data from every horse in the field.', to: '/live-replay' },
             { label: 'Analysis', title: 'Deep Dive', desc: 'Speed traces, stride patterns, and ground loss metrics. See what chart callers with binoculars physically cannot observe.', to: '/deep-dive' },
-            { label: 'Profiling', title: 'Horse DNA', desc: 'Running style classification, stride signatures, and performance radar charts built from each horse\'s GPS history.', to: '/horse-dna' },
+            { label: 'Profiling', title: 'Horse Profiles', desc: 'Running style classification, stride signatures, and performance radar charts built from each horse\'s GPS history.', to: '/horse-profiles' },
             { label: 'Prediction', title: 'Forecast', desc: 'AI-powered pace projections and value picks for upcoming races based on GPS-derived running styles and patterns.', to: '/forecast' },
             { label: 'Comparison', title: 'GPS Edge', desc: 'Side-by-side comparison showing exactly what GPS reveals that traditional data misses, illustrated with real examples.', to: '/gps-edge' },
             { label: 'Detection', title: 'Track Bias', desc: 'Detect rail advantages, speed bias, and surface patterns using granular GPS positioning data across tracks.', to: '/gps-edge' },
