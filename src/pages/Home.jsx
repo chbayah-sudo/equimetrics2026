@@ -35,13 +35,6 @@ export default function Home() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}
-            style={{ position: 'absolute', bottom: -120, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}
-          >
-            <span style={{ fontSize: 10, letterSpacing: '2px', textTransform: 'uppercase', color: '#5A5550' }}>Scroll</span>
-            <div style={{ width: 1, height: 40, background: 'linear-gradient(to bottom, #C59757, transparent)' }} />
-          </motion.div>
         </div>
       </section>
 
@@ -50,10 +43,10 @@ export default function Home() {
         <motion.div {...fadeUp} transition={{ duration: 0.7 }}>
           <div className="card-flat" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '44px 0' }}>
             {[
-              { value: '985K+', label: 'GPS Data Points' },
-              { value: '32', label: 'GPS Tracks' },
-              { value: '2,847', label: 'Races Analyzed' },
-              { value: '8.2', label: 'Avg Field Size' },
+              { value: '12,919', label: 'Horses Profiled' },
+              { value: '52,767', label: 'Race Starts Analyzed' },
+              { value: '71', label: 'Tracks Covered' },
+              { value: '8.1', label: 'Avg Field Size' },
             ].map((stat, i) => (
               <div key={stat.label} style={{
                 textAlign: 'center', padding: '0 24px',
@@ -76,6 +69,9 @@ export default function Home() {
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 4.5vw, 46px)', fontWeight: 500, color: '#D6D1CC', maxWidth: 520 }}>
             Six tools that transform GPS telemetry into insight
           </h2>
+          <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 540, lineHeight: 1.7, marginTop: 18 }}>
+            We analyze all 52,000+ race starts across 71 tracks — and for the 32 GPS-equipped tracks, we unlock speed, stride, and ground loss data that traditional methods simply cannot capture.
+          </p>
         </motion.div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: 24 }}>
