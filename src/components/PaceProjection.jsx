@@ -7,7 +7,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   const sorted = [...payload].sort((a, b) => a.value - b.value);
   return (
-    <div style={{ background: '#161210', border: '1px solid rgba(197,151,87,0.15)', borderRadius: 3, padding: 12, minWidth: 130 }}>
+    <div style={{ background: '#141A10', border: '1px solid rgba(197,151,87,0.15)', borderRadius: 3, padding: 12, minWidth: 130 }}>
       <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: '#C59757', marginBottom: 8 }}>{label}</div>
       {sorted.map(e => (
         <div key={e.name} style={{ display: 'flex', justifyContent: 'space-between', gap: 16, fontSize: 11, padding: '2px 0' }}>
@@ -28,7 +28,7 @@ export default function PaceProjection() {
     <div className="card-flat" style={{ overflow: 'hidden' }}>
       <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
         <div className="label" style={{ color: '#C59757', marginBottom: 8 }}>AI Projection</div>
-        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: '#D6D1CC' }}>
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>
           Pace Scenario — {race.trackName} R{race.raceNumber}
         </h3>
         <p style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: '#5A5550', marginTop: 4 }}>
@@ -55,7 +55,7 @@ export default function PaceProjection() {
             <Tooltip content={<CustomTooltip />} />
             {race.horses.map(h => (
               <Line key={h.name} type="monotone" dataKey={h.name} stroke={COLORS[h.name]} strokeWidth={1.5}
-                dot={{ r: 3, fill: COLORS[h.name], stroke: '#0C0A09', strokeWidth: 2 }} activeDot={{ r: 5 }} />
+                dot={{ r: 3, fill: COLORS[h.name], stroke: '#0D110A', strokeWidth: 2 }} activeDot={{ r: 5 }} />
             ))}
           </LineChart>
         </ResponsiveContainer>
@@ -63,7 +63,7 @@ export default function PaceProjection() {
 
       <div style={{ padding: '0 28px 24px' }}>
         <div style={{ borderLeft: '3px solid #C59757', paddingLeft: 16 }}>
-          <p style={{ fontSize: 13, color: '#8A847E', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.7 }}>
             Floge sets the pace. Luna Moth stalks and strikes in the stretch. <span style={{ color: '#C59757' }}>Value pick: Foxy Cara (4/1)</span> — pace setup strongly favors closers.
           </p>
         </div>

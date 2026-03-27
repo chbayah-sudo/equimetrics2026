@@ -8,8 +8,8 @@ export default function Insights() {
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 12 }}>Data Advantage</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 48 }}>GPS Insights</h1>
+        <div className="label" style={{ color: '#C59757', marginBottom: 12 }}>The Advantage</div>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 48 }}>GPS Edge</h1>
       </motion.div>
 
       {/* Side-by-side comparison */}
@@ -21,16 +21,16 @@ export default function Insights() {
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 56, fontWeight: 400, color: '#5A5550', marginBottom: 8 }}>
               {comparisonData.traditional.dataPoints}
             </div>
-            <p style={{ fontSize: 14, color: '#8A847E', marginBottom: 24 }}>{comparisonData.traditional.label}</p>
+            <p style={{ fontSize: 16, color: '#8A847E', marginBottom: 24 }}>{comparisonData.traditional.label}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
               {comparisonData.traditional.metrics.map(m => (
-                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#5A5550' }}>
+                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 15, color: '#5A5550' }}>
                   <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#5A5550' }} />{m}
                 </div>
               ))}
             </div>
-            <div style={{ padding: 16, borderRadius: 3, background: '#1E1915' }}>
-              <p style={{ fontSize: 12, color: '#5A5550', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.traditional.example}"</p>
+            <div style={{ padding: 16, borderRadius: 3, background: '#1C2418' }}>
+              <p style={{ fontSize: 13, color: '#5A5550', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.traditional.example}"</p>
             </div>
             <p style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: '#5A5550', marginTop: 12 }}>{comparisonData.traditional.precision}</p>
           </div>
@@ -43,7 +43,7 @@ export default function Insights() {
             <div style={{ fontFamily: 'var(--font-serif)', fontSize: 56, fontWeight: 400, color: '#C59757', marginBottom: 8 }}>
               {comparisonData.gps.dataPoints}+
             </div>
-            <p style={{ fontSize: 14, color: '#8A847E', marginBottom: 24 }}>{comparisonData.gps.label}</p>
+            <p style={{ fontSize: 16, color: '#8A847E', marginBottom: 24 }}>{comparisonData.gps.label}</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
               {comparisonData.gps.metrics.map(m => (
                 <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#C59757', opacity: 0.7 }}>
@@ -52,7 +52,7 @@ export default function Insights() {
               ))}
             </div>
             <div style={{ padding: 16, borderRadius: 3, background: 'rgba(197,151,87,0.06)' }}>
-              <p style={{ fontSize: 12, color: '#8A847E', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.gps.example}"</p>
+              <p style={{ fontSize: 14, color: '#8A847E', fontStyle: 'italic', lineHeight: 1.6 }}>"{comparisonData.gps.example}"</p>
             </div>
             <p style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: '#C59757', opacity: 0.5, marginTop: 12 }}>{comparisonData.gps.precision}</p>
           </div>
@@ -83,8 +83,8 @@ export default function Insights() {
             <motion.div key={c.title} {...fadeUp} transition={{ delay: i * 0.06 }}>
               <div className="card" style={{ padding: 28 }}>
                 <div className="gold-line" style={{ marginBottom: 16 }} />
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>{c.title}</h3>
-                <p style={{ fontSize: 13, color: '#8A847E', lineHeight: 1.7 }}>{c.desc}</p>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>{c.title}</h3>
+                <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.7 }}>{c.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -98,7 +98,7 @@ export default function Insights() {
           <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 500, color: '#D6D1CC', marginBottom: 16 }}>
             Non-GPS tracks
           </h3>
-          <p style={{ fontSize: 14, color: '#8A847E', lineHeight: 1.8, marginBottom: 32 }}>
+          <p style={{ fontSize: 16, color: '#8A847E', lineHeight: 1.8, marginBottom: 32 }}>
             Only 32 of 117 tracks currently have GPS. GallopIQ is designed to work everywhere.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
@@ -107,14 +107,14 @@ export default function Insights() {
               { value: '85%', label: 'Calibration', sub: 'Prediction from traditional data' },
               { value: '117', label: 'All Tracks', sub: 'Supported with lower confidence' },
             ].map(s => (
-              <div key={s.label} style={{ padding: 20, borderRadius: 3, background: '#1E1915' }}>
+              <div key={s.label} style={{ padding: 20, borderRadius: 3, background: '#1C2418' }}>
                 <div style={{ fontFamily: 'var(--font-serif)', fontSize: 32, fontWeight: 400, color: '#C59757', marginBottom: 8 }}>{s.value}</div>
                 <div style={{ fontSize: 13, fontWeight: 500, color: '#D6D1CC' }}>{s.label}</div>
-                <div style={{ fontSize: 11, color: '#5A5550', marginTop: 4 }}>{s.sub}</div>
+                <div style={{ fontSize: 13, color: '#5A5550', marginTop: 4 }}>{s.sub}</div>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: 12, color: '#5A5550', marginTop: 24, lineHeight: 1.7 }}>
+          <p style={{ fontSize: 13, color: '#5A5550', marginTop: 24, lineHeight: 1.7 }}>
             By training on races with both GPS and traditional data, we build a translation model that generates synthetic GPS-like metrics. This quantifies the business case for GPS expansion.
           </p>
         </div>

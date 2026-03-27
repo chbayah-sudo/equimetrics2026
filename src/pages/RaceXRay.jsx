@@ -9,9 +9,9 @@ export default function RaceXRay() {
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
       <motion.div {...fadeUp}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 12 }}>Deep Analysis</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>Race X-Ray</h1>
-        <p style={{ fontSize: 14, color: '#5A5550', marginBottom: 48 }}>See what chart callers cannot</p>
+        <div className="label" style={{ color: '#C59757', marginBottom: 12 }}>Analysis</div>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>Deep Dive</h1>
+        <p style={{ fontSize: 15, color: '#5A5550', marginBottom: 48 }}>See what chart callers can't see</p>
       </motion.div>
 
       {/* Key metrics */}
@@ -28,7 +28,7 @@ export default function RaceXRay() {
                 {s.value}<span style={{ fontSize: 16, color: '#5A5550', marginLeft: 2 }}>{s.unit}</span>
               </div>
               <div className="label" style={{ marginTop: 8 }}>{s.label}</div>
-              <div style={{ fontSize: 11, color: '#5A5550', marginTop: 4 }}>{s.sub}</div>
+              <div style={{ fontSize: 13, color: '#5A5550', marginTop: 4 }}>{s.sub}</div>
             </div>
           ))}
         </div>
@@ -48,8 +48,8 @@ export default function RaceXRay() {
         <div className="card-flat" style={{ overflow: 'hidden' }}>
           <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
             <div className="label" style={{ color: '#C59757', marginBottom: 8 }}>GPS Exclusive</div>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: '#D6D1CC' }}>Effort-Adjusted Rankings</h3>
-            <p style={{ fontSize: 13, color: '#5A5550', marginTop: 4 }}>Rankings recalculated for ground loss</p>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>Effort-Adjusted Rankings</h3>
+            <p style={{ fontSize: 14, color: "#5A5550", marginTop: 4 }}>Rankings recalculated for ground loss</p>
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
@@ -69,10 +69,10 @@ export default function RaceXRay() {
                     <td style={{ padding: '12px 28px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <div style={{ width: 6, height: 6, borderRadius: '50%', background: rh?.color }} />
-                        <span style={{ fontSize: 14, color: '#D6D1CC' }}>{horse.name}</span>
+                        <span style={{ fontSize: 16, color: '#D6D1CC' }}>{horse.name}</span>
                       </div>
                     </td>
-                    <td style={{ padding: '12px 28px', fontFamily: 'var(--font-mono)', fontSize: 13, color: '#5A5550' }}>{rh?.finalPos}</td>
+                    <td style={{ padding: '12px 28px', fontFamily: 'var(--font-mono)', fontSize: 15, color: '#5A5550' }}>{rh?.finalPos}</td>
                     <td style={{ padding: '12px 28px', fontFamily: 'var(--font-mono)', fontSize: 13, color: horse.groundLoss > 15 ? '#C59757' : '#5A5550' }}>+{horse.groundLoss}m</td>
                     <td style={{ padding: '12px 28px', fontSize: 12, color: improved ? '#C59757' : '#5A5550' }}>{improved ? 'Undervalued' : 'Fair'}</td>
                   </tr>

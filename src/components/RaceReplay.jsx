@@ -30,16 +30,16 @@ export default function RaceReplay() {
       <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <div className="label" style={{ color: '#C59757', marginBottom: 6 }}>Race Replay</div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: '#D6D1CC' }}>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>
             {featuredRace.trackName} Race {featuredRace.raceNumber}
           </h3>
-          <p style={{ fontSize: 12, color: '#5A5550', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
+          <p style={{ fontSize: 13, color: '#5A5550', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
             {featuredRace.distance} {featuredRace.surface} · {featuredRace.type} · {featuredRace.purse}
           </p>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 400, color: '#C59757' }}>{currentData.label}</div>
-          <div style={{ fontSize: 11, color: '#5A5550' }}>Gate {currentData.gate}</div>
+          <div style={{ fontSize: 13, color: '#5A5550' }}>Gate {currentData.gate}</div>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export default function RaceReplay() {
             <div key={horse.name} style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 5 }}>
               <div style={{ width: 24, fontFamily: 'var(--font-serif)', fontSize: 14, color: isLeader ? '#C59757' : '#5A5550', textAlign: 'center' }}>{position}</div>
               <div style={{ width: 140, fontSize: 13, fontWeight: 500, color: isLeader ? '#D6D1CC' : '#5A5550', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{horse.name}</div>
-              <div style={{ flex: 1, height: 20, borderRadius: 2, background: '#1E1915', overflow: 'hidden', position: 'relative' }}>
+              <div style={{ flex: 1, height: 20, borderRadius: 2, background: '#1C2418', overflow: 'hidden', position: 'relative' }}>
                 <motion.div animate={{ width: `${barWidth}%` }} transition={{ duration: 0.4, ease: 'easeOut' }}
                   style={{ height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${horse.color}10, ${horse.color}30)`, borderRight: `2px solid ${horse.color}` }} />
                 <motion.div animate={{ left: `calc(${barWidth}% - 4px)` }} transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -82,9 +82,9 @@ export default function RaceReplay() {
         <div style={{ flex: 1 }}>
           <input type="range" min={0} max={totalGates - 1} value={currentGate}
             onChange={e => { setCurrentGate(parseInt(e.target.value)); setIsPlaying(false); }}
-            style={{ width: '100%', height: 2, appearance: 'none', cursor: 'pointer', background: `linear-gradient(to right, #C59757 ${progress}%, #1E1915 ${progress}%)`, borderRadius: 1, accentColor: '#C59757' }} />
+            style={{ width: '100%', height: 2, appearance: 'none', cursor: 'pointer', background: `linear-gradient(to right, #C59757 ${progress}%, #1C2418 ${progress}%)`, borderRadius: 1, accentColor: '#C59757' }} />
         </div>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#C59757', fontVariantNumeric: 'tabular-nums' }}>{currentGate + 1}/{totalGates}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#C59757', fontVariantNumeric: 'tabular-nums' }}>{currentGate + 1}/{totalGates}</span>
       </div>
     </div>
   );

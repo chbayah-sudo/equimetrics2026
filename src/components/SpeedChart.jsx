@@ -5,7 +5,7 @@ import { featuredRace, speedData, strideData } from '../data/raceData';
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div style={{ background: '#161210', border: '1px solid rgba(197,151,87,0.15)', borderRadius: 3, padding: 12, minWidth: 150 }}>
+    <div style={{ background: '#141A10', border: '1px solid rgba(197,151,87,0.15)', borderRadius: 3, padding: 12, minWidth: 150 }}>
       <div style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: '#C59757', marginBottom: 8 }}>{label}</div>
       {payload.map(entry => (
         <div key={entry.name} style={{ display: 'flex', justifyContent: 'space-between', gap: 16, fontSize: 11, padding: '2px 0' }}>
@@ -30,7 +30,7 @@ export default function SpeedChart({ type = 'speed' }) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
           <div className="label" style={{ marginBottom: 8 }}>{type === 'speed' ? 'Velocity' : 'Biomechanics'}</div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: '#D6D1CC' }}>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>
             {type === 'speed' ? 'Speed Traces' : 'Stride Analysis'}
           </h3>
         </div>
@@ -69,7 +69,7 @@ export default function SpeedChart({ type = 'speed' }) {
           {featuredRace.horses.map(h => activeHorses.includes(h.name) ? (
             <Area key={h.name} type="monotone" dataKey={h.name} stroke={h.color} strokeWidth={1.5}
               fill={`url(#g-${type}-${h.name.replace(/[^a-zA-Z]/g, '')})`}
-              dot={false} activeDot={{ r: 3, fill: h.color, stroke: '#0C0A09', strokeWidth: 2 }} />
+              dot={false} activeDot={{ r: 3, fill: h.color, stroke: '#0D110A', strokeWidth: 2 }} />
           ) : null)}
         </AreaChart>
       </ResponsiveContainer>

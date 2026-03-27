@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 
 const navItems = [
   { path: '/', label: 'Home' },
-  { path: '/race-night', label: 'Race Night' },
-  { path: '/xray', label: 'X-Ray' },
-  { path: '/profiles', label: 'Profiles' },
-  { path: '/preview', label: 'Preview' },
-  { path: '/insights', label: 'Insights' },
+  { path: '/live-replay', label: 'Live Replay' },
+  { path: '/deep-dive', label: 'Deep Dive' },
+  { path: '/horse-dna', label: 'Horse DNA' },
+  { path: '/forecast', label: 'Forecast' },
+  { path: '/gps-edge', label: 'GPS Edge' },
 ];
 
 export default function Navbar() {
@@ -28,25 +28,23 @@ export default function Navbar() {
       transition={{ duration: 0.8, delay: 0.2 }}
       style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, height: 72,
-        backgroundColor: 'rgba(12, 10, 9, 0.92)',
+        backgroundColor: 'rgba(13, 17, 10, 0.92)',
         backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${scrolled ? 'rgba(197, 151, 87, 0.08)' : 'rgba(197, 151, 87, 0.03)'}`,
         transition: 'border-color 400ms ease',
       }}
     >
       <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        {/* Logo */}
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: 0 }}>
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 16, fontWeight: 600, color: '#D6D1CC', letterSpacing: '0.5px' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 17, fontWeight: 600, color: '#D6D1CC', letterSpacing: '0.5px' }}>
             GALLOP
           </span>
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 16, fontWeight: 600, color: '#C59757', letterSpacing: '0.5px' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 17, fontWeight: 600, color: '#C59757', letterSpacing: '0.5px' }}>
             IQ
           </span>
         </Link>
 
-        {/* Links */}
-        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 32 }}>
+        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 28 }}>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -54,7 +52,7 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 style={{
-                  fontSize: 13, fontWeight: 400, textDecoration: 'none',
+                  fontSize: 14, fontWeight: 400, textDecoration: 'none',
                   color: isActive ? '#C59757' : '#5A5550',
                   transition: 'color 300ms ease',
                 }}
@@ -67,9 +65,8 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* CTA */}
-        <Link to="/race-night" className="hidden md:inline-flex btn-primary" style={{ padding: '10px 22px', fontSize: 11 }}>
-          Explore Race
+        <Link to="/live-replay" className="hidden md:inline-flex btn-primary" style={{ padding: '10px 22px', fontSize: 12 }}>
+          Watch a Race
         </Link>
       </div>
     </motion.nav>

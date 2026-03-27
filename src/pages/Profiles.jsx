@@ -42,7 +42,7 @@ export default function Profiles() {
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="label" style={{ color: '#C59757', marginBottom: 12 }}>Horse DNA</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 40 }}>Profiles</h1>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 40 }}>Horse DNA</h1>
       </motion.div>
 
       {/* Selector */}
@@ -50,7 +50,7 @@ export default function Profiles() {
         {profiles.map((p, i) => (
           <button key={p.name} onClick={() => setSel(i)}
             style={{ padding: '12px 24px', borderRadius: 3, fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 300ms',
-              background: sel === i ? '#161210' : 'transparent',
+              background: sel === i ? '#141A10' : 'transparent',
               border: sel === i ? '1px solid rgba(197,151,87,0.15)' : '1px solid rgba(197,151,87,0.04)',
               color: sel === i ? '#C59757' : '#5A5550' }}>
             {p.name}
@@ -69,7 +69,7 @@ export default function Profiles() {
                   <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: '#C59757' }}>{h.name}</h2>
                 </div>
                 <div className="label" style={{ marginBottom: 20 }}>{h.style}</div>
-                <p style={{ fontSize: 14, color: '#8A847E', lineHeight: 1.8, marginBottom: 24 }}>{h.bio}</p>
+                <p style={{ fontSize: 16, color: '#8A847E', lineHeight: 1.8, marginBottom: 24 }}>{h.bio}</p>
                 <div style={{ display: 'flex', gap: 32, fontSize: 13 }}>
                   {[['Record', h.record], ['Top Speed', h.bestSpeed], ['Avg Stride', h.avgStride]].map(([l, v]) => (
                     <div key={l}>
@@ -96,7 +96,7 @@ export default function Profiles() {
             {[['Speed Profile', 'mph', h.speed, 'speed'], ['Stride Pattern', 'ft', h.stride, 'stride']].map(([title, unit, data, key]) => (
               <div key={key} className="card-flat" style={{ padding: 24 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: '#D6D1CC' }}>{title}</h3>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC' }}>{title}</h3>
                   <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>{unit}</span>
                 </div>
                 <ResponsiveContainer width="100%" height={120}>
@@ -116,15 +116,15 @@ export default function Profiles() {
 
           {/* Attributes */}
           <div className="card-flat" style={{ padding: 32 }}>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 16, fontWeight: 500, color: '#D6D1CC', marginBottom: 24 }}>Attributes</h3>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC', marginBottom: 24 }}>Attributes</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 40px' }}>
               {[['Top Speed', h.topSpeed], ['Acceleration', h.acceleration], ['Stamina', h.stamina], ['Closing Power', h.closing], ['Efficiency', h.efficiency], ['Consistency', h.consistency]].map(([label, val]) => (
                 <div key={label}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <span style={{ fontSize: 13, color: '#8A847E' }}>{label}</span>
+                    <span style={{ fontSize: 15, color: '#8A847E' }}>{label}</span>
                     <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: '#C59757' }}>{val}</span>
                   </div>
-                  <div style={{ height: 3, borderRadius: 1, background: '#1E1915', overflow: 'hidden' }}>
+                  <div style={{ height: 3, borderRadius: 1, background: '#1C2418', overflow: 'hidden' }}>
                     <motion.div initial={{ width: 0 }} animate={{ width: `${val}%` }} transition={{ duration: 0.8, ease: 'easeOut' }}
                       style={{ height: '100%', borderRadius: 1, background: `linear-gradient(90deg, ${h.color}60, ${h.color})` }} />
                   </div>
