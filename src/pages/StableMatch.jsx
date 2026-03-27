@@ -293,6 +293,12 @@ function PreferencesScreen({ onStart }) {
         </div>
       </div>
 
+      <div style={{ marginBottom: 32, padding: '16px 20px', borderRadius: 3, background: 'rgba(232,184,109,0.06)', border: '1px solid rgba(232,184,109,0.12)' }}>
+        <p style={{ fontSize: 14, color: '#E8B86D', fontWeight: 600, lineHeight: 1.7, margin: 0 }}>
+          Fun fact: A horse's left heart ventricle size is one of the strongest predictors of racing success — bigger chamber, more blood per beat, more speed when it counts.
+        </p>
+      </div>
+
       <button
         onClick={() => onStart({ style, odds: ODDS_RANGES[odds], surface, minGPS })}
         className="btn-primary"
