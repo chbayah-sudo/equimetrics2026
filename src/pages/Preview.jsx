@@ -1,314 +1,357 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AreaChart, Area, ResponsiveContainer } from 'recharts';
+import allRacesRaw from '../data/allRaces.json';
 import { forecastRaces, styleColors, scenarioColors } from '../data/forecastData';
+import { AreaChart, Area, ResponsiveContainer } from 'recharts';
+
+// Track full names
+const TRACK_NAMES = {
+  AQU: 'Aqueduct', GP: 'Gulfstream Park', 'GP ': 'Gulfstream Park', HOU: 'Sam Houston',
+  LRL: 'Laurel Park', 'OP ': 'Oaklawn Park', OP: 'Oaklawn Park', SA: 'Santa Anita',
+  'SA ': 'Santa Anita', TAM: 'Tampa Bay Downs', TP: 'Turfway Park', 'TP ': 'Turfway Park',
+  CT: 'Charles Town', 'CT ': 'Charles Town', PEN: 'Penn National', PRX: 'Parx',
+  MVR: 'Mahoning Valley', FON: 'Fonner Park', TUP: 'Turf Paradise', SUN: 'Sunland Park',
+  CMR: 'Camarero', WRD: 'Will Rogers', CAM: 'Camarero', CHE: 'Cherokee',
+};
 
 const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
 
-function MiniSparkline({ data, color, width = 80, height = 28 }) {
-  if (!data || !data.length) return null;
-  const chartData = data.map((v, i) => ({ i, v }));
+// Find the matching deep-analysis race from forecastData
+function findFeaturedRace(track, raceNumber, date) {
+  return forecastRaces.find(r =>
+    r.track === track.trim() && r.raceNumber === raceNumber && r.date === date
+  );
+}
+
+function MiniSparkline({ data, color, width = 72, height = 24 }) {
+  if (!data?.length) return null;
   return (
     <div style={{ width, height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData} margin={{ top: 2, right: 0, left: 0, bottom: 2 }}>
+        <AreaChart data={data.map((v, i) => ({ i, v }))} margin={{ top: 1, right: 0, left: 0, bottom: 1 }}>
           <defs>
-            <linearGradient id={`spark-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={color} stopOpacity={0.15} />
+            <linearGradient id={`sp-${color.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={color} stopOpacity={0.12} />
               <stop offset="100%" stopColor={color} stopOpacity={0} />
             </linearGradient>
           </defs>
-          <Area type="monotone" dataKey="v" stroke={color} strokeWidth={1.2}
-            fill={`url(#spark-${color.replace('#', '')})`} dot={false} />
+          <Area type="monotone" dataKey="v" stroke={color} strokeWidth={1}
+            fill={`url(#sp-${color.replace('#', '')})`} dot={false} />
         </AreaChart>
       </ResponsiveContainer>
     </div>
   );
 }
 
-function PaceBar({ analysis }) {
-  const total = analysis.frontRunners + analysis.stalkers + analysis.closers;
-  const frPct = (analysis.frontRunners / total) * 100;
-  const stPct = (analysis.stalkers / total) * 100;
-  const clPct = (analysis.closers / total) * 100;
-  const sc = scenarioColors[analysis.scenario] || '#C59757';
-
-  return (
-    <div className="card-flat" style={{ padding: 32, overflow: 'hidden' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
-        <div>
-          <div className="label" style={{ color: sc, marginBottom: 10, fontSize: 12 }}>Pace Scenario</div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 26, fontWeight: 500, color: '#D6D1CC' }}>
-            {analysis.label}
-          </h3>
-        </div>
-        <div style={{ display: 'flex', gap: 16, fontSize: 13 }}>
-          {[
-            { label: 'Speed', count: analysis.frontRunners, color: styleColors['Front Runner'] },
-            { label: 'Stalk', count: analysis.stalkers, color: styleColors['Stalker'] },
-            { label: 'Close', count: analysis.closers, color: styleColors['Closer'] },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 400, color: s.color }}>{s.count}</div>
-              <div style={{ fontSize: 11, color: '#5A5550', marginTop: 2 }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', height: 8, borderRadius: 4, overflow: 'hidden', marginBottom: 20 }}>
-        <div style={{ width: `${frPct}%`, background: styleColors['Front Runner'], transition: 'width 600ms ease' }} />
-        <div style={{ width: `${stPct}%`, background: styleColors['Stalker'], transition: 'width 600ms ease' }} />
-        <div style={{ width: `${clPct}%`, background: styleColors['Closer'], transition: 'width 600ms ease' }} />
-      </div>
-
-      <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.8 }}>{analysis.detail}</p>
-    </div>
-  );
-}
-
-function GPSEdgePick({ pick, index }) {
-  return (
-    <motion.div {...fadeUp} transition={{ delay: 0.1 * index }}>
-      <div style={{ borderLeft: '3px solid #C59757', paddingLeft: 24, marginBottom: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-          <span style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#C59757' }}>{pick.name}</span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#5A5550' }}>{pick.odds}</span>
-        </div>
-        <div style={{ fontSize: 16, fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>{pick.headline}</div>
-        <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.8 }}>{pick.analysis}</p>
-      </div>
-    </motion.div>
-  );
-}
-
-function HorseRow({ horse, rank }) {
-  const styleColor = horse.style ? styleColors[horse.style] : '#5A5550';
-
-  return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: '36px 1fr 90px 70px 60px 80px',
-      alignItems: 'center',
-      padding: '14px 24px',
-      borderBottom: '1px solid rgba(197,151,87,0.04)',
-      opacity: horse.hasGPS ? 1 : 0.45,
-      transition: 'background 300ms ease',
-    }}
-      onMouseEnter={e => e.currentTarget.style.background = 'rgba(197,151,87,0.02)'}
-      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-    >
-      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: rank <= 3 ? '#C59757' : '#5A5550' }}>
-        {horse.post}
-      </div>
-
-      <div>
-        <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC', marginBottom: 2 }}>{horse.name}</div>
-        <div style={{ fontSize: 12, color: '#5A5550' }}>
-          J: {horse.jockey} &nbsp;·&nbsp; T: {horse.trainer}
-        </div>
-      </div>
-
-      <div>
-        {horse.style ? (
-          <span style={{
-            fontSize: 11, fontWeight: 500, padding: '3px 8px', borderRadius: 3,
-            color: styleColor, background: `${styleColor}12`, border: `1px solid ${styleColor}20`,
-          }}>
-            {horse.style === 'Front Runner' ? 'Speed' : horse.style}
-          </span>
-        ) : (
-          <span style={{ fontSize: 11, color: '#5A5550', fontStyle: 'italic' }}>No GPS</span>
-        )}
-      </div>
-
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#8A847E' }}>{horse.odds}</div>
-
-      <div>
-        {horse.gpsScore != null ? (
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 600, color: horse.gpsScore >= 85 ? '#C59757' : horse.gpsScore >= 70 ? '#D6D1CC' : '#5A5550' }}>
-            {horse.gpsScore}
-          </span>
-        ) : (
-          <span style={{ fontSize: 12, color: '#5A5550' }}>—</span>
-        )}
-      </div>
-
-      <div>
-        {horse.speeds.length > 0 ? (
-          <MiniSparkline data={horse.speeds} color={styleColor} />
-        ) : (
-          <div style={{ width: 80, height: 28, borderRadius: 2, background: '#1C2418', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: 9, color: '#5A5550' }}>NO DATA</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export default function Preview() {
-  const [selRace, setSelRace] = useState(0);
-  const race = forecastRaces[selRace];
+  // Get unique dates and tracks
+  const dates = useMemo(() => [...new Set(allRacesRaw.map(r => r.date))].sort(), []);
+  const [selDate, setSelDate] = useState(dates[2] || dates[0]); // default to Mar 27
+  const [selTrack, setSelTrack] = useState(null);
+  const [selRaceNum, setSelRaceNum] = useState(null);
 
-  const sortedHorses = [...race.horses].sort((a, b) => {
-    if (!a.hasGPS && !b.hasGPS) return 0;
-    if (!a.hasGPS) return 1;
-    if (!b.hasGPS) return -1;
-    return (b.gpsScore || 0) - (a.gpsScore || 0);
-  });
+  // Filter races for selected date
+  const dayRaces = useMemo(() => allRacesRaw.filter(r => r.date === selDate), [selDate]);
+  const tracks = useMemo(() => {
+    const t = [...new Set(dayRaces.map(r => r.track))].sort((a, b) => {
+      // Sort GPS-heavy tracks first
+      const aGps = dayRaces.filter(r => r.track === a).reduce((s, r) => s + r.gpsPct, 0);
+      const bGps = dayRaces.filter(r => r.track === b).reduce((s, r) => s + r.gpsPct, 0);
+      return bGps - aGps;
+    });
+    return t;
+  }, [dayRaces]);
+
+  // Auto-select first track when date changes
+  const activeTrack = selTrack && tracks.includes(selTrack) ? selTrack : tracks[0];
+  const trackRaces = useMemo(() => dayRaces.filter(r => r.track === activeTrack).sort((a, b) => a.raceNumber - b.raceNumber), [dayRaces, activeTrack]);
+  const activeRaceNum = selRaceNum && trackRaces.some(r => r.raceNumber === selRaceNum) ? selRaceNum : trackRaces[0]?.raceNumber;
+  const activeRace = trackRaces.find(r => r.raceNumber === activeRaceNum);
+
+  // Check if this race has a featured deep analysis
+  const featured = activeRace ? findFeaturedRace(activeRace.track, activeRace.raceNumber, activeRace.date) : null;
+
+  const trackName = TRACK_NAMES[activeTrack] || TRACK_NAMES[activeTrack?.trim()] || activeTrack;
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
 
+      {/* Header */}
       <motion.div {...fadeUp}>
         <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>Upcoming Races</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 16 }}>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 12 }}>
           Forecast
         </h1>
-        <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 560, lineHeight: 1.7, marginBottom: 48 }}>
-          GPS-powered predictions for upcoming races. Pick a race, see the full field, and discover which horses have hidden edges the morning line doesn't reflect.
+        <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 520, lineHeight: 1.7, marginBottom: 16 }}>
+          Pick a date, track, and race to see every horse in the field with GPS insights the odds don't reflect.
+        </p>
+        <p style={{ fontSize: 14, color: '#5A5550', marginBottom: 48 }}>
+          {allRacesRaw.length} races · {dates.length} race days · {new Set(allRacesRaw.map(r => r.track)).size} tracks
         </p>
       </motion.div>
 
-      {/* How to use */}
-      <motion.div {...fadeUp} transition={{ delay: 0.05 }}>
-        <div className="card-flat" style={{ padding: 28, marginBottom: 48, borderColor: 'rgba(197,151,87,0.1)' }}>
-          <div style={{ borderLeft: '3px solid #C59757', paddingLeft: 20 }}>
-            <div style={{ fontSize: 16, fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>How to read this page</div>
-            <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.8 }}>
-              This page shows you which horses have hidden advantages that only GPS data can reveal.
-              The morning line odds reflect a track oddsmaker's prediction based on past finishes and
-              reputation — but they don't account for <span style={{ color: '#C59757' }}>ground loss</span> (how
-              much extra distance a horse runs from racing wide), <span style={{ color: '#C59757' }}>true
-              sectional speed</span> (how fast each horse actually ran, not just the leader), or <span style={{ color: '#C59757' }}>stride
-              efficiency</span> (whether a horse is tiring or accelerating late).
-              GallopIQ analyzes all of this to find horses the odds undervalue.
-            </p>
-          </div>
+      {/* ── DATE SELECTOR ── */}
+      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 28 }}>
+        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race Day</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {dates.map(d => {
+            const dayName = new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            const count = allRacesRaw.filter(r => r.date === d).length;
+            const isActive = d === selDate;
+            return (
+              <button key={d} onClick={() => { setSelDate(d); setSelTrack(null); setSelRaceNum(null); }}
+                style={{
+                  padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  background: isActive ? '#141A10' : 'transparent',
+                  border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
+                  color: isActive ? '#C59757' : '#5A5550',
+                }}>
+                <div style={{ fontSize: 14, fontWeight: 500 }}>{dayName}</div>
+                <div style={{ fontSize: 11, color: '#5A5550', marginTop: 2 }}>{count} races</div>
+              </button>
+            );
+          })}
         </div>
       </motion.div>
 
-      {/* Race selector */}
-      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 40 }}>
-        <div className="label" style={{ marginBottom: 16, fontSize: 12 }}>Select a Race</div>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          {forecastRaces.map((r, i) => (
-            <button key={r.id} onClick={() => setSelRace(i)}
-              style={{
-                padding: '16px 24px', borderRadius: 3, cursor: 'pointer', textAlign: 'left',
-                minWidth: 220, transition: 'all 300ms',
-                background: selRace === i ? '#141A10' : '#141A10',
-                border: selRace === i ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <span style={{ fontFamily: 'var(--font-serif)', fontSize: 18, fontWeight: 500, color: selRace === i ? '#C59757' : '#D6D1CC' }}>
-                  {r.trackName} R{r.raceNumber}
+      {/* ── TRACK SELECTOR ── */}
+      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 28 }}>
+        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Track</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {tracks.map(t => {
+            const tRaces = dayRaces.filter(r => r.track === t);
+            const tAvgGps = Math.round(tRaces.reduce((s, r) => s + r.gpsPct, 0) / tRaces.length);
+            const isActive = t === activeTrack;
+            const name = TRACK_NAMES[t] || TRACK_NAMES[t?.trim()] || t;
+            return (
+              <button key={t} onClick={() => { setSelTrack(t); setSelRaceNum(null); }}
+                style={{
+                  padding: '10px 16px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  background: isActive ? '#141A10' : 'transparent',
+                  border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
+                  color: isActive ? '#D6D1CC' : '#5A5550',
+                }}>
+                <div style={{ fontSize: 14, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  {name}
+                  {tAvgGps >= 70 && (
+                    <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', padding: '1px 5px', borderRadius: 2, background: 'rgba(82,183,136,0.1)', color: '#52B788' }}>
+                      GPS
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontSize: 11, color: '#5A5550', marginTop: 2 }}>{tRaces.length} races · {tAvgGps}% GPS</div>
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      {/* ── RACE NUMBER SELECTOR ── */}
+      <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 40 }}>
+        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race</div>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          {trackRaces.map(r => {
+            const isActive = r.raceNumber === activeRaceNum;
+            return (
+              <button key={r.raceNumber} onClick={() => setSelRaceNum(r.raceNumber)}
+                style={{
+                  width: 52, height: 52, borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  background: isActive ? '#141A10' : 'transparent',
+                  border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
+                }}>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: isActive ? '#C59757' : '#5A5550' }}>
+                  {r.raceNumber}
+                </div>
+                <div style={{
+                  fontSize: 9, fontFamily: 'var(--font-mono)', marginTop: 1,
+                  color: r.gpsPct >= 80 ? '#52B788' : r.gpsPct >= 40 ? '#E8B86D' : '#5A5550',
+                }}>
+                  {r.gpsPct}%
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      {/* ── SELECTED RACE ── */}
+      {activeRace && (
+        <AnimatePresence mode="wait">
+          <motion.div key={`${activeRace.date}-${activeRace.track}-${activeRace.raceNumber}`}
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.25 }}>
+
+            {/* Race header */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 32 }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: '#D6D1CC' }}>
+                {trackName} Race {activeRace.raceNumber}
+              </h2>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <span style={{ fontSize: 14, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>
+                  {activeRace.fieldSize} horses
                 </span>
                 <span style={{
-                  fontSize: 11, fontFamily: 'var(--font-mono)', padding: '2px 6px', borderRadius: 3,
-                  background: r.gpsCoverage === 100 ? 'rgba(82,183,136,0.1)' : 'rgba(232,184,109,0.1)',
-                  color: r.gpsCoverage === 100 ? '#52B788' : '#E8B86D',
+                  fontSize: 12, fontFamily: 'var(--font-mono)', padding: '3px 8px', borderRadius: 3,
+                  background: activeRace.gpsPct >= 80 ? 'rgba(82,183,136,0.1)' : activeRace.gpsPct >= 40 ? 'rgba(232,184,109,0.1)' : 'rgba(90,85,80,0.1)',
+                  color: activeRace.gpsPct >= 80 ? '#52B788' : activeRace.gpsPct >= 40 ? '#E8B86D' : '#5A5550',
                 }}>
-                  {r.gpsCoverage}% GPS
+                  {activeRace.gpsPct}% GPS Coverage
                 </span>
               </div>
-              <div style={{ fontSize: 13, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>
-                {r.date} · {r.distance} {r.surface} · {r.purse}
-              </div>
-              <div style={{ fontSize: 12, color: '#5A5550', marginTop: 4 }}>
-                {r.fieldSize} horses · {r.type}
-              </div>
-            </button>
-          ))}
-        </div>
-      </motion.div>
-
-      <AnimatePresence mode="wait">
-        <motion.div key={selRace} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.3 }}>
-
-          {/* Race header */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, alignItems: 'baseline', marginBottom: 32 }}>
-            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 32, fontWeight: 500, color: '#D6D1CC' }}>
-              {race.trackName} Race {race.raceNumber}
-            </h2>
-            <div style={{ display: 'flex', gap: 16, fontSize: 14, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>
-              <span>{race.date}</span>
-              <span>{race.distance} {race.surface}</span>
-              <span style={{ color: '#C59757' }}>{race.purse}</span>
             </div>
-          </div>
 
-          {/* Pace scenario */}
-          <div style={{ marginBottom: 32 }}>
-            <PaceBar analysis={race.paceAnalysis} />
-          </div>
+            {/* ── FEATURED RACE: PACE + PICKS ── */}
+            {featured && (
+              <>
+                {/* Pace scenario */}
+                <div className="card-flat" style={{ padding: 28, marginBottom: 24 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+                    <div>
+                      <div className="label" style={{ color: scenarioColors[featured.paceAnalysis.scenario], marginBottom: 8, fontSize: 11 }}>Pace Scenario</div>
+                      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>{featured.paceAnalysis.label}</div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 14 }}>
+                      {[['Speed', featured.paceAnalysis.frontRunners, styleColors['Front Runner']], ['Stalk', featured.paceAnalysis.stalkers, styleColors['Stalker']], ['Close', featured.paceAnalysis.closers, styleColors['Closer']]].map(([l, c, col]) => (
+                        <div key={l} style={{ textAlign: 'center' }}>
+                          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 20, color: col }}>{c}</div>
+                          <div style={{ fontSize: 10, color: '#5A5550' }}>{l}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', height: 6, borderRadius: 3, overflow: 'hidden', marginBottom: 16 }}>
+                    {[['Front Runner', featured.paceAnalysis.frontRunners], ['Stalker', featured.paceAnalysis.stalkers], ['Closer', featured.paceAnalysis.closers]].map(([style, count]) => (
+                      <div key={style} style={{ flex: count, background: styleColors[style], transition: 'flex 500ms ease' }} />
+                    ))}
+                  </div>
+                  <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.7 }}>{featured.paceAnalysis.detail}</p>
+                </div>
 
-          {/* GPS Edge Picks */}
-          <div style={{ marginBottom: 40 }}>
-            <div className="label" style={{ color: '#C59757', marginBottom: 16, fontSize: 12 }}>GPS Edge Picks</div>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 500, color: '#D6D1CC', marginBottom: 28 }}>
-              Where the data disagrees with the odds
-            </h3>
-            {race.gpsEdgePicks.map((pick, i) => (
-              <GPSEdgePick key={pick.name} pick={pick} index={i} />
-            ))}
-          </div>
+                {/* GPS Edge picks */}
+                <div style={{ marginBottom: 32 }}>
+                  <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 11 }}>GPS Edge Picks</div>
+                  {featured.gpsEdgePicks.map((pick) => (
+                    <div key={pick.name} style={{ borderLeft: '3px solid #C59757', paddingLeft: 20, marginBottom: 24 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+                        <span style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#C59757' }}>{pick.name}</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#5A5550' }}>{pick.odds}</span>
+                      </div>
+                      <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC', marginBottom: 6 }}>{pick.headline}</div>
+                      <p style={{ fontSize: 14, color: '#8A847E', lineHeight: 1.7 }}>{pick.analysis}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
 
-          {/* Full race card */}
-          <div className="card-flat" style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div className="label" style={{ marginBottom: 6, fontSize: 11 }}>Full Field</div>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>
-                  Race Card — {race.fieldSize} Entries
+            {/* ── RACE CARD ── */}
+            <div className="card-flat" style={{ overflow: 'hidden' }}>
+              <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC' }}>
+                  Race Card
                 </h3>
+                {!featured && activeRace.gpsPct < 50 && (
+                  <span style={{ fontSize: 12, color: '#5A5550', fontStyle: 'italic' }}>Limited GPS data for this race</span>
+                )}
               </div>
-              <div style={{ fontSize: 13, color: '#5A5550' }}>Sorted by GPS Score</div>
+
+              {/* Header row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '40px 1fr 70px 80px', padding: '8px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
+                {['Post', 'Horse', 'Odds', 'GPS'].map(h => (
+                  <div key={h} className="label" style={{ fontSize: 10 }}>{h}</div>
+                ))}
+              </div>
+
+              {/* Horse rows */}
+              {(featured ? [...featured.horses].sort((a, b) => a.post - b.post) : activeRace.horses.sort((a, b) => a.post - b.post)).map(horse => {
+                const hasGPS = featured ? horse.hasGPS : horse.hasGPS;
+                const color = featured && horse.style ? styleColors[horse.style] : '#5A5550';
+
+                return (
+                  <div key={horse.name}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '40px 1fr 70px 80px',
+                      alignItems: 'center',
+                      padding: '12px 24px',
+                      borderBottom: '1px solid rgba(197,151,87,0.03)',
+                      opacity: hasGPS ? 1 : 0.4,
+                      transition: 'background 250ms',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(197,151,87,0.02)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: '#5A5550' }}>{horse.post}</div>
+
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                        <span style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</span>
+                        {featured && horse.style && (
+                          <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color, background: `${color}12`, border: `1px solid ${color}20` }}>
+                            {horse.style === 'Front Runner' ? 'Speed' : horse.style}
+                          </span>
+                        )}
+                        {!hasGPS && <span style={{ fontSize: 10, color: '#5A5550', fontStyle: 'italic' }}>No GPS</span>}
+                      </div>
+                      <div style={{ fontSize: 12, color: '#5A5550' }}>
+                        J: {horse.jockey} · T: {horse.trainer}
+                      </div>
+                    </div>
+
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#8A847E' }}>{horse.odds}</div>
+
+                    <div>
+                      {featured && horse.gpsScore != null ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, fontWeight: 600, color: horse.gpsScore >= 85 ? '#C59757' : horse.gpsScore >= 70 ? '#D6D1CC' : '#5A5550' }}>
+                            {horse.gpsScore}
+                          </span>
+                          {horse.speeds?.length > 0 && <MiniSparkline data={horse.speeds} color={color} />}
+                        </div>
+                      ) : hasGPS ? (
+                        <span style={{ fontSize: 12, color: '#52B788' }}>Available</span>
+                      ) : (
+                        <span style={{ fontSize: 12, color: '#5A5550' }}>—</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '36px 1fr 90px 70px 60px 80px',
-              padding: '10px 24px',
-              borderBottom: '1px solid rgba(197,151,87,0.06)',
-            }}>
-              {['Post', 'Horse', 'Style', 'Odds', 'GPS', 'Speed'].map(h => (
-                <div key={h} className="label" style={{ fontSize: 10 }}>{h}</div>
-              ))}
-            </div>
+            {/* Key metrics for featured races */}
+            {featured && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 24 }}>
+                {[
+                  { label: 'Fastest Closer', val: featured.horses.filter(h => h.closingMPH).sort((a, b) => b.closingMPH - a.closingMPH)[0], m: h => `${h.closingMPH} mph` },
+                  { label: 'Best Efficiency', val: featured.horses.filter(h => h.efficiency).sort((a, b) => b.efficiency - a.efficiency)[0], m: h => `${h.efficiency}%` },
+                  { label: 'Peak Speed', val: featured.horses.filter(h => h.peakMPH).sort((a, b) => b.peakMPH - a.peakMPH)[0], m: h => `${h.peakMPH} mph` },
+                  { label: 'Best Stamina', val: featured.horses.filter(h => h.strideFade != null).sort((a, b) => b.strideFade - a.strideFade)[0], m: h => `${h.strideFade}%` },
+                ].map(item => (
+                  <div key={item.label} className="card-flat" style={{ padding: 20 }}>
+                    <div className="label" style={{ marginBottom: 8, fontSize: 10 }}>{item.label}</div>
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: '#C59757', marginBottom: 2 }}>{item.val?.name || '—'}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: '#8A847E' }}>{item.val ? item.m(item.val) : '—'}</div>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            {sortedHorses.map((horse, i) => (
-              <HorseRow key={horse.name} horse={horse} rank={i + 1} />
-            ))}
-          </div>
-
-          {/* Key metrics */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginTop: 32 }}>
-            {[
-              { label: 'Fastest Closer', value: race.horses.filter(h => h.closingMPH).sort((a, b) => b.closingMPH - a.closingMPH)[0], metric: h => `${h.closingMPH} mph` },
-              { label: 'Best Efficiency', value: race.horses.filter(h => h.efficiency).sort((a, b) => b.efficiency - a.efficiency)[0], metric: h => `${h.efficiency}%` },
-              { label: 'Peak Speed', value: race.horses.filter(h => h.peakMPH).sort((a, b) => b.peakMPH - a.peakMPH)[0], metric: h => `${h.peakMPH} mph` },
-              { label: 'Best Stamina', value: race.horses.filter(h => h.strideFade != null).sort((a, b) => b.strideFade - a.strideFade)[0], metric: h => `${h.strideFade}% fade` },
-            ].map(item => (
-              <div key={item.label} className="card-flat" style={{ padding: 24 }}>
-                <div className="label" style={{ marginBottom: 10, fontSize: 11 }}>{item.label}</div>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#C59757', marginBottom: 4 }}>
-                  {item.value?.name || '—'}
-                </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#8A847E' }}>
-                  {item.value ? item.metric(item.value) : '—'}
-                </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#5A5550', marginTop: 4 }}>
-                  {item.value?.odds || ''}
+            {/* How-to for non-featured */}
+            {!featured && (
+              <div className="card-flat" style={{ padding: 24, marginTop: 24, borderColor: 'rgba(197,151,87,0.1)' }}>
+                <div style={{ borderLeft: '3px solid #C59757', paddingLeft: 16 }}>
+                  <p style={{ fontSize: 14, color: '#8A847E', lineHeight: 1.7 }}>
+                    <span style={{ color: '#C59757' }}>Note:</span> Full GPS analysis (pace scenarios, edge picks, speed profiles) is available for our 3 featured demo races.
+                    Select <strong style={{ color: '#D6D1CC' }}>Tampa Bay R7 (Mar 28)</strong>, <strong style={{ color: '#D6D1CC' }}>Aqueduct R9 (Mar 28)</strong>, or <strong style={{ color: '#D6D1CC' }}>Tampa Bay R5 (Mar 27)</strong> to see the complete analysis.
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
+            )}
 
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      )}
     </div>
   );
 }
