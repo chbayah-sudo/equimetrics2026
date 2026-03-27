@@ -65,9 +65,6 @@ export default function Navbar() {
           })}
         </div>
 
-        <Link to="/live-replay" className="hidden md:inline-flex btn-primary" style={{ padding: '10px 22px', fontSize: 12 }}>
-          Watch a Race
-        </Link>
       </div>
     </motion.nav>
   );
