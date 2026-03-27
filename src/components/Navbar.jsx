@@ -9,6 +9,7 @@ const navItems = [
   { path: '/horse-profiles', label: 'Horse Profiles' },
   { path: '/forecast', label: 'Forecast' },
   { path: '/gps-edge', label: 'GPS Edge' },
+  { path: '/horsellm', label: 'HorseLLM' },
 ];
 
 export default function Navbar() {
