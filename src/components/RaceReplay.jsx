@@ -1,63 +1,106 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, RotateCcw } from 'lucide-react';
-import { featuredRace, gpsRaceData } from '../data/raceData';
+import { getPortrait } from '../data/portraits';
 
-export default function RaceReplay() {
+const COLORS = ['#C59757','#52B788','#5B8DEF','#E8B86D','#9B72CF','#C2653A','#4ECDC4','#EF5B5B','#D4A574','#74C69D','#8B4226','#5BEF8D','#E07A5F','#95D5B2'];
+
+export default function RaceReplay({ race }) {
   const [currentGate, setCurrentGate] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const intervalRef = useRef(null);
-  const totalGates = gpsRaceData.length;
+
+  const gateData = race.gateData;
+  const totalGates = gateData.length;
   const progress = (currentGate / (totalGates - 1)) * 100;
-  const currentData = gpsRaceData[currentGate];
+  const currentData = gateData[currentGate];
+
+  // Reset when race changes
+  useEffect(() => { setCurrentGate(0); setIsPlaying(false); }, [race.id]);
 
   useEffect(() => {
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
         setCurrentGate(prev => { if (prev >= totalGates - 1) { setIsPlaying(false); return prev; } return prev + 1; });
-      }, 800 / speed);
+      }, 700 / speed);
     }
     return () => clearInterval(intervalRef.current);
   }, [isPlaying, speed, totalGates]);
 
   const reset = () => { setIsPlaying(false); setCurrentGate(0); };
-  const sortedHorses = [...featuredRace.horses].sort((a, b) => currentData.positions[a.name] - currentData.positions[b.name]);
+
+  // Assign colors to horses
+  const horses = race.horses.map((h, i) => ({ ...h, color: COLORS[i % COLORS.length] }));
+
+  // Sort by current position
+  const sortedHorses = [...horses].sort((a, b) => {
+    const posA = currentData.positions[a.name] || 99;
+    const posB = currentData.positions[b.name] || 99;
+    return posA - posB;
+  });
 
   return (
     <div className="card-flat" style={{ overflow: 'hidden' }}>
       {/* Header */}
       <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <div className="label" style={{ color: '#C59757', marginBottom: 6 }}>Race Replay</div>
           <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>
-            {featuredRace.trackName} Race {featuredRace.raceNumber}
+            {race.track} Race {race.raceNumber}
           </h3>
           <p style={{ fontSize: 13, color: '#5A5550', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
-            {featuredRace.distance} {featuredRace.surface} · {featuredRace.type} · {featuredRace.purse}
+            {race.distance} {race.surface} · {race.type} · {race.purse} · {race.fieldSize} runners
           </p>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 400, color: '#C59757' }}>{currentData.label}</div>
-          <div style={{ fontSize: 13, color: '#5A5550' }}>Gate {currentData.gate}</div>
+          <div style={{ fontSize: 13, color: '#5A5550' }}>
+            {currentGate === totalGates - 1 ? 'Final' : `Gate ${currentData.gate}`}
+          </div>
         </div>
       </div>
 
       {/* Horses */}
       <div style={{ padding: '16px 28px' }}>
         {sortedHorses.map(horse => {
-          const position = currentData.positions[horse.name];
-          const barWidth = Math.max(15, 100 - ((position - 1) / (featuredRace.fieldSize - 1)) * 55 - (currentGate < totalGates - 1 ? (totalGates - 1 - currentGate) * 2 : 0));
+          const position = currentData.positions[horse.name] || race.fieldSize;
+          const barWidth = Math.max(12, 100 - ((position - 1) / Math.max(1, race.fieldSize - 1)) * 55 - (currentGate < totalGates - 1 ? (totalGates - 1 - currentGate) * 1.5 : 0));
           const isLeader = position === 1;
+
           return (
-            <div key={horse.name} style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 5 }}>
-              <div style={{ width: 24, fontFamily: 'var(--font-serif)', fontSize: 14, color: isLeader ? '#C59757' : '#5A5550', textAlign: 'center' }}>{position}</div>
-              <div style={{ width: 140, fontSize: 13, fontWeight: 500, color: isLeader ? '#D6D1CC' : '#5A5550', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{horse.name}</div>
-              <div style={{ flex: 1, height: 20, borderRadius: 2, background: '#1C2418', overflow: 'hidden', position: 'relative' }}>
-                <motion.div animate={{ width: `${barWidth}%` }} transition={{ duration: 0.4, ease: 'easeOut' }}
-                  style={{ height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${horse.color}10, ${horse.color}30)`, borderRight: `2px solid ${horse.color}` }} />
-                <motion.div animate={{ left: `calc(${barWidth}% - 4px)` }} transition={{ duration: 0.4, ease: 'easeOut' }}
-                  style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', width: 6, height: 6, borderRadius: '50%', background: horse.color, zIndex: 2 }} />
+            <div key={horse.name} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
+              {/* Position */}
+              <div style={{ width: 22, fontFamily: 'var(--font-serif)', fontSize: 14, color: isLeader ? '#C59757' : '#5A5550', textAlign: 'center', flexShrink: 0 }}>
+                {position}
+              </div>
+
+              {/* Name */}
+              <div style={{ width: 130, fontSize: 13, fontWeight: 500, color: isLeader ? '#D6D1CC' : '#5A5550', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                {horse.name}
+              </div>
+
+              {/* Bar + portrait at the end */}
+              <div style={{ flex: 1, height: 28, borderRadius: 2, background: '#1C2418', overflow: 'visible', position: 'relative' }}>
+                <motion.div
+                  animate={{ width: `${barWidth}%` }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  style={{ height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${horse.color}08, ${horse.color}25)`, borderRight: `2px solid ${horse.color}` }}
+                />
+                {/* Portrait at the tip */}
+                <motion.div
+                  animate={{ left: `calc(${barWidth}% - 14px)` }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', zIndex: 3 }}
+                >
+                  <div style={{
+                    width: 26, height: 26, borderRadius: 4, overflow: 'hidden',
+                    border: `2px solid ${horse.color}`,
+                    boxShadow: `0 0 8px ${horse.color}40`,
+                  }}>
+                    <img src={getPortrait(horse.name)} alt=""
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                </motion.div>
               </div>
             </div>
           );
@@ -84,7 +127,9 @@ export default function RaceReplay() {
             onChange={e => { setCurrentGate(parseInt(e.target.value)); setIsPlaying(false); }}
             style={{ width: '100%', height: 2, appearance: 'none', cursor: 'pointer', background: `linear-gradient(to right, #C59757 ${progress}%, #1C2418 ${progress}%)`, borderRadius: 1, accentColor: '#C59757' }} />
         </div>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#C59757', fontVariantNumeric: 'tabular-nums' }}>{currentGate + 1}/{totalGates}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#C59757', fontVariantNumeric: 'tabular-nums' }}>
+          {currentGate + 1}/{totalGates}
+        </span>
       </div>
     </div>
   );

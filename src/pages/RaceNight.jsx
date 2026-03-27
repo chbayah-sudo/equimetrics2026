@@ -1,71 +1,138 @@
-import { motion } from 'framer-motion';
+import { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import RaceReplay from '../components/RaceReplay';
-import SpeedChart from '../components/SpeedChart';
-import { featuredRace } from '../data/raceData';
+import replayRaces from '../data/replayRaces.json';
+import { getPortrait } from '../data/portraits';
+
+const TRACK_NAMES = {
+  AQU: 'Aqueduct', GP: 'Gulfstream Park', HOU: 'Sam Houston', LRL: 'Laurel Park',
+  OP: 'Oaklawn Park', SA: 'Santa Anita', TAM: 'Tampa Bay', TP: 'Turfway Park',
+  FG: 'Fair Grounds', CNL: 'Colonial Downs',
+};
+
+const COLORS = ['#C59757','#52B788','#5B8DEF','#E8B86D','#9B72CF','#C2653A','#4ECDC4','#EF5B5B','#D4A574','#74C69D','#8B4226','#5BEF8D'];
 
 const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
 
 export default function RaceNight() {
+  const dates = useMemo(() => [...new Set(replayRaces.map(r => r.date))].sort().reverse(), []);
+  const [selDate, setSelDate] = useState(dates[0]);
+  const [selTrack, setSelTrack] = useState(null);
+  const [selRace, setSelRace] = useState(null);
+
+  const dayRaces = useMemo(() => replayRaces.filter(r => r.date === selDate), [selDate]);
+  const tracks = useMemo(() => [...new Set(dayRaces.map(r => r.track))].sort(), [dayRaces]);
+  const activeTrack = selTrack && tracks.includes(selTrack) ? selTrack : tracks[0];
+  const trackRaces = useMemo(() => dayRaces.filter(r => r.track === activeTrack).sort((a, b) => a.raceNumber - b.raceNumber), [dayRaces, activeTrack]);
+  const activeRace = selRace ? replayRaces.find(r => r.id === selRace) : trackRaces[0];
+
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
       <motion.div {...fadeUp}>
         <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>Replay</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 4.5vw, 44px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>Live Replay</h1>
-        <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 10 }}>GPS-powered race replay and telemetry</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 14, fontFamily: 'var(--font-mono)', color: '#5A5550', marginBottom: 48 }}>
-          <span>{featuredRace.trackName}</span>
-          <span style={{ color: 'rgba(197,151,87,0.2)' }}>·</span>
-          <span>{featuredRace.date}</span>
-          <span style={{ color: 'rgba(197,151,87,0.2)' }}>·</span>
-          <span>{featuredRace.distance} {featuredRace.surface}</span>
-          <span style={{ color: 'rgba(197,151,87,0.2)' }}>·</span>
-          <span style={{ color: '#C59757' }}>{featuredRace.type} {featuredRace.purse}</span>
+        <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 12 }}>
+          Choose a race and watch it unfold gate by gate with GPS tracking.
+        </p>
+        <p style={{ fontSize: 14, color: '#5A5550', marginBottom: 40 }}>
+          {replayRaces.length} races · {new Set(replayRaces.map(r => r.track)).size} tracks · {dates.length} race days
+        </p>
+      </motion.div>
+
+      {/* Date selector */}
+      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 24 }}>
+        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race Day</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {dates.map(d => {
+            const dayName = new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            const active = d === selDate;
+            return (
+              <button key={d} onClick={() => { setSelDate(d); setSelTrack(null); setSelRace(null); }}
+                style={{ padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  background: active ? '#141A10' : 'transparent',
+                  border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
+                  color: active ? '#C59757' : '#5A5550', fontSize: 14, fontWeight: 500 }}>
+                {dayName}
+              </button>
+            );
+          })}
         </div>
       </motion.div>
 
-      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 32 }}>
-        <RaceReplay />
+      {/* Track selector */}
+      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 24 }}>
+        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Track</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {tracks.map(t => {
+            const active = t === activeTrack;
+            return (
+              <button key={t} onClick={() => { setSelTrack(t); setSelRace(null); }}
+                style={{ padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  background: active ? '#141A10' : 'transparent',
+                  border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
+                  color: active ? '#D6D1CC' : '#5A5550', fontSize: 14, fontWeight: 500 }}>
+                {TRACK_NAMES[t] || t}
+              </button>
+            );
+          })}
+        </div>
       </motion.div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 24, marginBottom: 32 }}>
-        <motion.div {...fadeUp} transition={{ delay: 0.2 }}><SpeedChart type="speed" /></motion.div>
-        <motion.div {...fadeUp} transition={{ delay: 0.3 }}><SpeedChart type="stride" /></motion.div>
-      </div>
+      {/* Race number selector */}
+      <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 36 }}>
+        <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>Race</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {trackRaces.map(r => {
+            const active = activeRace?.id === r.id;
+            return (
+              <button key={r.id} onClick={() => setSelRace(r.id)}
+                style={{ width: 56, height: 56, borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  background: active ? '#141A10' : 'transparent',
+                  border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)' }}>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 20, color: active ? '#C59757' : '#5A5550' }}>{r.raceNumber}</div>
+                <div style={{ fontSize: 10, color: '#5A5550', marginTop: 1 }}>{r.fieldSize}h</div>
+              </button>
+            );
+          })}
+        </div>
+      </motion.div>
 
-      <motion.div {...fadeUp} transition={{ delay: 0.4 }}>
-        <div className="card-flat" style={{ overflow: 'hidden' }}>
-          <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>Final Results</h3>
-          </div>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
-                {['Finish', 'Horse', 'Post', 'Odds', 'Result'].map(h => (
-                  <th key={h} className="label" style={{ textAlign: 'left', padding: '14px 28px', fontSize: 11 }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[...featuredRace.horses].sort((a, b) => a.finalPos - b.finalPos).map((horse, i) => (
-                <tr key={horse.name} style={{ borderBottom: i < featuredRace.horses.length - 1 ? '1px solid rgba(197,151,87,0.04)' : 'none' }}>
-                  <td style={{ padding: '14px 28px', fontFamily: 'var(--font-serif)', fontSize: 18, color: i === 0 ? '#C59757' : '#5A5550' }}>{horse.finalPos}</td>
-                  <td style={{ padding: '14px 28px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: horse.color }} />
-                      <span style={{ fontSize: 15, color: '#D6D1CC' }}>{horse.name}</span>
+      {/* Replay */}
+      {activeRace && (
+        <AnimatePresence mode="wait">
+          <motion.div key={activeRace.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}>
+            <RaceReplay race={activeRace} />
+
+            {/* Results table */}
+            <div className="card-flat" style={{ overflow: 'hidden', marginTop: 24 }}>
+              <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC' }}>Final Results</h3>
+              </div>
+              {[...activeRace.horses].sort((a, b) => (a.finalPos || 99) - (b.finalPos || 99)).map((horse, i) => {
+                const color = COLORS[activeRace.horses.indexOf(horse) % COLORS.length];
+                return (
+                  <div key={horse.name} style={{
+                    display: 'grid', gridTemplateColumns: '40px 40px 1fr 80px 80px',
+                    alignItems: 'center', padding: '12px 24px',
+                    borderBottom: i < activeRace.horses.length - 1 ? '1px solid rgba(197,151,87,0.03)' : 'none',
+                  }}>
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: i === 0 ? '#C59757' : '#5A5550' }}>
+                      {horse.finalPos || '—'}
                     </div>
-                  </td>
-                  <td style={{ padding: '14px 28px', fontSize: 14, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>{horse.post}</td>
-                  <td style={{ padding: '14px 28px', fontSize: 14, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>{horse.odds}</td>
-                  <td style={{ padding: '14px 28px', fontSize: 14, color: i === 0 ? '#C59757' : '#5A5550' }}>
-                    {horse.finalPos === 1 ? 'Winner' : horse.finalPos <= 3 ? `Placed ${horse.finalPos}` : `${horse.finalPos}th`}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </motion.div>
+                    <div style={{ width: 30, height: 30, borderRadius: 4, overflow: 'hidden', border: `1px solid ${color}40` }}>
+                      <img src={getPortrait(horse.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div style={{ fontSize: 15, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#5A5550' }}>Post {horse.post}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#8A847E' }}>{horse.odds}</div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      )}
     </div>
   );
 }
