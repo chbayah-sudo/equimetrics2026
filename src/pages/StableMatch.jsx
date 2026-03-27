@@ -28,7 +28,7 @@ function getStrideLengthLabel(speeds) {
   return stride;
 }
 
-function SwipeCard({ horse, onSwipe, isTop }) {
+function SwipeCard({ horse, onSwipe, isTop, exitDirection }) {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-18, 18]);
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
@@ -37,6 +37,8 @@ function SwipeCard({ horse, onSwipe, isTop }) {
   const color = horse.style ? (styleColors[horse.style] || '#C59757') : '#8A847E';
   const strideLen = getStrideLengthLabel(horse.speeds);
   const oddsNum = parseOdds(horse.odds);
+
+  const exitX = exitDirection === 'right' ? 400 : exitDirection === 'left' ? -400 : (x.get() > 0 ? 400 : -400);
 
   return (
     <motion.div
@@ -54,7 +56,7 @@ function SwipeCard({ horse, onSwipe, isTop }) {
       }}
       initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.6 }}
       animate={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.6 }}
-      exit={{ x: x.get() > 0 ? 400 : -400, opacity: 0, transition: { duration: 0.3 } }}
+      exit={{ x: exitX, opacity: 0, transition: { duration: 0.3 } }}
     >
       <div style={{
         width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden',
@@ -420,6 +422,7 @@ export default function StableMatch() {
   const [matches, setMatches] = useState([]);
   const [passed, setPassed] = useState([]);
   const [horses, setHorses] = useState([]);
+  const [lastSwipe, setLastSwipe] = useState(null);
 
   const buildDeck = (preferences) => {
     const allHorses = [];
@@ -457,6 +460,7 @@ export default function StableMatch() {
 
   const handleSwipe = (direction) => {
     const horse = horses[currentIdx];
+    setLastSwipe(direction);
     if (direction === 'right') {
       setMatches(prev => [...prev, horse]);
     } else {
@@ -546,6 +550,7 @@ export default function StableMatch() {
                       horse={horse}
                       onSwipe={handleSwipe}
                       isTop={i === arr.length - 1}
+                      exitDirection={lastSwipe}
                     />
                   ))}
                 </AnimatePresence>
@@ -555,19 +560,6 @@ export default function StableMatch() {
             {/* Action buttons */}
             {remaining > 0 && (
               <div style={{ display: 'flex', justifyContent: 'center', gap: 20 }}>
-                <button
-                  onClick={() => handleSwipe('left')}
-                  style={{
-                    width: 60, height: 60, borderRadius: '50%', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: 'rgba(194,101,58,0.08)', border: '2px solid rgba(194,101,58,0.25)',
-                    color: '#C2653A', transition: 'all 250ms',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(194,101,58,0.15)'; e.currentTarget.style.borderColor = 'rgba(194,101,58,0.4)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(194,101,58,0.08)'; e.currentTarget.style.borderColor = 'rgba(194,101,58,0.25)'; }}
-                >
-                  <X style={{ width: 26, height: 26 }} />
-                </button>
                 <button
                   onClick={() => handleSwipe('right')}
                   style={{
@@ -580,6 +572,19 @@ export default function StableMatch() {
                   onMouseLeave={e => { e.currentTarget.style.background = 'rgba(82,183,136,0.08)'; e.currentTarget.style.borderColor = 'rgba(82,183,136,0.25)'; }}
                 >
                   <Heart style={{ width: 26, height: 26 }} />
+                </button>
+                <button
+                  onClick={() => handleSwipe('left')}
+                  style={{
+                    width: 60, height: 60, borderRadius: '50%', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'rgba(194,101,58,0.08)', border: '2px solid rgba(194,101,58,0.25)',
+                    color: '#C2653A', transition: 'all 250ms',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(194,101,58,0.15)'; e.currentTarget.style.borderColor = 'rgba(194,101,58,0.4)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(194,101,58,0.08)'; e.currentTarget.style.borderColor = 'rgba(194,101,58,0.25)'; }}
+                >
+                  <X style={{ width: 26, height: 26 }} />
                 </button>
               </div>
             )}
