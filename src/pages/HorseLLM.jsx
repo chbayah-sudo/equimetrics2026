@@ -1,7 +1,30 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Loader2 } from 'lucide-react';
 import { buildSystemPrompt, findRelevantHorses, findRelevantRaces } from '../data/buildContext';
+
+const LOADING_PUNS = [
+  "Saddling up the neurons...",
+  "Galloping through the data...",
+  "Checking the hay-stacks...",
+  "Consulting the horse whisperer...",
+  "Trotting through past performances...",
+  "Measuring hoofprints in the data...",
+  "Reining in the insights...",
+  "Clearing the last furlong...",
+  "Warming up in the paddock...",
+  "Feeding the algorithm some oats...",
+  "Horsing around with the numbers...",
+  "Unbridled analysis in progress...",
+  "Hold your horses...",
+  "Cantering through GPS coordinates...",
+  "Mane-lining the important stats...",
+  "Stirrup some predictions...",
+  "Jockeying for the best answer...",
+  "No horsing around, almost there...",
+  "Running neck and neck with the data...",
+  "Putting the cart before the... wait, got it...",
+];
 
 const SUGGESTIONS = [
   "Who do you think will win Tampa Bay R7 on March 28?",
@@ -18,12 +41,29 @@ export default function HorseLLM() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingPun, setLoadingPun] = useState(LOADING_PUNS[0]);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const punInterval = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, loadingPun]);
+
+  // Cycle through puns while loading
+  useEffect(() => {
+    if (loading) {
+      let idx = Math.floor(Math.random() * LOADING_PUNS.length);
+      setLoadingPun(LOADING_PUNS[idx]);
+      punInterval.current = setInterval(() => {
+        idx = (idx + 1) % LOADING_PUNS.length;
+        setLoadingPun(LOADING_PUNS[idx]);
+      }, 2200);
+    } else {
+      clearInterval(punInterval.current);
+    }
+    return () => clearInterval(punInterval.current);
+  }, [loading]);
 
   const sendMessage = async (text) => {
     const userMsg = text || input.trim();
@@ -136,9 +176,31 @@ export default function HorseLLM() {
         ))}
 
         {loading && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '14px 18px' }}>
-            <Loader2 style={{ width: 16, height: 16, color: '#C59757', animation: 'spin 1s linear infinite' }} />
-            <span style={{ fontSize: 13, color: '#5A5550' }}>Analyzing...</span>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            style={{ padding: '16px 18px', maxWidth: '85%' }}>
+            <div style={{
+              padding: '16px 20px', borderRadius: 3,
+              background: '#141A10', border: '1px solid rgba(197,151,87,0.06)',
+            }}>
+              <div style={{ fontSize: 10, color: '#C59757', fontFamily: 'var(--font-mono)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 10 }}>
+                HorseLLM
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <Loader2 style={{ width: 16, height: 16, color: '#C59757', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={loadingPun}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.25 }}
+                    style={{ fontSize: 14, color: '#8A847E', fontStyle: 'italic' }}
+                  >
+                    {loadingPun}
+                  </motion.span>
+                </AnimatePresence>
+              </div>
+            </div>
           </motion.div>
         )}
 
