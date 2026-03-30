@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Loader2 } from 'lucide-react';
-import { buildSystemPrompt, findRelevantHorses, findRelevantRaces } from '../data/buildContext';
 
 const LOADING_PUNS = [
   "Saddling up the neurons...",
@@ -50,7 +49,6 @@ export default function HorseLLM() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loadingPun]);
 
-  // Cycle through puns while loading
   useEffect(() => {
     if (loading) {
       let idx = Math.floor(Math.random() * LOADING_PUNS.length);
@@ -75,35 +73,28 @@ export default function HorseLLM() {
     setLoading(true);
 
     try {
-      // Build RAG context
-      const horseCtx = findRelevantHorses(userMsg);
-      const raceCtx = findRelevantRaces(userMsg);
-      let ragContext = '';
-      if (horseCtx.length > 0) ragContext += '\n\nRELEVANT HORSE DATA:\n' + horseCtx.join('\n\n');
-      if (raceCtx.length > 0) ragContext += '\n\nRELEVANT RACE DATA:\n' + raceCtx.join('\n');
-
-      const systemPrompt = buildSystemPrompt() + ragContext;
-
-      const apiMessages = [
-        { role: 'system', content: systemPrompt },
-        ...newMessages.slice(-10).map(m => ({ role: m.role, content: m.content })),
-      ];
+      // Send only user/assistant messages — server builds RAG context
+      const chatMessages = newMessages.slice(-10).map(m => ({ role: m.role, content: m.content }));
 
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ messages: chatMessages }),
       });
 
       const data = await res.json();
 
-      if (data.choices?.[0]?.message?.content) {
+      if (res.status === 429) {
+        setMessages(prev => [...prev, { role: 'assistant', content: 'Whoa there — too many questions at once! Give me a moment to catch my breath.' }]);
+      } else if (res.status === 400) {
+        setMessages(prev => [...prev, { role: 'assistant', content: data.error || 'Invalid request. Try a shorter question.' }]);
+      } else if (data.choices?.[0]?.message?.content) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.choices[0].message.content }]);
       } else {
         setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I couldn\'t process that. Try again.' }]);
       }
     } catch (err) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection error. Check your API key and try again.' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection error. Please try again.' }]);
     }
 
     setLoading(false);
@@ -133,7 +124,7 @@ export default function HorseLLM() {
               {SUGGESTIONS.map(s => (
                 <button key={s} onClick={() => sendMessage(s)}
                   className="card" style={{
-                    padding: '10px 16px', cursor: 'pointer', fontSize: 17,
+                    padding: '10px 16px', cursor: 'pointer', fontSize: 15,
                     color: '#8A847E', background: '#141A10', textAlign: 'left',
                     transition: 'all 250ms',
                   }}

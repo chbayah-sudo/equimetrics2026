@@ -1,7 +1,9 @@
 // Builds a compact context string from our data for the LLM
-import allProfiles from './horseProfiles.json';
-import allRaces from './allRaces.json';
-import { forecastRaces } from './forecastData';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const allProfiles = require('./horseProfiles.json');
+const allRaces = require('./allRaces.json');
+import { forecastRaces } from './forecastData.js';
 
 const TRACK_NAMES = {
   AQU: 'Aqueduct (Queens, NY)', GP: 'Gulfstream Park (Hallandale Beach, FL)',

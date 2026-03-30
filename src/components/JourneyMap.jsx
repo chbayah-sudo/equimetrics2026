@@ -84,6 +84,11 @@ const GOLD = '#C59757';
 const GREEN = '#52B788';
 const BLUE = '#5B8DEF';
 
+function esc(str) {
+  if (str == null) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function JourneyMapInner({ races, horseName }) {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
@@ -264,13 +269,13 @@ function JourneyMapInner({ races, horseName }) {
         const rows = raceList.map(r => {
           const isWin = r.position === 1;
           const fin = r.position
-            ? `<span style="color:${isWin ? GOLD : '#D6D1CC'};font-weight:600">${r.position}</span><span style="color:#5A5550">/${r.fieldSize || '?'}</span>`
+            ? `<span style="color:${isWin ? GOLD : '#D6D1CC'};font-weight:600">${esc(r.position)}</span><span style="color:#5A5550">/${esc(r.fieldSize || '?')}</span>`
             : '<span style="color:#5A5550">—</span>';
           return `<div style="display:flex;gap:12px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(197,151,87,0.05)">
-            <span style="font-family:monospace;font-size:11px;color:#5A5550;min-width:24px">#${r.idx}</span>
+            <span style="font-family:monospace;font-size:11px;color:#5A5550;min-width:24px">#${esc(r.idx)}</span>
             <span style="min-width:36px">${fin}</span>
-            ${r.earnings ? `<span style="font-family:monospace;font-size:11px;color:${GOLD}">$${r.earnings.toLocaleString()}</span>` : ''}
-            <span style="font-family:monospace;font-size:10px;color:#5A5550;margin-left:auto">${r.date.slice(5)}${r.hasGPS ? ' <span style="color:#52B788">GPS</span>' : ''}</span>
+            ${r.earnings ? `<span style="font-family:monospace;font-size:11px;color:${GOLD}">$${esc(r.earnings.toLocaleString())}</span>` : ''}
+            <span style="font-family:monospace;font-size:10px;color:#5A5550;margin-left:auto">${esc(r.date?.slice(5))}${r.hasGPS ? ' <span style="color:#52B788">GPS</span>' : ''}</span>
           </div>`;
         }).join('');
 
@@ -278,8 +283,8 @@ function JourneyMapInner({ races, horseName }) {
         popupRef.current = new mapboxgl.Popup({ offset: 14, closeButton: true, maxWidth: '260px', className: 'journey-popup' })
           .setLngLat(coords)
           .setHTML(`<div style="font-family:Inter,system-ui,sans-serif">
-            <div style="font-size:15px;font-weight:700;color:#D6D1CC;margin-bottom:2px">${props.name}</div>
-            <div style="font-size:12px;color:#8A847E;margin-bottom:8px">${props.city}</div>
+            <div style="font-size:15px;font-weight:700;color:#D6D1CC;margin-bottom:2px">${esc(props.name)}</div>
+            <div style="font-size:12px;color:#8A847E;margin-bottom:8px">${esc(props.city)}</div>
             ${rows}
           </div>`)
           .addTo(map);

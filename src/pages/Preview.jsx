@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import allRacesRaw from '../data/allRaces.json';
-import { forecastRaces, styleColors, scenarioColors } from '../data/forecastData';
+import { styleColors, scenarioColors } from '../data/forecastConstants';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 import { getPortrait } from '../data/portraits';
 
@@ -18,8 +17,8 @@ const TRACK_NAMES = {
 const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
 
 // Find the matching deep-analysis race from forecastData
-function findFeaturedRace(track, raceNumber, date) {
-  return forecastRaces.find(r =>
+function findFeaturedRace(track, raceNumber, date, forecastRaces) {
+  return (forecastRaces || []).find(r =>
     r.track === track.trim() && r.raceNumber === raceNumber && r.date === date
   );
 }
@@ -45,14 +44,24 @@ function MiniSparkline({ data, color, width = 72, height = 24 }) {
 }
 
 export default function Preview() {
+  const [allRacesRaw, setAllRacesRaw] = useState([]);
+  const [forecastRaces, setForecastRaces] = useState([]);
+  useEffect(() => {
+    fetch('/api/races').then(r => r.json()).then(setAllRacesRaw);
+    fetch('/api/forecast').then(r => r.json()).then(setForecastRaces);
+  }, []);
+
   // Get unique dates and tracks
-  const dates = useMemo(() => [...new Set(allRacesRaw.map(r => r.date))].sort(), []);
-  const [selDate, setSelDate] = useState(dates[2] || dates[0]); // default to Mar 27
+  const dates = useMemo(() => [...new Set(allRacesRaw.map(r => r.date))].sort(), [allRacesRaw]);
+  const [selDate, setSelDate] = useState(null);
   const [selTrack, setSelTrack] = useState(null);
   const [selRaceNum, setSelRaceNum] = useState(null);
 
+  // Auto-select date when data loads
+  useEffect(() => { if (dates.length && !selDate) setSelDate(dates[2] || dates[0]); }, [dates, selDate]);
+
   // Filter races for selected date
-  const dayRaces = useMemo(() => allRacesRaw.filter(r => r.date === selDate), [selDate]);
+  const dayRaces = useMemo(() => allRacesRaw.filter(r => r.date === selDate), [allRacesRaw, selDate]);
   const tracks = useMemo(() => {
     const t = [...new Set(dayRaces.map(r => r.track))].sort((a, b) => {
       // Sort GPS-heavy tracks first
@@ -70,7 +79,7 @@ export default function Preview() {
   const activeRace = trackRaces.find(r => r.raceNumber === activeRaceNum);
 
   // Check if this race has a featured deep analysis
-  const featured = activeRace ? findFeaturedRace(activeRace.track, activeRace.raceNumber, activeRace.date) : null;
+  const featured = activeRace ? findFeaturedRace(activeRace.track, activeRace.raceNumber, activeRace.date, forecastRaces) : null;
 
   const trackName = TRACK_NAMES[activeTrack] || TRACK_NAMES[activeTrack?.trim()] || activeTrack;
 

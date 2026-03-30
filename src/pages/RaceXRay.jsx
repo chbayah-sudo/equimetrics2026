@@ -1,11 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Trophy } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
 } from 'recharts';
-import allProfiles from '../data/horseProfiles.json';
 import { getPortrait } from '../data/portraits';
 
 const COLORS = ['#C59757','#52B788','#5B8DEF','#E8B86D','#9B72CF','#C2653A','#4ECDC4','#EF5B5B','#D4A574','#74C69D','#8B4226','#5BEF8D'];
@@ -42,51 +41,30 @@ const CustomTip = ({ active, payload, label }) => {
   );
 };
 
-// Build all GPS races from profiles
-function buildGPSRaces() {
-  const raceMap = {};
-  Object.values(allProfiles).forEach(p => {
-    (p.races || []).forEach(r => {
-      if (!r.hasGPS || !r.speeds?.length) return;
-      const key = `${r.date}-${r.track}-${r.raceNum}`;
-      if (!raceMap[key]) {
-        raceMap[key] = {
-          id: key, date: r.date, track: r.track, raceNum: r.raceNum,
-          distance: r.distance, surface: r.surface, type: r.raceType,
-          purse: r.purse, horses: [],
-        };
-      }
-      raceMap[key].horses.push({
-        name: p.name, position: r.position, fieldSize: r.fieldSize,
-        speeds: r.speeds, strideLengths: r.strideLengths,
-        closingMPH: r.closingMPH, peakMPH: r.peakMPH,
-        totalDist: r.totalDist, groundLoss: r.groundLoss,
-        positions: r.positions, earnings: r.earnings,
-      });
-    });
-  });
-  return Object.values(raceMap)
-    .filter(r => r.horses.length >= 3)
-    .sort((a, b) => b.date.localeCompare(a.date) || a.track.localeCompare(b.track) || a.raceNum - b.raceNum);
-}
-
-const allGPSRaces = buildGPSRaces();
-
 export default function RaceXRay() {
   const [query, setQuery] = useState('');
   const [showDrop, setShowDrop] = useState(false);
   const [selected, setSelected] = useState(null);
   const [activeHorses, setActiveHorses] = useState([]);
+  const [results, setResults] = useState([]);
+  const [browseRaces, setBrowseRaces] = useState([]);
+  const [totalGPSRaces, setTotalGPSRaces] = useState(155);
 
-  const results = useMemo(() => {
-    if (!query || query.length < 2) return [];
-    const q = query.toLowerCase();
-    return allGPSRaces.filter(r => {
-      const trackName = (TRACK_NAMES[r.track] || r.track).toLowerCase();
-      const label = `${trackName} r${r.raceNum} ${r.date}`;
-      const horseNames = r.horses.map(h => h.name.toLowerCase()).join(' ');
-      return label.includes(q) || horseNames.includes(q);
-    }).slice(0, 12);
+  // Fetch browse races on mount
+  useEffect(() => {
+    fetch('/api/gps-races?top=12').then(r => r.json()).then(d => {
+      setBrowseRaces(d.races || []);
+      setTotalGPSRaces(d.total || 155);
+    });
+  }, []);
+
+  // Debounced search
+  useEffect(() => {
+    if (!query || query.length < 2) { setResults([]); return; }
+    const timer = setTimeout(() => {
+      fetch(`/api/gps-races?q=${encodeURIComponent(query)}`).then(r => r.json()).then(setResults);
+    }, 300);
+    return () => clearTimeout(timer);
   }, [query]);
 
   const race = selected;
@@ -99,11 +77,20 @@ export default function RaceXRay() {
 
   const winner = horses[0];
 
-  const selectRace = (r) => {
-    setSelected(r);
+  const selectRace = async (r) => {
     setQuery('');
     setShowDrop(false);
-    setActiveHorses(r.horses.slice(0, 6).map(h => h.name));
+    // If we already have horse data (full race), use it directly
+    if (r.horses?.length && r.horses[0].speeds) {
+      setSelected(r);
+      setActiveHorses(r.horses.slice(0, 6).map(h => h.name));
+    } else {
+      // Fetch full race data from API
+      const res = await fetch(`/api/gps-races?id=${encodeURIComponent(r.id)}`);
+      const fullRace = await res.json();
+      setSelected(fullRace);
+      setActiveHorses(fullRace.horses.slice(0, 6).map(h => h.name));
+    }
   };
 
   const toggleHorse = (name) => {
@@ -171,7 +158,7 @@ export default function RaceXRay() {
   }, [horses]);
 
   // Top races for browse
-  const topRaces = useMemo(() => allGPSRaces.filter(r => r.horses.length >= 5).slice(0, 12), []);
+  const topRaces = browseRaces;
 
   const trackName = race ? (TRACK_NAMES[race.track] || race.track) : '';
 
@@ -181,7 +168,7 @@ export default function RaceXRay() {
         <div className="label" style={{ color: '#C59757', marginBottom: 12 }}>Analysis</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>Deep Dive</h1>
         <p style={{ fontSize: 17, color: '#5A5550', marginBottom: 12 }}>
-          Search {allGPSRaces.length} GPS races — pick one to see speed, stride, ground loss, and effort-adjusted rankings.
+          Search {totalGPSRaces} GPS races — pick one to see speed, stride, ground loss, and effort-adjusted rankings.
         </p>
       </motion.div>
 
@@ -205,7 +192,6 @@ export default function RaceXRay() {
         {showDrop && results.length > 0 && (
           <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 4, background: '#141A10', border: '1px solid rgba(197,151,87,0.12)', borderRadius: 3, maxHeight: 400, overflowY: 'auto', boxShadow: '0 12px 40px rgba(0,0,0,0.4)' }}>
             {results.map(r => {
-              const winnerH = [...r.horses].sort((a, b) => (a.position || 99) - (b.position || 99))[0];
               return (
                 <button key={r.id} onClick={() => selectRace(r)}
                   style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', background: 'transparent', border: 'none', borderBottom: '1px solid rgba(197,151,87,0.04)', cursor: 'pointer', textAlign: 'left', transition: 'background 200ms' }}
@@ -213,17 +199,17 @@ export default function RaceXRay() {
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
                   <div>
                     <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>
-                      {TRACK_NAMES[r.track] || r.track} Race {r.raceNum}
+                      {r.trackName || TRACK_NAMES[r.track] || r.track} Race {r.raceNum}
                     </div>
                     <div style={{ fontSize: 16, color: '#5A5550', marginTop: 2 }}>
-                      {r.date} · {r.distance} {r.surface} · {r.type} · {r.horses.length} horses GPS
+                      {r.date} · {r.distance} {r.surface} · {r.type} · {r.horseCount || r.horses?.length} horses GPS
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                    {winnerH && (
+                    {r.winnerName && (
                       <span style={{ fontSize: 16, color: '#C59757' }}>
                         <Trophy style={{ width: 11, height: 11, display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />
-                        {winnerH.name}
+                        {r.winnerName}
                       </span>
                     )}
                   </div>
@@ -453,7 +439,6 @@ export default function RaceXRay() {
             <div className="label" style={{ marginBottom: 16, fontSize: 16 }}>Recent GPS Races</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
               {topRaces.map((r, idx) => {
-                const w = [...r.horses].sort((a, b) => (a.position || 99) - (b.position || 99))[0];
                 return (
                   <button key={r.id} onClick={() => selectRace(r)} className="card"
                     style={{ padding: 0, textAlign: 'left', cursor: 'pointer', background: '#141A10', overflow: 'hidden' }}>
@@ -463,18 +448,18 @@ export default function RaceXRay() {
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 20%, rgba(20,26,16,0.95) 100%)' }} />
                       <div style={{ position: 'absolute', bottom: 14, left: 16, right: 16 }}>
                         <div style={{ fontSize: 17, fontWeight: 600, color: '#D6D1CC', marginBottom: 4 }}>
-                          {TRACK_NAMES[r.track] || r.track} R{r.raceNum}
+                          {r.trackName || TRACK_NAMES[r.track] || r.track} R{r.raceNum}
                         </div>
                         <div style={{ fontSize: 16, color: '#5A5550' }}>
-                          {r.date} · {r.distance} {r.surface} · {r.horses.length} horses
+                          {r.date} · {r.distance} {r.surface} · {r.horseCount || r.horses?.length} horses
                         </div>
                       </div>
                     </div>
                     <div style={{ padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      {w && (
+                      {r.winnerName && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <Trophy style={{ width: 12, height: 12, color: '#C59757' }} />
-                          <span style={{ fontSize: 17, color: '#C59757' }}>{w.name}</span>
+                          <span style={{ fontSize: 17, color: '#C59757' }}>{r.winnerName}</span>
                         </div>
                       )}
                       <span style={{ fontSize: 16, color: '#5A5550' }}>
