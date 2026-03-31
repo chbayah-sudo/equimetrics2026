@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RaceReplay from '../components/RaceReplay';
-import replayRaces from '../data/replayRaces.json';
 import { getPortrait } from '../data/portraits';
 
 const TRACK_NAMES = {
@@ -15,12 +14,17 @@ const COLORS = ['#C59757','#52B788','#5B8DEF','#E8B86D','#9B72CF','#C2653A','#4E
 const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } };
 
 export default function RaceNight() {
-  const dates = useMemo(() => [...new Set(replayRaces.map(r => r.date))].sort().reverse(), []);
-  const [selDate, setSelDate] = useState(dates[0]);
+  const [replayRaces, setReplayRaces] = useState([]);
+  useEffect(() => { fetch('/api/replays').then(r => r.json()).then(setReplayRaces); }, []);
+
+  const dates = useMemo(() => [...new Set(replayRaces.map(r => r.date))].sort().reverse(), [replayRaces]);
+  const [selDate, setSelDate] = useState(null);
   const [selTrack, setSelTrack] = useState(null);
   const [selRace, setSelRace] = useState(null);
 
-  const dayRaces = useMemo(() => replayRaces.filter(r => r.date === selDate), [selDate]);
+  useEffect(() => { if (dates.length && !selDate) setSelDate(dates[0]); }, [dates, selDate]);
+
+  const dayRaces = useMemo(() => replayRaces.filter(r => r.date === selDate), [replayRaces, selDate]);
   const tracks = useMemo(() => [...new Set(dayRaces.map(r => r.track))].sort(), [dayRaces]);
   const activeTrack = selTrack && tracks.includes(selTrack) ? selTrack : tracks[0];
   const trackRaces = useMemo(() => dayRaces.filter(r => r.track === activeTrack).sort((a, b) => a.raceNumber - b.raceNumber), [dayRaces, activeTrack]);

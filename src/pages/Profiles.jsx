@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   AreaChart, Area, LineChart, Line, BarChart, Bar, XAxis, YAxis,
@@ -6,12 +6,10 @@ import {
   Tooltip, CartesianGrid, Cell,
 } from 'recharts';
 import { Search, X, ChevronDown, ChevronUp } from 'lucide-react';
-import allProfiles from '../data/horseProfiles.json';
 import { getPortrait } from '../data/portraits';
 import JourneyMap from '../components/JourneyMap';
 
 const SC = { 'Front Runner': '#52B788', Stalker: '#E8B86D', Closer: '#9B72CF' };
-const profileList = Object.values(allProfiles).sort((a, b) => (b.gpsScore || 0) - (a.gpsScore || 0));
 
 const CustomTip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -138,16 +136,32 @@ export default function Profiles() {
   const [showDrop, setShowDrop] = useState(false);
   const [expandedRace, setExpandedRace] = useState(0);
   const [activeTab, setActiveTab] = useState('races');
+  const [results, setResults] = useState([]);
+  const [topHorsesList, setTopHorsesList] = useState([]);
+  const [h, setH] = useState(null);
+  const [totalCount, setTotalCount] = useState(12919);
 
-  const results = useMemo(() => {
-    if (!query || query.length < 2) return [];
-    const q = query.toLowerCase();
-    return profileList.filter(p => p.name.toLowerCase().includes(q)).slice(0, 15);
+  // Fetch top horses on mount
+  useEffect(() => {
+    fetch('/api/horses?top=16').then(r => r.json()).then(setTopHorsesList);
+    fetch('/api/horses').then(r => r.json()).then(d => setTotalCount(d.total || 12919));
+  }, []);
+
+  // Debounced search
+  useEffect(() => {
+    if (!query || query.length < 2) { setResults([]); return; }
+    const timer = setTimeout(() => {
+      fetch(`/api/horses?q=${encodeURIComponent(query)}`).then(r => r.json()).then(setResults);
+    }, 300);
+    return () => clearTimeout(timer);
   }, [query]);
-
-  const h = selected ? allProfiles[selected] : null;
   const color = h?.style ? (SC[h.style] || '#C59757') : '#8A847E';
-  const selectHorse = (name) => { setSelected(name); setQuery(''); setShowDrop(false); setExpandedRace(0); setActiveTab('races'); };
+  const selectHorse = async (name) => {
+    setSelected(name); setQuery(''); setShowDrop(false); setExpandedRace(0); setActiveTab('races');
+    const res = await fetch(`/api/horses/${encodeURIComponent(name)}`);
+    const profile = await res.json();
+    setH(profile);
+  };
 
   const radarData = h && h.hasGPS ? [
     { t: 'Speed', v: h.bestPeak ? Math.min(100, (h.bestPeak / 42) * 100) : 0 },
@@ -162,7 +176,7 @@ export default function Profiles() {
     earned: r.earnings || 0,
   })) : [];
 
-  const topHorses = useMemo(() => profileList.filter(p => p.numRaces >= 2).slice(0, 16), []);
+  const topHorses = topHorsesList;
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
@@ -170,7 +184,7 @@ export default function Profiles() {
         <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>Profiling</div>
         <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 12 }}>Horse Profiles</h1>
         <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 520, lineHeight: 1.7, marginBottom: 12 }}>
-          Search {profileList.length.toLocaleString()} horses — GPS and traditional — to see race history, earnings, and performance data.
+          Search {totalCount.toLocaleString()} horses — GPS and traditional — to see race history, earnings, and performance data.
         </p>
       </motion.div>
 

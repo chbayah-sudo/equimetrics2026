@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Trophy, TrendingUp, ChevronRight, Check, Crown, Flame, Target, Zap, ArrowUpRight, ArrowDownRight } from 'lucide-react';
-import { forecastRaces } from '../data/forecastData';
 import { getPortrait } from '../data/portraits';
 
 // ── Hay currency icon ──
@@ -22,9 +21,9 @@ const DEMO_USERS = [
 const GROUP = { name: 'The Thoroughbreds', members: DEMO_USERS.length, totalBets: 52, created: 'Mar 2026' };
 
 // ── Build betting markets from real race data ──
-function buildMarkets() {
+function buildMarkets(forecastRaces) {
   const markets = [];
-  forecastRaces.forEach(race => {
+  (forecastRaces || []).forEach(race => {
     const topHorses = [...race.horses].sort((a, b) => (b.gpsScore || 0) - (a.gpsScore || 0));
     const topSpeed = [...race.horses].sort((a, b) => (b.peakMPH || 0) - (a.peakMPH || 0));
     const topCloser = [...race.horses].sort((a, b) => (b.closingMPH || 0) - (a.closingMPH || 0));
@@ -296,8 +295,10 @@ export default function EquiBets() {
   const [category, setCategory] = useState('All');
   const [betModal, setBetModal] = useState(null);
   const [toast, setToast] = useState(null);
+  const [forecastRaces, setForecastRaces] = useState([]);
+  useEffect(() => { fetch('/api/forecast').then(r => r.json()).then(setForecastRaces); }, []);
 
-  const allMarkets = useMemo(() => buildMarkets(), []);
+  const allMarkets = useMemo(() => buildMarkets(forecastRaces), [forecastRaces]);
 
   const filtered = useMemo(() => {
     if (category === 'All') return allMarkets;

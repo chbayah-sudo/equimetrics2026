@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { Heart, X, RotateCcw, ChevronRight, SlidersHorizontal, Trophy, Zap, TrendingUp } from 'lucide-react';
-import { forecastRaces, styleColors } from '../data/forecastData';
+import { styleColors } from '../data/forecastConstants';
 import { getPortrait } from '../data/portraits';
 
 const STYLE_OPTIONS = ['Any', 'Front Runner', 'Stalker', 'Closer'];
@@ -423,6 +423,8 @@ export default function StableMatch() {
   const [passed, setPassed] = useState([]);
   const [horses, setHorses] = useState([]);
   const [lastSwipe, setLastSwipe] = useState(null);
+  const [forecastRaces, setForecastRaces] = useState([]);
+  useEffect(() => { fetch('/api/forecast').then(r => r.json()).then(setForecastRaces); }, []);
 
   const buildDeck = (preferences) => {
     const allHorses = [];
