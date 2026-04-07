@@ -64,7 +64,10 @@ export default function RaceReplay({ race }) {
       <div style={{ padding: '16px 28px' }}>
         {sortedHorses.map(horse => {
           const position = currentData.positions[horse.name] || race.fieldSize;
-          const barWidth = Math.max(12, 100 - ((position - 1) / Math.max(1, race.fieldSize - 1)) * 55 - (currentGate < totalGates - 1 ? (totalGates - 1 - currentGate) * 1.5 : 0));
+          const raceProgress = currentGate / Math.max(1, totalGates - 1); // 0 at start, 1 at finish
+          const posSpread = ((position - 1) / Math.max(1, race.fieldSize - 1)) * 50 * raceProgress; // spread grows as race progresses
+          const baseProgress = raceProgress * 60 + 15; // all horses advance from 15% to 75% together
+          const barWidth = Math.max(12, baseProgress - posSpread);
           const isLeader = position === 1;
 
           return (
