@@ -15,7 +15,7 @@ const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 } }
 
 export default function RaceNight() {
   const [replayRaces, setReplayRaces] = useState([]);
-  useEffect(() => { fetch('/api/replays').then(r => r.json()).then(setReplayRaces); }, []);
+  useEffect(() => { fetch('/data/replays.json').then(r => r.json()).then(setReplayRaces); }, []);
 
   const dates = useMemo(() => [...new Set(replayRaces.map(r => r.date))].sort().reverse(), [replayRaces]);
   const [selDate, setSelDate] = useState(null);

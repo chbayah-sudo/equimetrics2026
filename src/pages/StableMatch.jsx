@@ -424,7 +424,7 @@ export default function StableMatch() {
   const [horses, setHorses] = useState([]);
   const [lastSwipe, setLastSwipe] = useState(null);
   const [forecastRaces, setForecastRaces] = useState([]);
-  useEffect(() => { fetch('/api/forecast').then(r => r.json()).then(setForecastRaces); }, []);
+  useEffect(() => { fetch('/data/forecast.json').then(r => r.json()).then(setForecastRaces); }, []);
 
   const buildDeck = (preferences) => {
     const allHorses = [];

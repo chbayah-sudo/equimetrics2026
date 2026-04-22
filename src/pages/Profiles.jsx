@@ -141,20 +141,23 @@ export default function Profiles() {
   const [h, setH] = useState(null);
   const [totalCount, setTotalCount] = useState(12919);
 
-  // Fetch top horses on mount
+  // Fetch static horse index once — enables instant local search
+  const [profileList, setProfileList] = useState([]);
   useEffect(() => {
-    fetch('/api/horses?top=16').then(r => r.json()).then(setTopHorsesList);
-    fetch('/api/horses').then(r => r.json()).then(d => setTotalCount(d.total || 12919));
+    fetch('/data/horse-index.json').then(r => r.json()).then(d => {
+      const list = Object.values(d).sort((a, b) => (b.gpsScore || 0) - (a.gpsScore || 0));
+      setProfileList(list);
+      setTotalCount(list.length);
+      setTopHorsesList(list.filter(p => p.numRaces >= 2).slice(0, 16));
+    });
   }, []);
 
-  // Debounced search
+  // Instant in-memory search (no network roundtrip)
   useEffect(() => {
     if (!query || query.length < 2) { setResults([]); return; }
-    const timer = setTimeout(() => {
-      fetch(`/api/horses?q=${encodeURIComponent(query)}`).then(r => r.json()).then(setResults);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [query]);
+    const q = query.toLowerCase();
+    setResults(profileList.filter(p => p.name.toLowerCase().includes(q)).slice(0, 15));
+  }, [query, profileList]);
   const color = h?.style ? (SC[h.style] || '#C59757') : '#8A847E';
   const selectHorse = async (name) => {
     setSelected(name); setQuery(''); setShowDrop(false); setExpandedRace(0); setActiveTab('races');

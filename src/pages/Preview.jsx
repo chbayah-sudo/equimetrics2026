@@ -47,8 +47,8 @@ export default function Preview() {
   const [allRacesRaw, setAllRacesRaw] = useState([]);
   const [forecastRaces, setForecastRaces] = useState([]);
   useEffect(() => {
-    fetch('/api/races').then(r => r.json()).then(setAllRacesRaw);
-    fetch('/api/forecast').then(r => r.json()).then(setForecastRaces);
+    fetch('/data/races.json').then(r => r.json()).then(setAllRacesRaw);
+    fetch('/data/forecast.json').then(r => r.json()).then(setForecastRaces);
   }, []);
 
   // Get unique dates and tracks

@@ -296,7 +296,7 @@ export default function EquiBets() {
   const [betModal, setBetModal] = useState(null);
   const [toast, setToast] = useState(null);
   const [forecastRaces, setForecastRaces] = useState([]);
-  useEffect(() => { fetch('/api/forecast').then(r => r.json()).then(setForecastRaces); }, []);
+  useEffect(() => { fetch('/data/forecast.json').then(r => r.json()).then(setForecastRaces); }, []);
 
   const allMarkets = useMemo(() => buildMarkets(forecastRaces), [forecastRaces]);
 

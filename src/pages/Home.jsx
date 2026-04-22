@@ -11,7 +11,7 @@ export default function Home() {
       {/* ═══ HERO ═══ */}
       <section style={{ position: 'relative', height: '100vh', minHeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-          <video autoPlay loop muted playsInline
+          <video autoPlay loop muted playsInline preload="metadata"
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             ref={el => { if (el) el.playbackRate = 2; }}>
             <source src="/horse.webm" type="video/webm" />

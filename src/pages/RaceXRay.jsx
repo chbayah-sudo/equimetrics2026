@@ -49,23 +49,33 @@ export default function RaceXRay() {
   const [results, setResults] = useState([]);
   const [browseRaces, setBrowseRaces] = useState([]);
   const [totalGPSRaces, setTotalGPSRaces] = useState(155);
+  const [allRaces, setAllRaces] = useState([]);
 
-  // Fetch browse races on mount
+  // Fetch all GPS races from static file
   useEffect(() => {
-    fetch('/api/gps-races?top=12').then(r => r.json()).then(d => {
-      setBrowseRaces(d.races || []);
-      setTotalGPSRaces(d.total || 155);
+    fetch('/data/gps-races.json').then(r => r.json()).then(d => {
+      setAllRaces(d);
+      setTotalGPSRaces(d.length);
+      setBrowseRaces(d.slice(0, 12).map(r => {
+        const w = [...r.horses].sort((a, b) => (a.position || 99) - (b.position || 99))[0];
+        return { id: r.id, date: r.date, track: r.track, raceNum: r.raceNum, distance: r.distance, surface: r.surface, type: r.type, purse: r.purse, horseCount: r.horses.length, winnerName: w?.name, trackName: TRACK_NAMES[r.track] || r.track };
+      }));
     });
   }, []);
 
-  // Debounced search
+  // Instant in-memory search
   useEffect(() => {
     if (!query || query.length < 2) { setResults([]); return; }
-    const timer = setTimeout(() => {
-      fetch(`/api/gps-races?q=${encodeURIComponent(query)}`).then(r => r.json()).then(setResults);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [query]);
+    const q = query.toLowerCase();
+    const filtered = allRaces.filter(r => {
+      const tn = (TRACK_NAMES[r.track] || r.track).toLowerCase();
+      return `${tn} r${r.raceNum} ${r.date}`.includes(q) || r.horses.some(h => h.name.toLowerCase().includes(q));
+    }).slice(0, 12).map(r => {
+      const w = [...r.horses].sort((a, b) => (a.position || 99) - (b.position || 99))[0];
+      return { id: r.id, date: r.date, track: r.track, raceNum: r.raceNum, distance: r.distance, surface: r.surface, type: r.type, purse: r.purse, horseCount: r.horses.length, winnerName: w?.name, trackName: TRACK_NAMES[r.track] || r.track };
+    });
+    setResults(filtered);
+  }, [query, allRaces]);
 
   const race = selected;
   const horses = useMemo(() => {
@@ -77,19 +87,14 @@ export default function RaceXRay() {
 
   const winner = horses[0];
 
-  const selectRace = async (r) => {
+  const selectRace = (r) => {
     setQuery('');
     setShowDrop(false);
-    // If we already have horse data (full race), use it directly
-    if (r.horses?.length && r.horses[0].speeds) {
-      setSelected(r);
-      setActiveHorses(r.horses.slice(0, 6).map(h => h.name));
-    } else {
-      // Fetch full race data from API
-      const res = await fetch(`/api/gps-races?id=${encodeURIComponent(r.id)}`);
-      const fullRace = await res.json();
-      setSelected(fullRace);
-      setActiveHorses(fullRace.horses.slice(0, 6).map(h => h.name));
+    // Full data is already in memory — look it up by id
+    const full = r.horses?.length && r.horses[0].speeds ? r : allRaces.find(x => x.id === r.id);
+    if (full) {
+      setSelected(full);
+      setActiveHorses(full.horses.slice(0, 6).map(h => h.name));
     }
   };
 
