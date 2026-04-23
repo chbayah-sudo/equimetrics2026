@@ -25,15 +25,15 @@ export default function Home() {
             <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(56px, 9vw, 82px)', fontWeight: 500, color: '#D6D1CC', letterSpacing: '-1px', lineHeight: 1.05, marginBottom: 52 }}>
               Equimetrics
             </h1>
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/horsellm" className="btn-primary" style={{ fontSize: 14 }}>
-                Ask HorseLLM <ArrowRight style={{ width: 15, height: 15 }} />
+            <div style={{ display: 'flex', gap: 18, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link to="/horsellm" className="btn-primary" style={{ fontSize: 17, padding: '17px 34px' }}>
+                Ask HorseLLM <ArrowRight style={{ width: 18, height: 18 }} />
               </Link>
-              <Link to="/stable-match" className="btn-primary" style={{ fontSize: 14 }}>
-                StableMatch <ArrowRight style={{ width: 15, height: 15 }} />
+              <Link to="/stable-match" className="btn-primary" style={{ fontSize: 17, padding: '17px 34px' }}>
+                StableMatch <ArrowRight style={{ width: 18, height: 18 }} />
               </Link>
-              <Link to="/equibets" className="btn-primary" style={{ fontSize: 14 }}>
-                EquiBets <ArrowRight style={{ width: 15, height: 15 }} />
+              <Link to="/equibets" className="btn-primary" style={{ fontSize: 17, padding: '17px 34px' }}>
+                EquiBets <ArrowRight style={{ width: 18, height: 18 }} />
               </Link>
             </div>
           </motion.div>
@@ -42,9 +42,9 @@ export default function Home() {
       </section>
 
       {/* ═══ STATS BAR ═══ */}
-      <section style={{ maxWidth: 1100, margin: '-60px auto 0', padding: '0 32px', position: 'relative', zIndex: 20 }}>
+      <section style={{ maxWidth: 1280, margin: '-60px auto 0', padding: '0 40px', position: 'relative', zIndex: 20 }}>
         <motion.div {...fadeUp} transition={{ duration: 0.7 }}>
-          <div className="card-flat" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '44px 0' }}>
+          <div className="card-flat" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', padding: '52px 0' }}>
             {[
               { value: '12,919', label: 'Horses Profiled' },
               { value: '52,767', label: 'Race Starts Analyzed' },
@@ -52,13 +52,13 @@ export default function Home() {
               { value: '8.1', label: 'Avg Field Size' },
             ].map((stat, i) => (
               <div key={stat.label} style={{
-                textAlign: 'center', padding: '0 24px',
+                textAlign: 'center', padding: '0 28px',
                 borderRight: i < 3 ? '1px solid rgba(197, 151, 87, 0.08)' : 'none',
               }}>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 42, fontWeight: 400, color: '#C59757', marginBottom: 10 }}>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 52, fontWeight: 400, color: '#C59757', marginBottom: 12 }}>
                   {stat.value}
                 </div>
-                <div className="label" style={{ fontSize: 11 }}>{stat.label}</div>
+                <div className="label" style={{ fontSize: 14 }}>{stat.label}</div>
               </div>
             ))}
           </div>
@@ -66,18 +66,18 @@ export default function Home() {
       </section>
 
       {/* ═══ FEATURES ═══ */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: 'clamp(80px, 12vw, 160px) 32px' }}>
-        <motion.div {...fadeUp} style={{ marginBottom: 60 }}>
-          <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>What We Built</div>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 4.5vw, 46px)', fontWeight: 500, color: '#D6D1CC', maxWidth: 520 }}>
+      <section style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(80px, 12vw, 160px) 40px' }}>
+        <motion.div {...fadeUp} style={{ marginBottom: 72 }}>
+          <div className="label" style={{ color: '#C59757', marginBottom: 16, fontSize: 15 }}>What We Built</div>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(40px, 5.5vw, 56px)', fontWeight: 500, color: '#D6D1CC', maxWidth: 640 }}>
             Six tools that transform GPS telemetry into insight
           </h2>
-          <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 540, lineHeight: 1.7, marginTop: 18 }}>
+          <p style={{ fontSize: 20, color: '#8A847E', maxWidth: 660, lineHeight: 1.7, marginTop: 22 }}>
             We analyze all 52,000+ race starts across 71 tracks — and for the 32 GPS-equipped tracks, we unlock speed, stride, and ground loss data that traditional methods simply cannot capture.
           </p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: 28 }}>
           {[
             { label: 'Replay', title: 'Live Replay', desc: 'Gate-by-gate GPS tracking. Watch positions evolve in real time with animated telemetry data from every horse in the field.', to: '/live-replay' },
             { label: 'Analysis', title: 'Deep Dive', desc: 'Speed traces, stride patterns, and ground loss metrics. See what chart callers with binoculars physically cannot observe.', to: '/deep-dive' },
@@ -87,16 +87,16 @@ export default function Home() {
             { label: 'Matchmaking', title: 'StableMatch', desc: 'Swipe through upcoming horses like a dating app. Set your style, odds, and GPS preferences — then build a betting stable tailored to you.', to: '/stable-match' },
           ].map((f, i) => (
             <motion.div key={f.title} {...fadeUp} transition={{ delay: i * 0.08, duration: 0.5 }}>
-              <Link to={f.to} className="card" style={{ display: 'block', padding: 36, textDecoration: 'none', height: '100%' }}>
-                <div className="label" style={{ marginBottom: 12, fontSize: 11 }}>{f.label}</div>
-                <div className="gold-line" style={{ marginBottom: 16 }} />
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 24, fontWeight: 500, color: '#D6D1CC', marginBottom: 14 }}>
+              <Link to={f.to} className="card" style={{ display: 'block', padding: 44, textDecoration: 'none', height: '100%' }}>
+                <div className="label" style={{ marginBottom: 14, fontSize: 14 }}>{f.label}</div>
+                <div className="gold-line" style={{ marginBottom: 20 }} />
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, color: '#D6D1CC', marginBottom: 16 }}>
                   {f.title}
                 </h3>
-                <p style={{ fontSize: 15, color: '#8A847E', lineHeight: 1.7, marginBottom: 22 }}>
+                <p style={{ fontSize: 18, color: '#8A847E', lineHeight: 1.7, marginBottom: 26 }}>
                   {f.desc}
                 </p>
-                <span style={{ fontSize: 14, color: '#C59757', opacity: 0.7 }}>
+                <span style={{ fontSize: 17, color: '#C59757', opacity: 0.8 }}>
                   Explore &rarr;
                 </span>
               </Link>
@@ -106,10 +106,10 @@ export default function Home() {
       </section>
 
       {/* ═══ COMPARISON TABLE ═══ */}
-      <section style={{ maxWidth: 1000, margin: '0 auto', padding: '0 32px clamp(80px, 12vw, 160px)' }}>
-        <motion.div {...fadeUp} style={{ marginBottom: 60 }}>
-          <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 12 }}>The Advantage</div>
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 4.5vw, 46px)', fontWeight: 500, color: '#D6D1CC' }}>
+      <section style={{ maxWidth: 1120, margin: '0 auto', padding: '0 40px clamp(80px, 12vw, 160px)' }}>
+        <motion.div {...fadeUp} style={{ marginBottom: 72 }}>
+          <div className="label" style={{ color: '#C59757', marginBottom: 16, fontSize: 15 }}>The Advantage</div>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(40px, 5.5vw, 56px)', fontWeight: 500, color: '#D6D1CC' }}>
             Why GPS changes everything
           </h2>
         </motion.div>
@@ -117,31 +117,31 @@ export default function Home() {
       </section>
 
       {/* ═══ CTA ═══ */}
-      <section style={{ maxWidth: 700, margin: '0 auto', padding: '0 32px clamp(80px, 12vw, 160px)', textAlign: 'center' }}>
+      <section style={{ maxWidth: 820, margin: '0 auto', padding: '0 40px clamp(80px, 12vw, 160px)', textAlign: 'center' }}>
         <motion.div {...fadeUp}>
-          <div className="gold-line" style={{ margin: '0 auto 36px' }} />
-          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 18 }}>
+          <div className="gold-line" style={{ margin: '0 auto 40px' }} />
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 50px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 22 }}>
             Ready to see racing differently?
           </h2>
-          <p style={{ fontSize: 16, color: '#8A847E', marginBottom: 52, maxWidth: 420, marginLeft: 'auto', marginRight: 'auto' }}>
+          <p style={{ fontSize: 20, color: '#8A847E', marginBottom: 60, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>
             Dive into a featured race with full GPS telemetry — speed, stride, ground loss, and more.
           </p>
-          <Link to="/live-replay" className="btn-primary" style={{ fontSize: 14 }}>
-            Launch Live Replay <ArrowRight style={{ width: 15, height: 15 }} />
+          <Link to="/live-replay" className="btn-primary" style={{ fontSize: 17, padding: '17px 34px' }}>
+            Launch Live Replay <ArrowRight style={{ width: 18, height: 18 }} />
           </Link>
         </motion.div>
       </section>
 
       {/* ═══ FOOTER ═══ */}
-      <footer style={{ borderTop: '1px solid rgba(197, 151, 87, 0.06)', padding: '48px 0' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 20 }}>
-          <span style={{ fontSize: 15, fontWeight: 600, color: '#D6D1CC' }}>
+      <footer style={{ borderTop: '1px solid rgba(197, 151, 87, 0.06)', padding: '56px 0' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 24 }}>
+          <span style={{ fontSize: 18, fontWeight: 600, color: '#D6D1CC' }}>
             EQUI<span style={{ color: '#C59757' }}>METRICS</span>
           </span>
-          <p style={{ fontSize: 13, color: '#5A5550' }}>
+          <p style={{ fontSize: 15, color: '#5A5550' }}>
             985,000+ GPS data points &middot; 32 tracks &middot; Data by Equibase &middot; 2026 Econ Games
           </p>
-          <div style={{ display: 'flex', gap: 24, fontSize: 13 }}>
+          <div style={{ display: 'flex', gap: 28, fontSize: 16 }}>
             {[
               { to: '/live-replay', label: 'Live Replay' },
               { to: '/deep-dive', label: 'Deep Dive' },

@@ -319,25 +319,25 @@ export default function EquiBets() {
 
       {/* Header */}
       <motion.div {...fadeUp}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14 }}>
-          <img src="/horse.gif" alt="" style={{ width: 120, height: 120, borderRadius: 10 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 22, marginBottom: 16 }}>
+          <img src="/horse.gif" alt="" style={{ width: 128, height: 128, borderRadius: 10 }} />
           <div>
-            <div className="label" style={{ color: '#C59757', marginBottom: 6, fontSize: 16 }}>Prediction Markets</div>
-            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC' }}>
+            <div className="label" style={{ color: '#C59757', marginBottom: 8, fontSize: 18 }}>Prediction Markets</div>
+            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(38px, 5.5vw, 54px)', fontWeight: 500, color: '#D6D1CC' }}>
               Equi<span style={{ color: '#C59757' }}>Bets</span>
             </h1>
           </div>
         </div>
-        <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 600, lineHeight: 1.7, marginBottom: 12 }}>
+        <p style={{ fontSize: 18, color: '#8A847E', maxWidth: 680, lineHeight: 1.7, marginBottom: 14 }}>
           Bet on races, GPS outcomes, and live events with haysticks. Compete with friends, climb the leaderboard, and earn tickets to real races.
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 16, color: '#5A5550', marginBottom: 36 }}>
-          <Hay size={18} /> <span style={{ fontFamily: 'var(--font-mono)', color: '#C59757', fontWeight: 600 }}>1,000</span> haysticks to start · Earn more by winning bets
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 18, color: '#5A5550', marginBottom: 42 }}>
+          <Hay size={20} /> <span style={{ fontFamily: 'var(--font-mono)', color: '#C59757', fontWeight: 600 }}>1,000</span> haysticks to start · Earn more by winning bets
         </div>
       </motion.div>
 
       {/* Tabs */}
-      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ display: 'flex', gap: 4, marginBottom: 32 }}>
+      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ display: 'flex', gap: 6, marginBottom: 36 }}>
         {[
           { key: 'markets', label: 'Markets', icon: TrendingUp },
           { key: 'leaderboard', label: 'Leaderboard', icon: Trophy },
@@ -346,13 +346,13 @@ export default function EquiBets() {
           const active = activeTab === tab.key;
           return (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{
-              display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 3,
-              cursor: 'pointer', fontSize: 16, fontWeight: 500, transition: 'all 250ms',
+              display: 'flex', alignItems: 'center', gap: 10, padding: '14px 28px', borderRadius: 4,
+              cursor: 'pointer', fontSize: 18, fontWeight: 500, transition: 'all 250ms',
               background: active ? '#141A10' : 'transparent',
               border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
               color: active ? '#C59757' : '#5A5550',
             }}>
-              <tab.icon style={{ width: 16, height: 16 }} /> {tab.label}
+              <tab.icon style={{ width: 18, height: 18 }} /> {tab.label}
             </button>
           );
         })}
@@ -363,12 +363,12 @@ export default function EquiBets() {
         {activeTab === 'markets' && (
           <motion.div key="markets" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}>
             {/* Category filter */}
-            <div style={{ display: 'flex', gap: 8, marginBottom: 28, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 10, marginBottom: 32, flexWrap: 'wrap' }}>
               {CATEGORIES.map(c => {
                 const active = category === c;
                 return (
                   <button key={c} onClick={() => setCategory(c)} style={{
-                    padding: '8px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 17, fontWeight: 500,
+                    padding: '10px 22px', borderRadius: 4, cursor: 'pointer', fontSize: 17, fontWeight: 500,
                     transition: 'all 250ms',
                     background: active ? '#141A10' : 'transparent',
                     border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
@@ -378,7 +378,7 @@ export default function EquiBets() {
                   </button>
                 );
               })}
-              <div style={{ marginLeft: 'auto', fontSize: 17, color: '#5A5550', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ marginLeft: 'auto', fontSize: 17, color: '#5A5550', display: 'flex', alignItems: 'center', gap: 6 }}>
                 {filtered.length} market{filtered.length !== 1 ? 's' : ''}
               </div>
             </div>

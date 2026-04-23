@@ -84,26 +84,32 @@ export default function Preview() {
   const trackName = TRACK_NAMES[activeTrack] || TRACK_NAMES[activeTrack?.trim()] || activeTrack;
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px 80px' }}>
 
       {/* Header */}
       <motion.div {...fadeUp}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>Upcoming Races</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 12 }}>
+        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 18 }}>Upcoming Races</div>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(38px, 5vw, 54px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 14 }}>
           Forecast
         </h1>
-        <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 520, lineHeight: 1.7, marginBottom: 16 }}>
+        <p style={{ fontSize: 19, color: '#8A847E', maxWidth: 720, lineHeight: 1.7, marginBottom: 20 }}>
           Pick a date, track, and race to see every horse in the field with GPS insights the odds don't reflect.
         </p>
-        <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 48 }}>
+        <div className="card-flat" style={{ padding: '20px 24px', marginBottom: 24, borderColor: 'rgba(155,114,207,0.15)', maxWidth: 820 }}>
+          <div style={{ fontSize: 13, color: '#9B72CF', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 600, marginBottom: 10 }}>Forecast methodology</div>
+          <p style={{ fontSize: 16, color: '#8A847E', lineHeight: 1.7, margin: 0, textAlign: 'justify' }}>
+            Forecasts combine each horse's GPS career history with the full field's profiles and the race's specific conditions. We model how the entrants' running styles will shape the pace, accounting for distance, surface, jockey and trainer history, and how each horse's strengths translate to that exact setup. Picks are horses whose modeled probability of winning is higher than what the morning-line odds imply.
+          </p>
+        </div>
+        <p style={{ fontSize: 17, color: '#5A5550', marginBottom: 56 }}>
           {allRacesRaw.length} races · {dates.length} race days · {new Set(allRacesRaw.map(r => r.track)).size} tracks
         </p>
       </motion.div>
 
       {/* ── DATE SELECTOR ── */}
-      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 28 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race Day</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 32 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Race Day</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {dates.map(d => {
             const dayName = new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
             const count = allRacesRaw.filter(r => r.date === d).length;
@@ -111,13 +117,13 @@ export default function Preview() {
             return (
               <button key={d} onClick={() => { setSelDate(d); setSelTrack(null); setSelRaceNum(null); }}
                 style={{
-                  padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  padding: '14px 22px', borderRadius: 4, cursor: 'pointer', transition: 'all 250ms',
                   background: isActive ? '#141A10' : 'transparent',
                   border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
                   color: isActive ? '#C59757' : '#5A5550',
                 }}>
-                <div style={{ fontSize: 16, fontWeight: 500 }}>{dayName}</div>
-                <div style={{ fontSize: 17, color: '#5A5550', marginTop: 2 }}>{count} races</div>
+                <div style={{ fontSize: 18, fontWeight: 500 }}>{dayName}</div>
+                <div style={{ fontSize: 14, color: '#5A5550', marginTop: 4 }}>{count} races</div>
               </button>
             );
           })}
@@ -125,9 +131,9 @@ export default function Preview() {
       </motion.div>
 
       {/* ── TRACK SELECTOR ── */}
-      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 28 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Track</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 32 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Track</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {tracks.map(t => {
             const tRaces = dayRaces.filter(r => r.track === t);
             const tAvgGps = Math.round(tRaces.reduce((s, r) => s + r.gpsPct, 0) / tRaces.length);
@@ -136,20 +142,20 @@ export default function Preview() {
             return (
               <button key={t} onClick={() => { setSelTrack(t); setSelRaceNum(null); }}
                 style={{
-                  padding: '10px 16px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  padding: '14px 22px', borderRadius: 4, cursor: 'pointer', transition: 'all 250ms',
                   background: isActive ? '#141A10' : 'transparent',
                   border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
                   color: isActive ? '#D6D1CC' : '#5A5550',
                 }}>
-                <div style={{ fontSize: 16, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ fontSize: 18, fontWeight: 500, display: 'flex', alignItems: 'center', gap: 10 }}>
                   {name}
                   {tAvgGps >= 70 && (
-                    <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', padding: '1px 5px', borderRadius: 2, background: 'rgba(82,183,136,0.1)', color: '#52B788' }}>
+                    <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', padding: '2px 8px', borderRadius: 3, background: 'rgba(82,183,136,0.1)', color: '#52B788' }}>
                       GPS
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: 17, color: '#5A5550', marginTop: 2 }}>{tRaces.length} races · {tAvgGps}% GPS</div>
+                <div style={{ fontSize: 14, color: '#5A5550', marginTop: 4 }}>{tRaces.length} races · {tAvgGps}% GPS</div>
               </button>
             );
           })}
@@ -157,24 +163,24 @@ export default function Preview() {
       </motion.div>
 
       {/* ── RACE NUMBER SELECTOR ── */}
-      <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 40 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race</div>
-        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+      <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 48 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Race</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {trackRaces.map(r => {
             const isActive = r.raceNumber === activeRaceNum;
             return (
               <button key={r.raceNumber} onClick={() => setSelRaceNum(r.raceNumber)}
                 style={{
-                  width: 52, height: 52, borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                  width: 68, height: 68, borderRadius: 4, cursor: 'pointer', transition: 'all 250ms',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                   background: isActive ? '#141A10' : 'transparent',
                   border: isActive ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
                 }}>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: isActive ? '#C59757' : '#5A5550' }}>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 24, color: isActive ? '#C59757' : '#5A5550' }}>
                   {r.raceNumber}
                 </div>
                 <div style={{
-                  fontSize: 9, fontFamily: 'var(--font-mono)', marginTop: 1,
+                  fontSize: 11, fontFamily: 'var(--font-mono)', marginTop: 2,
                   color: r.gpsPct >= 80 ? '#52B788' : r.gpsPct >= 40 ? '#E8B86D' : '#5A5550',
                 }}>
                   {r.gpsPct}%
@@ -192,16 +198,16 @@ export default function Preview() {
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.25 }}>
 
             {/* Race header */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 32 }}>
-              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: '#D6D1CC' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 36, gap: 14 }}>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 36, fontWeight: 500, color: '#D6D1CC' }}>
                 {trackName} Race {activeRace.raceNumber}
               </h2>
-              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <span style={{ fontSize: 16, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>
+              <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+                <span style={{ fontSize: 17, fontFamily: 'var(--font-mono)', color: '#5A5550' }}>
                   {activeRace.fieldSize} horses
                 </span>
                 <span style={{
-                  fontSize: 16, fontFamily: 'var(--font-mono)', padding: '3px 8px', borderRadius: 3,
+                  fontSize: 15, fontFamily: 'var(--font-mono)', padding: '5px 12px', borderRadius: 4,
                   background: activeRace.gpsPct >= 80 ? 'rgba(82,183,136,0.1)' : activeRace.gpsPct >= 40 ? 'rgba(232,184,109,0.1)' : 'rgba(90,85,80,0.1)',
                   color: activeRace.gpsPct >= 80 ? '#52B788' : activeRace.gpsPct >= 40 ? '#E8B86D' : '#5A5550',
                 }}>
@@ -214,40 +220,40 @@ export default function Preview() {
             {featured && (
               <>
                 {/* Pace scenario */}
-                <div className="card-flat" style={{ padding: 28, marginBottom: 24 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+                <div className="card-flat" style={{ padding: 36, marginBottom: 28 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
                     <div>
-                      <div className="label" style={{ color: scenarioColors[featured.paceAnalysis.scenario], marginBottom: 8, fontSize: 13 }}>Pace Scenario</div>
-                      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>{featured.paceAnalysis.label}</div>
+                      <div className="label" style={{ color: scenarioColors[featured.paceAnalysis.scenario], marginBottom: 10, fontSize: 13 }}>Pace Scenario</div>
+                      <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: '#D6D1CC' }}>{featured.paceAnalysis.label}</div>
                     </div>
-                    <div style={{ display: 'flex', gap: 14 }}>
+                    <div style={{ display: 'flex', gap: 20 }}>
                       {[['Speed', featured.paceAnalysis.frontRunners, styleColors['Front Runner']], ['Stalk', featured.paceAnalysis.stalkers, styleColors['Stalker']], ['Close', featured.paceAnalysis.closers, styleColors['Closer']]].map(([l, c, col]) => (
                         <div key={l} style={{ textAlign: 'center' }}>
-                          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 20, color: col }}>{c}</div>
-                          <div style={{ fontSize: 10, color: '#5A5550' }}>{l}</div>
+                          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, color: col }}>{c}</div>
+                          <div style={{ fontSize: 13, color: '#5A5550', marginTop: 2 }}>{l}</div>
                         </div>
                       ))}
                     </div>
                   </div>
-                  <div style={{ display: 'flex', height: 6, borderRadius: 3, overflow: 'hidden', marginBottom: 16 }}>
+                  <div style={{ display: 'flex', height: 8, borderRadius: 4, overflow: 'hidden', marginBottom: 20 }}>
                     {[['Front Runner', featured.paceAnalysis.frontRunners], ['Stalker', featured.paceAnalysis.stalkers], ['Closer', featured.paceAnalysis.closers]].map(([style, count]) => (
                       <div key={style} style={{ flex: count, background: styleColors[style], transition: 'flex 500ms ease' }} />
                     ))}
                   </div>
-                  <p style={{ fontSize: 17, color: '#8A847E', lineHeight: 1.7 }}>{featured.paceAnalysis.detail}</p>
+                  <p style={{ fontSize: 18, color: '#8A847E', lineHeight: 1.7 }}>{featured.paceAnalysis.detail}</p>
                 </div>
 
                 {/* GPS Edge picks */}
-                <div style={{ marginBottom: 32 }}>
-                  <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 13 }}>GPS Edge Picks</div>
+                <div style={{ marginBottom: 40 }}>
+                  <div className="label" style={{ color: '#C59757', marginBottom: 18, fontSize: 14 }}>GPS Edge Picks</div>
                   {featured.gpsEdgePicks.map((pick) => (
-                    <div key={pick.name} style={{ borderLeft: '3px solid #C59757', paddingLeft: 20, marginBottom: 24 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-                        <span style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#C59757' }}>{pick.name}</span>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: '#5A5550' }}>{pick.odds}</span>
+                    <div key={pick.name} style={{ borderLeft: '4px solid #C59757', paddingLeft: 26, marginBottom: 30 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 8 }}>
+                        <span style={{ fontFamily: 'var(--font-serif)', fontSize: 26, fontWeight: 500, color: '#C59757' }}>{pick.name}</span>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, color: '#5A5550' }}>{pick.odds}</span>
                       </div>
-                      <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC', marginBottom: 6 }}>{pick.headline}</div>
-                      <p style={{ fontSize: 16, color: '#8A847E', lineHeight: 1.7 }}>{pick.analysis}</p>
+                      <div style={{ fontSize: 19, fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>{pick.headline}</div>
+                      <p style={{ fontSize: 17, color: '#8A847E', lineHeight: 1.7 }}>{pick.analysis}</p>
                     </div>
                   ))}
                 </div>
@@ -256,8 +262,8 @@ export default function Preview() {
 
             {/* ── RACE CARD ── */}
             <div className="card-flat" style={{ overflow: 'hidden' }}>
-              <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC' }}>
+              <div style={{ padding: '22px 32px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 26, fontWeight: 500, color: '#D6D1CC' }}>
                   Race Card
                 </h3>
                 {!featured && activeRace.gpsPct < 50 && (
@@ -266,9 +272,9 @@ export default function Preview() {
               </div>
 
               {/* Header row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '40px 40px 1fr 70px 80px', padding: '8px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '52px 52px 1fr 90px 100px', padding: '12px 32px', borderBottom: '1px solid rgba(197,151,87,0.06)', gap: 14 }}>
                 {['#', '', 'Horse', 'Odds', 'Data'].map(h => (
-                  <div key={h} className="label" style={{ fontSize: 10 }}>{h}</div>
+                  <div key={h} className="label" style={{ fontSize: 12 }}>{h}</div>
                 ))}
               </div>
 
@@ -281,47 +287,48 @@ export default function Preview() {
                   <div key={horse.name}
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: '40px 40px 1fr 70px 80px',
+                      gridTemplateColumns: '52px 52px 1fr 90px 100px',
                       alignItems: 'center',
-                      padding: '12px 24px',
+                      padding: '18px 32px',
+                      gap: 14,
                       borderBottom: '1px solid rgba(197,151,87,0.03)',
                       transition: 'background 250ms',
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(197,151,87,0.02)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
-                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 16, color: '#5A5550' }}>{horse.post}</div>
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: '#5A5550' }}>{horse.post}</div>
 
                     {/* Portrait thumbnail */}
-                    <div style={{ width: 32, height: 32, borderRadius: 4, overflow: 'hidden', border: '1px solid rgba(197,151,87,0.1)' }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 5, overflow: 'hidden', border: '1px solid rgba(197,151,87,0.1)' }}>
                       <img src={getPortrait(horse.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
 
                     <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
-                        <span style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                        <span style={{ fontSize: 19, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</span>
                         {featured && horse.style && (
-                          <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color, background: `${color}12`, border: `1px solid ${color}20` }}>
+                          <span style={{ fontSize: 12, padding: '3px 9px', borderRadius: 3, color, background: `${color}12`, border: `1px solid ${color}20` }}>
                             {horse.style === 'Front Runner' ? 'Speed' : horse.style}
                           </span>
                         )}
                         {!hasGPS && (
-                          <span style={{ fontSize: 10, padding: '2px 6px', borderRadius: 2, color: '#8A847E', background: 'rgba(138,132,126,0.08)', border: '1px solid rgba(138,132,126,0.15)' }}>
+                          <span style={{ fontSize: 12, padding: '3px 9px', borderRadius: 3, color: '#8A847E', background: 'rgba(138,132,126,0.08)', border: '1px solid rgba(138,132,126,0.15)' }}>
                             Traditional
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: 16, color: '#5A5550' }}>
+                      <div style={{ fontSize: 15, color: '#5A5550' }}>
                         J: {horse.jockey} · T: {horse.trainer}
                       </div>
                     </div>
 
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#8A847E' }}>{horse.odds}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, color: '#8A847E' }}>{horse.odds}</div>
 
                     <div>
                       {featured && horse.gpsScore != null ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 17, fontWeight: 600, color: horse.gpsScore >= 85 ? '#C59757' : horse.gpsScore >= 70 ? '#D6D1CC' : '#5A5550' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 600, color: horse.gpsScore >= 85 ? '#C59757' : horse.gpsScore >= 70 ? '#D6D1CC' : '#5A5550' }}>
                             {horse.gpsScore}
                           </span>
                           {horse.speeds?.length > 0 && <MiniSparkline data={horse.speeds} color={color} />}
@@ -329,7 +336,7 @@ export default function Preview() {
                       ) : hasGPS ? (
                         <span style={{ fontSize: 16, color: '#52B788' }}>GPS</span>
                       ) : (
-                        <span style={{ fontSize: 17, color: '#8A847E' }}>Trad.</span>
+                        <span style={{ fontSize: 16, color: '#8A847E' }}>Trad.</span>
                       )}
                     </div>
                   </div>
@@ -339,17 +346,17 @@ export default function Preview() {
 
             {/* Key metrics for featured races */}
             {featured && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 24 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginTop: 32 }}>
                 {[
                   { label: 'Fastest Closer', val: featured.horses.filter(h => h.closingMPH).sort((a, b) => b.closingMPH - a.closingMPH)[0], m: h => `${h.closingMPH} mph` },
                   { label: 'Best Efficiency', val: featured.horses.filter(h => h.efficiency).sort((a, b) => b.efficiency - a.efficiency)[0], m: h => `${h.efficiency}%` },
                   { label: 'Peak Speed', val: featured.horses.filter(h => h.peakMPH).sort((a, b) => b.peakMPH - a.peakMPH)[0], m: h => `${h.peakMPH} mph` },
                   { label: 'Best Stamina', val: featured.horses.filter(h => h.strideFade != null).sort((a, b) => b.strideFade - a.strideFade)[0], m: h => `${h.strideFade}%` },
                 ].map(item => (
-                  <div key={item.label} className="card-flat" style={{ padding: 20 }}>
-                    <div className="label" style={{ marginBottom: 8, fontSize: 10 }}>{item.label}</div>
-                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: '#C59757', marginBottom: 2 }}>{item.val?.name || '—'}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: '#8A847E' }}>{item.val ? item.m(item.val) : '—'}</div>
+                  <div key={item.label} className="card-flat" style={{ padding: 26 }}>
+                    <div className="label" style={{ marginBottom: 10, fontSize: 12 }}>{item.label}</div>
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 22, color: '#C59757', marginBottom: 4 }}>{item.val?.name || '—'}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, color: '#8A847E' }}>{item.val ? item.m(item.val) : '—'}</div>
                   </div>
                 ))}
               </div>

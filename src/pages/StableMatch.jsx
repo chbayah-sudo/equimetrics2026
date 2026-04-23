@@ -56,16 +56,16 @@ function SwipeCard({ horse, onSwipe, isTop, exitDirection }) {
       }}
       initial={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.6 }}
       animate={{ scale: isTop ? 1 : 0.95, opacity: isTop ? 1 : 0.6 }}
-      exit={{ x: exitX, opacity: 0, transition: { duration: 0.3 } }}
+      exit={{ x: exitX, opacity: 0, rotate: exitX > 0 ? 25 : -25, transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] } }}
     >
       <div style={{
         width: '100%', height: '100%', borderRadius: 8, overflow: 'hidden',
         background: '#141A10', border: '1px solid rgba(197,151,87,0.1)',
         boxShadow: '0 8px 40px rgba(0,0,0,0.4)',
-        display: 'flex', flexDirection: 'column',
+        display: 'flex', flexDirection: 'row',
       }}>
-        {/* Horse image */}
-        <div style={{ position: 'relative', flex: '0 0 55%', overflow: 'hidden' }}>
+        {/* Horse image — left half */}
+        <div style={{ position: 'relative', flex: '0 0 50%', overflow: 'hidden' }}>
           <img
             src={getPortrait(horse.name)}
             alt={horse.name}
@@ -74,7 +74,7 @@ function SwipeCard({ horse, onSwipe, isTop, exitDirection }) {
           />
           <div style={{
             position: 'absolute', inset: 0,
-            background: 'linear-gradient(180deg, transparent 30%, rgba(20,26,16,0.97) 100%)',
+            background: 'linear-gradient(90deg, transparent 50%, rgba(20,26,16,0.4) 100%)',
           }} />
 
           {/* LIKE / NOPE overlays */}
@@ -98,58 +98,57 @@ function SwipeCard({ horse, onSwipe, isTop, exitDirection }) {
               </motion.div>
             </>
           )}
+        </div>
 
-          {/* Name + odds overlay */}
-          <div style={{ position: 'absolute', bottom: 16, left: 20, right: 20 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-              <div>
-                <h3 style={{
-                  fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500,
-                  color: '#D6D1CC', marginBottom: 6, textShadow: '0 2px 8px rgba(0,0,0,0.6)',
-                }}>
-                  {horse.name}
-                </h3>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {horse.style && (
-                    <span style={{
-                      fontSize: 17, padding: '3px 10px', borderRadius: 3,
-                      color, background: `${color}18`, backdropFilter: 'blur(4px)',
-                    }}>
-                      {horse.style === 'Front Runner' ? 'Speed' : horse.style}
-                    </span>
-                  )}
-                  <span style={{
-                    fontSize: 17, padding: '3px 10px', borderRadius: 3,
-                    color: '#8A847E', background: 'rgba(28,36,24,0.8)',
-                  }}>
-                    {horse.raceName}
-                  </span>
-                </div>
-              </div>
+        {/* Data — right half */}
+        <div style={{ flex: '1 1 50%', padding: '24px 26px', display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          {/* Header: name, badges, odds */}
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
+              <h3 style={{
+                fontFamily: 'var(--font-serif)', fontSize: 26, fontWeight: 500,
+                color: '#D6D1CC', lineHeight: 1.15, margin: 0,
+              }}>
+                {horse.name}
+              </h3>
               <div style={{
-                fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 600,
+                fontFamily: 'var(--font-mono)', fontSize: 20, fontWeight: 600,
                 color: oddsNum <= 4 ? '#C59757' : oddsNum <= 12 ? '#D6D1CC' : '#8A847E',
-                background: 'rgba(13,17,10,0.7)', padding: '6px 14px', borderRadius: 4,
-                backdropFilter: 'blur(4px)',
+                background: 'rgba(13,17,10,0.7)', padding: '5px 12px', borderRadius: 4,
+                flexShrink: 0,
               }}>
                 {horse.odds}
               </div>
             </div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {horse.style && (
+                <span style={{
+                  fontSize: 13, padding: '3px 9px', borderRadius: 3,
+                  color, background: `${color}18`,
+                }}>
+                  {horse.style === 'Front Runner' ? 'Speed' : horse.style}
+                </span>
+              )}
+              <span style={{
+                fontSize: 13, padding: '3px 9px', borderRadius: 3,
+                color: '#8A847E', background: 'rgba(28,36,24,0.8)',
+              }}>
+                {horse.raceName}
+              </span>
+            </div>
           </div>
-        </div>
 
-        {/* Stats area */}
-        <div style={{ flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 16 }}>
+          {/* Top stats row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 16 }}>
             {[
               { icon: Zap, label: 'Peak Speed', value: horse.peakMPH ? `${horse.peakMPH} mph` : '—', highlight: horse.peakMPH >= 39 },
               { icon: TrendingUp, label: 'Stride Est.', value: strideLen ? `${strideLen} ft` : '—', highlight: strideLen >= 24 },
               { icon: Trophy, label: 'GPS Score', value: horse.gpsScore != null ? `${horse.gpsScore}` : '—', highlight: horse.gpsScore >= 80 },
             ].map(stat => (
               <div key={stat.label} style={{ textAlign: 'center' }}>
-                <stat.icon style={{ width: 16, height: 16, color: stat.highlight ? '#C59757' : '#5A5550', margin: '0 auto 6px' }} />
+                <stat.icon style={{ width: 16, height: 16, color: stat.highlight ? '#C59757' : '#5A5550', margin: '0 auto 5px' }} />
                 <div style={{
-                  fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 600,
+                  fontFamily: 'var(--font-mono)', fontSize: 17, fontWeight: 600,
                   color: stat.highlight ? '#C59757' : '#D6D1CC', marginBottom: 2,
                 }}>
                   {stat.value}
@@ -161,23 +160,26 @@ function SwipeCard({ horse, onSwipe, isTop, exitDirection }) {
             ))}
           </div>
 
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          {/* Secondary metrics */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 14 }}>
             {[
               { label: 'Closing', value: horse.closingMPH ? `${horse.closingMPH} mph` : '—' },
               { label: 'Stride Fade', value: horse.strideFade != null ? `${horse.strideFade}%` : '—' },
               { label: 'Efficiency', value: horse.efficiency ? `${horse.efficiency}%` : '—' },
             ].map(s => (
               <div key={s.label} style={{
-                padding: '6px 12px', borderRadius: 3,
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                padding: '8px 12px', borderRadius: 3,
                 background: 'rgba(197,151,87,0.04)', border: '1px solid rgba(197,151,87,0.06)',
               }}>
-                <span style={{ fontSize: 17, color: '#5A5550', marginRight: 6 }}>{s.label}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 17, color: '#D6D1CC' }}>{s.value}</span>
+                <span style={{ fontSize: 14, color: '#8A847E' }}>{s.label}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, color: '#D6D1CC', fontWeight: 600 }}>{s.value}</span>
               </div>
             ))}
           </div>
 
-          <div style={{ marginTop: 12, textAlign: 'center', fontSize: 16, color: '#5A5550' }}>
+          {/* Jockey/Trainer */}
+          <div style={{ marginTop: 'auto', textAlign: 'center', fontSize: 13, color: '#5A5550', paddingTop: 8, borderTop: '1px solid rgba(197,151,87,0.06)' }}>
             J: {horse.jockey} &middot; T: {horse.trainer}
           </div>
         </div>
@@ -197,31 +199,31 @@ function PreferencesScreen({ onStart }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      style={{ maxWidth: 520, margin: '0 auto' }}
+      style={{ maxWidth: 624, margin: '0 auto' }}
     >
-      <div style={{ textAlign: 'center', marginBottom: 48 }}>
-        <div className="gold-line" style={{ margin: '0 auto 24px' }} />
+      <div style={{ textAlign: 'center', marginBottom: 58 }}>
+        <div className="gold-line" style={{ margin: '0 auto 29px' }} />
         <h2 style={{
-          fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 5vw, 40px)',
-          fontWeight: 500, color: '#D6D1CC', marginBottom: 12,
+          fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 6vw, 48px)',
+          fontWeight: 500, color: '#D6D1CC', marginBottom: 14,
         }}>
           Set Your Preferences
         </h2>
-        <p style={{ fontSize: 17, color: '#5A5550', maxWidth: 380, margin: '0 auto' }}>
+        <p style={{ fontSize: 20, color: '#8A847E', maxWidth: 456, margin: '0 auto', lineHeight: 1.6 }}>
           Tell us what you like in a horse. We'll show you matches from upcoming races.
         </p>
       </div>
 
       {/* Running Style */}
-      <div style={{ marginBottom: 32 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Running Style</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ marginBottom: 38 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Running Style</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {STYLE_OPTIONS.map(s => {
             const active = style === s;
             const col = s !== 'Any' ? styleColors[s] : '#C59757';
             return (
               <button key={s} onClick={() => setStyle(s)} style={{
-                padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 16, fontWeight: 500,
+                padding: '12px 24px', borderRadius: 4, cursor: 'pointer', fontSize: 19, fontWeight: 500,
                 transition: 'all 250ms',
                 background: active ? `${col}15` : 'transparent',
                 border: active ? `1px solid ${col}40` : '1px solid rgba(197,151,87,0.06)',
@@ -235,14 +237,14 @@ function PreferencesScreen({ onStart }) {
       </div>
 
       {/* Odds Range */}
-      <div style={{ marginBottom: 32 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Odds Range</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <div style={{ marginBottom: 38 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Odds Range</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {ODDS_RANGES.map((r, i) => {
             const active = odds === i;
             return (
               <button key={r.label} onClick={() => setOdds(i)} style={{
-                padding: '10px 18px', borderRadius: 3, cursor: 'pointer', fontSize: 17, fontWeight: 500,
+                padding: '12px 22px', borderRadius: 4, cursor: 'pointer', fontSize: 18, fontWeight: 500,
                 transition: 'all 250ms',
                 background: active ? '#141A10' : 'transparent',
                 border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
@@ -256,14 +258,14 @@ function PreferencesScreen({ onStart }) {
       </div>
 
       {/* Surface */}
-      <div style={{ marginBottom: 32 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Surface</div>
-        <div style={{ display: 'flex', gap: 8 }}>
+      <div style={{ marginBottom: 38 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Surface</div>
+        <div style={{ display: 'flex', gap: 10 }}>
           {SURFACE_OPTIONS.map(s => {
             const active = surface === s;
             return (
               <button key={s} onClick={() => setSurface(s)} style={{
-                padding: '10px 20px', borderRadius: 3, cursor: 'pointer', fontSize: 16, fontWeight: 500,
+                padding: '12px 24px', borderRadius: 4, cursor: 'pointer', fontSize: 19, fontWeight: 500,
                 transition: 'all 250ms',
                 background: active ? '#141A10' : 'transparent',
                 border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
@@ -277,26 +279,26 @@ function PreferencesScreen({ onStart }) {
       </div>
 
       {/* Min GPS Score */}
-      <div style={{ marginBottom: 48 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>
-          Minimum GPS Score: <span style={{ color: '#C59757', fontFamily: 'var(--font-mono)' }}>{minGPS || 'Any'}</span>
+      <div style={{ marginBottom: 58 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>
+          Minimum GPS Score: <span style={{ color: '#C59757', fontFamily: 'var(--font-mono)', fontSize: 17 }}>{minGPS || 'Any'}</span>
         </div>
         <input
           type="range" min={0} max={90} step={5} value={minGPS}
           onChange={e => setMinGPS(parseInt(e.target.value))}
           style={{
-            width: '100%', height: 3, appearance: 'none', cursor: 'pointer',
+            width: '100%', height: 4, appearance: 'none', cursor: 'pointer',
             background: `linear-gradient(to right, #C59757 ${(minGPS / 90) * 100}%, #1C2418 ${(minGPS / 90) * 100}%)`,
             borderRadius: 2, accentColor: '#C59757',
           }}
         />
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 17, color: '#5A5550', marginTop: 6 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, color: '#5A5550', marginTop: 8 }}>
           <span>Any</span><span>90+</span>
         </div>
       </div>
 
-      <div style={{ marginBottom: 32, padding: '16px 20px', borderRadius: 3, background: 'rgba(232,184,109,0.06)', border: '1px solid rgba(232,184,109,0.12)' }}>
-        <p style={{ fontSize: 16, color: '#E8B86D', fontWeight: 600, lineHeight: 1.7, margin: 0 }}>
+      <div style={{ marginBottom: 38, padding: '20px 24px', borderRadius: 4, background: 'rgba(232,184,109,0.06)', border: '1px solid rgba(232,184,109,0.12)' }}>
+        <p style={{ fontSize: 18, color: '#E8B86D', fontWeight: 600, lineHeight: 1.7, margin: 0 }}>
           Fun fact: A horse's left heart ventricle size is one of the strongest predictors of racing success — bigger chamber, more blood per beat, more speed when it counts.
         </p>
       </div>
@@ -304,9 +306,9 @@ function PreferencesScreen({ onStart }) {
       <button
         onClick={() => onStart({ style, odds: ODDS_RANGES[odds], surface, minGPS })}
         className="btn-primary"
-        style={{ width: '100%', justifyContent: 'center', padding: '16px 28px', fontSize: 17 }}
+        style={{ width: '100%', justifyContent: 'center', padding: '20px 34px', fontSize: 19 }}
       >
-        Find My Horses <ChevronRight style={{ width: 18, height: 18 }} />
+        Find My Horses <ChevronRight style={{ width: 22, height: 22 }} />
       </button>
     </motion.div>
   );
@@ -488,22 +490,28 @@ export default function StableMatch() {
   const remaining = horses.length - currentIdx;
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
+    <div style={{ maxWidth: 1100, margin: '0 auto', padding: phase === 'swiping' ? '96px 32px 32px' : '120px 32px 80px' }}>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>
-          <SlidersHorizontal style={{ width: 12, height: 12, display: 'inline', verticalAlign: 'middle', marginRight: 6 }} />
-          Matchmaking
-        </div>
+        {phase !== 'swiping' && (
+          <div className="label" style={{ color: '#C59757', marginBottom: 16, fontSize: 19 }}>
+            <SlidersHorizontal style={{ width: 15, height: 15, display: 'inline', verticalAlign: 'middle', marginRight: 8 }} />
+            Matchmaking
+          </div>
+        )}
         <h1 style={{
-          fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 48px)',
-          fontWeight: 500, color: '#D6D1CC', marginBottom: 10,
+          fontFamily: 'var(--font-serif)',
+          fontSize: phase === 'swiping' ? 'clamp(28px, 3vw, 36px)' : 'clamp(40px, 6vw, 58px)',
+          fontWeight: 500, color: '#D6D1CC',
+          marginBottom: phase === 'swiping' ? 14 : 12,
         }}>
           Stable<span style={{ color: '#C59757' }}>Match</span>
         </h1>
-        <p style={{ fontSize: 16, color: '#8A847E', maxWidth: 520, lineHeight: 1.7, marginBottom: 48 }}>
-          Swipe through upcoming horses like a dating app. Set your preferences, see the data, and build your betting stable.
-        </p>
+        {phase !== 'swiping' && (
+          <p style={{ fontSize: 19, color: '#8A847E', maxWidth: 620, lineHeight: 1.7, marginBottom: 56 }}>
+            Swipe through upcoming horses like a dating app. Set your preferences, see the data, and build your betting stable.
+          </p>
+        )}
       </motion.div>
 
       <AnimatePresence mode="wait">
@@ -517,25 +525,25 @@ export default function StableMatch() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            style={{ maxWidth: 420, margin: '0 auto' }}
+            style={{ maxWidth: 760, margin: '0 auto' }}
           >
             {/* Progress */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <span style={{ fontSize: 17, color: '#5A5550' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <span style={{ fontSize: 15, color: '#5A5550' }}>
                 {remaining > 0 ? `${remaining} horse${remaining > 1 ? 's' : ''} remaining` : 'All done!'}
               </span>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span style={{ fontSize: 16, color: '#52B788' }}>
-                  <Heart style={{ width: 12, height: 12, display: 'inline', verticalAlign: 'middle', fill: '#52B788' }} /> {matches.length}
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <span style={{ fontSize: 15, color: '#52B788' }}>
+                  <Heart style={{ width: 13, height: 13, display: 'inline', verticalAlign: 'middle', fill: '#52B788' }} /> {matches.length}
                 </span>
-                <span style={{ fontSize: 16, color: '#C2653A' }}>
-                  <X style={{ width: 12, height: 12, display: 'inline', verticalAlign: 'middle' }} /> {passed.length}
+                <span style={{ fontSize: 15, color: '#C2653A' }}>
+                  <X style={{ width: 13, height: 13, display: 'inline', verticalAlign: 'middle' }} /> {passed.length}
                 </span>
               </div>
             </div>
 
             {/* Progress bar */}
-            <div style={{ height: 3, background: '#1C2418', borderRadius: 2, marginBottom: 24, overflow: 'hidden' }}>
+            <div style={{ height: 3, background: '#1C2418', borderRadius: 2, marginBottom: 16, overflow: 'hidden' }}>
               <motion.div
                 animate={{ width: `${((currentIdx) / horses.length) * 100}%` }}
                 style={{ height: '100%', background: '#C59757', borderRadius: 2 }}
@@ -543,7 +551,12 @@ export default function StableMatch() {
             </div>
 
             {/* Card stack */}
-            <div style={{ position: 'relative', width: '100%', paddingBottom: '130%', marginBottom: 24 }}>
+            <div style={{
+              position: 'relative', width: '100%',
+              height: 'min(470px, calc(100vh - 380px))',
+              minHeight: 360,
+              marginBottom: 20,
+            }}>
               <div style={{ position: 'absolute', inset: 0 }}>
                 <AnimatePresence>
                   {horses.slice(currentIdx, currentIdx + 2).reverse().map((horse, i, arr) => (

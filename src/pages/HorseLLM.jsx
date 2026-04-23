@@ -107,10 +107,10 @@ export default function HorseLLM() {
       {/* Header */}
       <div style={{ marginBottom: 24, flexShrink: 0 }}>
         <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>AI Assistant</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 44px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 8 }}>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(34px, 5vw, 48px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>
           Horse<span style={{ color: '#C59757' }}>LLM</span>
         </h1>
-        <p style={{ fontSize: 17, color: '#5A5550' }}>
+        <p style={{ fontSize: 20, color: '#8A847E', lineHeight: 1.6 }}>
           Ask anything about horses, races, GPS data, or betting insights. Powered by 12,919 horse profiles and real GPS telemetry.
         </p>
       </div>
@@ -119,12 +119,12 @@ export default function HorseLLM() {
       <div style={{ flex: 1, overflowY: 'auto', marginBottom: 16, paddingRight: 8 }}>
         {messages.length === 0 && (
           <div style={{ paddingTop: 20 }}>
-            <div style={{ fontSize: 16, color: '#5A5550', marginBottom: 20 }}>Try asking:</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            <div style={{ fontSize: 19, color: '#8A847E', marginBottom: 24 }}>Try asking:</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
               {SUGGESTIONS.map(s => (
                 <button key={s} onClick={() => sendMessage(s)}
                   className="card" style={{
-                    padding: '10px 16px', cursor: 'pointer', fontSize: 15,
+                    padding: '14px 20px', cursor: 'pointer', fontSize: 18,
                     color: '#8A847E', background: '#141A10', textAlign: 'left',
                     transition: 'all 250ms',
                   }}

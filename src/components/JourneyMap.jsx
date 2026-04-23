@@ -269,22 +269,22 @@ function JourneyMapInner({ races, horseName }) {
         const rows = raceList.map(r => {
           const isWin = r.position === 1;
           const fin = r.position
-            ? `<span style="color:${isWin ? GOLD : '#D6D1CC'};font-weight:600">${esc(r.position)}</span><span style="color:#5A5550">/${esc(r.fieldSize || '?')}</span>`
-            : '<span style="color:#5A5550">—</span>';
-          return `<div style="display:flex;gap:12px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(197,151,87,0.05)">
-            <span style="font-family:monospace;font-size:11px;color:#5A5550;min-width:24px">#${esc(r.idx)}</span>
-            <span style="min-width:36px">${fin}</span>
-            ${r.earnings ? `<span style="font-family:monospace;font-size:11px;color:${GOLD}">$${esc(r.earnings.toLocaleString())}</span>` : ''}
-            <span style="font-family:monospace;font-size:10px;color:#5A5550;margin-left:auto">${esc(r.date?.slice(5))}${r.hasGPS ? ' <span style="color:#52B788">GPS</span>' : ''}</span>
+            ? `<span style="color:${isWin ? GOLD : '#D6D1CC'};font-weight:600;font-size:14px">${esc(r.position)}</span><span style="color:#5A5550;font-size:14px">/${esc(r.fieldSize || '?')}</span>`
+            : '<span style="color:#5A5550;font-size:14px">—</span>';
+          return `<div style="display:flex;gap:14px;align-items:center;padding:6px 0;border-bottom:1px solid rgba(197,151,87,0.05)">
+            <span style="font-family:monospace;font-size:12px;color:#5A5550;min-width:27px">#${esc(r.idx)}</span>
+            <span style="min-width:41px">${fin}</span>
+            ${r.earnings ? `<span style="font-family:monospace;font-size:12px;color:${GOLD}">$${esc(r.earnings.toLocaleString())}</span>` : ''}
+            <span style="font-family:monospace;font-size:11px;color:#5A5550;margin-left:auto">${esc(r.date?.slice(5))}${r.hasGPS ? ' <span style="color:#52B788">GPS</span>' : ''}</span>
           </div>`;
         }).join('');
 
         if (popupRef.current) popupRef.current.remove();
-        popupRef.current = new mapboxgl.Popup({ offset: 14, closeButton: true, maxWidth: '260px', className: 'journey-popup' })
+        popupRef.current = new mapboxgl.Popup({ offset: 16, closeButton: true, maxWidth: '294px', className: 'journey-popup' })
           .setLngLat(coords)
           .setHTML(`<div style="font-family:Inter,system-ui,sans-serif">
-            <div style="font-size:15px;font-weight:700;color:#D6D1CC;margin-bottom:2px">${esc(props.name)}</div>
-            <div style="font-size:12px;color:#8A847E;margin-bottom:8px">${esc(props.city)}</div>
+            <div style="font-size:17px;font-weight:700;color:#D6D1CC;margin-bottom:3px">${esc(props.name)}</div>
+            <div style="font-size:14px;color:#8A847E;margin-bottom:9px">${esc(props.city)}</div>
             ${rows}
           </div>`)
           .addTo(map);
@@ -313,49 +313,50 @@ function JourneyMapInner({ races, horseName }) {
   if (locations.length === 0) return null;
 
   return (
-    <div className="card-flat" style={{ overflow: 'hidden', marginBottom: 24 }}>
-      <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+    <div className="card-flat" style={{ overflow: 'hidden', marginBottom: 28 }}>
+      <div style={{ padding: '28px 36px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 18 }}>
         <div>
-          <div className="label" style={{ fontSize: 11, color: '#C59757', marginBottom: 8 }}>Journey</div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>
+          <div className="label" style={{ fontSize: 15, color: '#C59757', marginBottom: 12 }}>Journey</div>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 30, fontWeight: 500, color: '#D6D1CC' }}>
             {horseName}&rsquo;s Racing Trail
           </h3>
         </div>
-        <div style={{ display: 'flex', gap: 24 }}>
+        <div style={{ display: 'flex', gap: 32 }}>
           {[
             { value: locations.length, label: locations.length === 1 ? 'Track' : 'Tracks' },
             { value: totalRaces, label: totalRaces === 1 ? 'Race' : 'Races' },
             { value: winCount, label: winCount === 1 ? 'Win' : 'Wins' },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 26, fontWeight: 400, color: '#C59757' }}>{s.value}</div>
-              <div style={{ fontSize: 12, color: '#5A5550', fontWeight: 500 }}>{s.label}</div>
+              <div style={{ fontFamily: 'var(--font-serif)', fontSize: 36, fontWeight: 400, color: '#C59757' }}>{s.value}</div>
+              <div style={{ fontSize: 15, color: '#5A5550', fontWeight: 500, marginTop: 4 }}>{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div ref={mapContainer} style={{ height: 400, width: '100%' }} />
+      <div ref={mapContainer} style={{ height: 460, width: '100%' }} />
 
-      <div style={{ padding: '16px 28px', borderTop: '1px solid rgba(197,151,87,0.06)', display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ padding: '22px 36px', borderTop: '1px solid rgba(197,151,87,0.06)', display: 'flex', gap: 30, flexWrap: 'wrap', alignItems: 'center' }}>
         {[
           { color: GREEN, label: 'First Race' },
           { color: BLUE, label: 'Latest Race' },
           { color: GOLD, label: 'Win' },
           { color: '#2A3626', border: 'rgba(197,151,87,0.3)', label: 'Other Starts' },
         ].map(l => (
-          <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#8A847E' }}>
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: l.color, border: `2px solid ${l.border || l.color}` }} />
+          <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 16, color: '#8A847E' }}>
+            <div style={{ width: 15, height: 15, borderRadius: '50%', background: l.color, border: `2px solid ${l.border || l.color}` }} />
             {l.label}
           </div>
         ))}
-        <div style={{ fontSize: 12, color: '#5A5550', marginLeft: 'auto', fontStyle: 'italic' }}>
+        <div style={{ fontSize: 15, color: '#5A5550', marginLeft: 'auto', fontStyle: 'italic' }}>
           Click a pin for race details
         </div>
       </div>
 
       <style>{`
         .journey-popup .mapboxgl-popup-content {
+          padding: 16px 20px !important;
           background: #141A10 !important;
           border: 1px solid rgba(197,151,87,0.2) !important;
           border-radius: 6px !important;

@@ -43,62 +43,66 @@ export default function RaceReplay({ race }) {
   return (
     <div className="card-flat" style={{ overflow: 'hidden' }}>
       {/* Header */}
-      <div style={{ padding: '20px 28px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ padding: '26px 36px', borderBottom: '1px solid rgba(197,151,87,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 22, fontWeight: 500, color: '#D6D1CC' }}>
+          <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 500, color: '#D6D1CC' }}>
             {race.track} Race {race.raceNumber}
           </h3>
-          <p style={{ fontSize: 13, color: '#5A5550', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
+          <p style={{ fontSize: 15, color: '#5A5550', fontFamily: 'var(--font-mono)', marginTop: 6 }}>
             {race.distance} {race.surface} · {race.type} · {race.purse} · {race.fieldSize} runners
           </p>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 28, fontWeight: 400, color: '#C59757' }}>{currentData.label}</div>
-          <div style={{ fontSize: 13, color: '#5A5550' }}>
+          <div style={{ fontFamily: 'var(--font-serif)', fontSize: 36, fontWeight: 400, color: '#C59757' }}>{currentData.label}</div>
+          <div style={{ fontSize: 15, color: '#5A5550' }}>
             {currentGate === totalGates - 1 ? 'Final' : `Gate ${currentData.gate}`}
           </div>
         </div>
       </div>
 
       {/* Horses */}
-      <div style={{ padding: '16px 28px' }}>
+      <div style={{ padding: '28px 36px' }}>
         {sortedHorses.map(horse => {
           const position = currentData.positions[horse.name] || race.fieldSize;
           const raceProgress = currentGate / Math.max(1, totalGates - 1); // 0 at start, 1 at finish
-          const posSpread = ((position - 1) / Math.max(1, race.fieldSize - 1)) * 50 * raceProgress; // spread grows as race progresses
-          const baseProgress = raceProgress * 60 + 15; // all horses advance from 15% to 75% together
-          const barWidth = Math.max(12, baseProgress - posSpread);
+          const isFinal = currentGate === totalGates - 1;
+          // Primary: distance covered (always advances forward across gates)
+          const baseProgress = raceProgress * 85 + 5; // all horses span 5% to 90% across the race
+          // Secondary: spread grows mid-race so rank differences are visible, collapses at finish
+          const spreadCurve = isFinal ? 0 : 10 * raceProgress * (1 - raceProgress) * 4; // bell curve, peaks at ~10% mid-race
+          const rankSpread = ((position - 1) / Math.max(1, race.fieldSize - 1)) * spreadCurve;
+          const barWidth = Math.max(5, baseProgress - rankSpread);
           const isLeader = position === 1;
 
           return (
-            <div key={horse.name} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 4 }}>
+            <div key={horse.name} style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 10 }}>
               {/* Position */}
-              <div style={{ width: 22, fontFamily: 'var(--font-serif)', fontSize: 14, color: isLeader ? '#C59757' : '#5A5550', textAlign: 'center', flexShrink: 0 }}>
+              <div style={{ width: 32, fontFamily: 'var(--font-serif)', fontSize: 22, color: isLeader ? '#C59757' : '#5A5550', textAlign: 'center', flexShrink: 0 }}>
                 {position}
               </div>
 
               {/* Name */}
-              <div style={{ width: 130, fontSize: 13, fontWeight: 500, color: isLeader ? '#D6D1CC' : '#5A5550', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 0 }}>
+              <div style={{ width: 180, fontSize: 17, fontWeight: 500, color: isLeader ? '#D6D1CC' : '#8A847E', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flexShrink: 0 }}>
                 {horse.name}
               </div>
 
               {/* Bar + portrait at the end */}
-              <div style={{ flex: 1, height: 28, borderRadius: 2, background: '#1C2418', overflow: 'visible', position: 'relative' }}>
+              <div style={{ flex: 1, height: 40, borderRadius: 3, background: '#1C2418', overflow: 'visible', position: 'relative' }}>
                 <motion.div
                   animate={{ width: `${barWidth}%` }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
-                  style={{ height: '100%', borderRadius: 2, background: `linear-gradient(90deg, ${horse.color}08, ${horse.color}25)`, borderRight: `2px solid ${horse.color}` }}
+                  style={{ height: '100%', borderRadius: 3, background: `linear-gradient(90deg, ${horse.color}08, ${horse.color}25)`, borderRight: `3px solid ${horse.color}` }}
                 />
                 {/* Portrait at the tip */}
                 <motion.div
-                  animate={{ left: `calc(${barWidth}% - 14px)` }}
+                  animate={{ left: `calc(${barWidth}% - 20px)` }}
                   transition={{ duration: 0.35, ease: 'easeOut' }}
                   style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', zIndex: 3 }}
                 >
                   <div style={{
-                    width: 26, height: 26, borderRadius: 4, overflow: 'hidden',
+                    width: 38, height: 38, borderRadius: 5, overflow: 'hidden',
                     border: `2px solid ${horse.color}`,
-                    boxShadow: `0 0 8px ${horse.color}40`,
+                    boxShadow: `0 0 10px ${horse.color}40`,
                   }}>
                     <img src={getPortrait(horse.name)} alt=""
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -111,16 +115,16 @@ export default function RaceReplay({ race }) {
       </div>
 
       {/* Controls */}
-      <div style={{ padding: '16px 28px', borderTop: '1px solid rgba(197,151,87,0.06)', display: 'flex', alignItems: 'center', gap: 16 }}>
-        <button onClick={() => setIsPlaying(!isPlaying)} className="btn-primary" style={{ padding: '8px 12px', fontSize: 0, lineHeight: 0 }}>
-          {isPlaying ? <Pause style={{ width: 14, height: 14 }} /> : <Play style={{ width: 14, height: 14, marginLeft: 1 }} />}
+      <div style={{ padding: '22px 36px', borderTop: '1px solid rgba(197,151,87,0.06)', display: 'flex', alignItems: 'center', gap: 20 }}>
+        <button onClick={() => setIsPlaying(!isPlaying)} className="btn-primary" style={{ padding: '12px 16px', fontSize: 0, lineHeight: 0 }}>
+          {isPlaying ? <Pause style={{ width: 18, height: 18 }} /> : <Play style={{ width: 18, height: 18, marginLeft: 1 }} />}
         </button>
-        <button onClick={reset} style={{ width: 34, height: 34, borderRadius: 4, border: '1px solid rgba(197,151,87,0.06)', background: 'transparent', color: '#5A5550', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <RotateCcw style={{ width: 13, height: 13 }} />
+        <button onClick={reset} style={{ width: 44, height: 44, borderRadius: 4, border: '1px solid rgba(197,151,87,0.06)', background: 'transparent', color: '#5A5550', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <RotateCcw style={{ width: 17, height: 17 }} />
         </button>
-        <div style={{ display: 'flex', gap: 4 }}>
+        <div style={{ display: 'flex', gap: 6 }}>
           {[1, 2, 4].map(s => (
-            <button key={s} onClick={() => setSpeed(s)} style={{ padding: '5px 10px', borderRadius: 3, fontSize: 11, fontFamily: 'var(--font-mono)', fontWeight: 500, cursor: 'pointer', background: speed === s ? 'rgba(197,151,87,0.1)' : 'transparent', color: speed === s ? '#C59757' : '#5A5550', border: speed === s ? '1px solid rgba(197,151,87,0.15)' : '1px solid transparent' }}>
+            <button key={s} onClick={() => setSpeed(s)} style={{ padding: '8px 14px', borderRadius: 3, fontSize: 15, fontFamily: 'var(--font-mono)', fontWeight: 500, cursor: 'pointer', background: speed === s ? 'rgba(197,151,87,0.1)' : 'transparent', color: speed === s ? '#C59757' : '#5A5550', border: speed === s ? '1px solid rgba(197,151,87,0.15)' : '1px solid transparent' }}>
               {s}x
             </button>
           ))}
@@ -128,9 +132,9 @@ export default function RaceReplay({ race }) {
         <div style={{ flex: 1 }}>
           <input type="range" min={0} max={totalGates - 1} value={currentGate}
             onChange={e => { setCurrentGate(parseInt(e.target.value)); setIsPlaying(false); }}
-            style={{ width: '100%', height: 2, appearance: 'none', cursor: 'pointer', background: `linear-gradient(to right, #C59757 ${progress}%, #1C2418 ${progress}%)`, borderRadius: 1, accentColor: '#C59757' }} />
+            style={{ width: '100%', height: 3, appearance: 'none', cursor: 'pointer', background: `linear-gradient(to right, #C59757 ${progress}%, #1C2418 ${progress}%)`, borderRadius: 2, accentColor: '#C59757' }} />
         </div>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, color: '#C59757', fontVariantNumeric: 'tabular-nums' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 19, color: '#C59757', fontVariantNumeric: 'tabular-nums' }}>
           {currentGate + 1}/{totalGates}
         </span>
       </div>

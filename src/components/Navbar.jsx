@@ -37,17 +37,17 @@ export default function Navbar() {
         transition: 'border-color 400ms ease',
       }}
     >
-      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: 0 }}>
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 17, fontWeight: 600, color: '#D6D1CC', letterSpacing: '0.5px' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 20, fontWeight: 600, color: '#D6D1CC', letterSpacing: '0.5px' }}>
             EQUI
           </span>
-          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 17, fontWeight: 600, color: '#C59757', letterSpacing: '0.5px' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: 20, fontWeight: 600, color: '#C59757', letterSpacing: '0.5px' }}>
             METRICS
           </span>
         </Link>
 
-        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 28 }}>
+        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 30 }}>
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -55,7 +55,7 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 style={{
-                  fontSize: 14, fontWeight: 400, textDecoration: 'none',
+                  fontSize: 17, fontWeight: 400, textDecoration: 'none',
                   color: isActive ? '#C59757' : '#5A5550',
                   transition: 'color 300ms ease',
                 }}

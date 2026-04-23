@@ -31,31 +31,31 @@ export default function RaceNight() {
   const activeRace = selRace ? replayRaces.find(r => r.id === selRace) : trackRaces[0];
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', padding: '120px 32px 80px' }}>
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px 80px' }}>
       <motion.div {...fadeUp}>
-        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 16 }}>Replay</div>
-        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 4.5vw, 44px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 10 }}>Live Replay</h1>
-        <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 12 }}>
+        <div className="label" style={{ color: '#C59757', marginBottom: 14, fontSize: 18 }}>Replay</div>
+        <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(38px, 5vw, 54px)', fontWeight: 500, color: '#D6D1CC', marginBottom: 14 }}>Live Replay</h1>
+        <p style={{ fontSize: 19, color: '#8A847E', marginBottom: 14 }}>
           Choose a race and watch it unfold gate by gate with GPS tracking.
         </p>
-        <p style={{ fontSize: 16, color: '#5A5550', marginBottom: 40 }}>
+        <p style={{ fontSize: 18, color: '#5A5550', marginBottom: 48 }}>
           {replayRaces.length} races · {new Set(replayRaces.map(r => r.track)).size} tracks · {dates.length} race days
         </p>
       </motion.div>
 
       {/* Date selector */}
-      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 24 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race Day</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <motion.div {...fadeUp} transition={{ delay: 0.05 }} style={{ marginBottom: 28 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Race Day</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {dates.map(d => {
             const dayName = new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
             const active = d === selDate;
             return (
               <button key={d} onClick={() => { setSelDate(d); setSelTrack(null); setSelRace(null); }}
-                style={{ padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                style={{ padding: '14px 24px', borderRadius: 4, cursor: 'pointer', transition: 'all 250ms',
                   background: active ? '#141A10' : 'transparent',
                   border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
-                  color: active ? '#C59757' : '#5A5550', fontSize: 16, fontWeight: 500 }}>
+                  color: active ? '#C59757' : '#5A5550', fontSize: 18, fontWeight: 500 }}>
                 {dayName}
               </button>
             );
@@ -64,17 +64,17 @@ export default function RaceNight() {
       </motion.div>
 
       {/* Track selector */}
-      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 24 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Track</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <motion.div {...fadeUp} transition={{ delay: 0.1 }} style={{ marginBottom: 28 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Track</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {tracks.map(t => {
             const active = t === activeTrack;
             return (
               <button key={t} onClick={() => { setSelTrack(t); setSelRace(null); }}
-                style={{ padding: '10px 18px', borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                style={{ padding: '14px 24px', borderRadius: 4, cursor: 'pointer', transition: 'all 250ms',
                   background: active ? '#141A10' : 'transparent',
                   border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)',
-                  color: active ? '#D6D1CC' : '#5A5550', fontSize: 16, fontWeight: 500 }}>
+                  color: active ? '#D6D1CC' : '#5A5550', fontSize: 18, fontWeight: 500 }}>
                 {TRACK_NAMES[t] || t}
               </button>
             );
@@ -83,19 +83,19 @@ export default function RaceNight() {
       </motion.div>
 
       {/* Race number selector */}
-      <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 36 }}>
-        <div className="label" style={{ marginBottom: 12, fontSize: 13 }}>Race</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <motion.div {...fadeUp} transition={{ delay: 0.15 }} style={{ marginBottom: 44 }}>
+        <div className="label" style={{ marginBottom: 14, fontSize: 15 }}>Race</div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
           {trackRaces.map(r => {
             const active = activeRace?.id === r.id;
             return (
               <button key={r.id} onClick={() => setSelRace(r.id)}
-                style={{ width: 56, height: 56, borderRadius: 3, cursor: 'pointer', transition: 'all 250ms',
+                style={{ width: 72, height: 72, borderRadius: 4, cursor: 'pointer', transition: 'all 250ms',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                   background: active ? '#141A10' : 'transparent',
                   border: active ? '1px solid rgba(197,151,87,0.2)' : '1px solid rgba(197,151,87,0.06)' }}>
-                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 20, color: active ? '#C59757' : '#5A5550' }}>{r.raceNumber}</div>
-                <div style={{ fontSize: 10, color: '#5A5550', marginTop: 1 }}>{r.fieldSize}h</div>
+                <div style={{ fontFamily: 'var(--font-serif)', fontSize: 26, color: active ? '#C59757' : '#5A5550' }}>{r.raceNumber}</div>
+                <div style={{ fontSize: 12, color: '#5A5550', marginTop: 2 }}>{r.fieldSize}h</div>
               </button>
             );
           })}
@@ -109,27 +109,27 @@ export default function RaceNight() {
             <RaceReplay race={activeRace} />
 
             {/* Results table */}
-            <div className="card-flat" style={{ overflow: 'hidden', marginTop: 24 }}>
-              <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 20, fontWeight: 500, color: '#D6D1CC' }}>Final Results</h3>
+            <div className="card-flat" style={{ overflow: 'hidden', marginTop: 32 }}>
+              <div style={{ padding: '22px 32px', borderBottom: '1px solid rgba(197,151,87,0.06)' }}>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 26, fontWeight: 500, color: '#D6D1CC' }}>Final Results</h3>
               </div>
               {[...activeRace.horses].sort((a, b) => (a.finalPos || 99) - (b.finalPos || 99)).map((horse, i) => {
                 const color = COLORS[activeRace.horses.indexOf(horse) % COLORS.length];
                 return (
                   <div key={horse.name} style={{
-                    display: 'grid', gridTemplateColumns: '40px 40px 1fr 80px 80px',
-                    alignItems: 'center', padding: '12px 24px',
+                    display: 'grid', gridTemplateColumns: '52px 52px 1fr 110px 110px',
+                    alignItems: 'center', padding: '18px 32px', gap: 16,
                     borderBottom: i < activeRace.horses.length - 1 ? '1px solid rgba(197,151,87,0.03)' : 'none',
                   }}>
-                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 18, color: i === 0 ? '#C59757' : '#5A5550' }}>
+                    <div style={{ fontFamily: 'var(--font-serif)', fontSize: 24, color: i === 0 ? '#C59757' : '#5A5550' }}>
                       {horse.finalPos || '—'}
                     </div>
-                    <div style={{ width: 30, height: 30, borderRadius: 4, overflow: 'hidden', border: `1px solid ${color}40` }}>
+                    <div style={{ width: 42, height: 42, borderRadius: 5, overflow: 'hidden', border: `1px solid ${color}40` }}>
                       <img src={getPortrait(horse.name)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
-                    <div style={{ fontSize: 17, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#5A5550' }}>Post {horse.post}</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 16, color: '#8A847E' }}>{horse.odds}</div>
+                    <div style={{ fontSize: 20, fontWeight: 500, color: '#D6D1CC' }}>{horse.name}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, color: '#5A5550' }}>Post {horse.post}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 18, color: '#8A847E' }}>{horse.odds}</div>
                   </div>
                 );
               })}
