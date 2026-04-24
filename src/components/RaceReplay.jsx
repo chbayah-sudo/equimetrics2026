@@ -33,12 +33,8 @@ export default function RaceReplay({ race }) {
   // Assign colors to horses
   const horses = race.horses.map((h, i) => ({ ...h, color: COLORS[i % COLORS.length] }));
 
-  // Sort by current position
-  const sortedHorses = [...horses].sort((a, b) => {
-    const posA = currentData.positions[a.name] || 99;
-    const posB = currentData.positions[b.name] || 99;
-    return posA - posB;
-  });
+  // Keep horses in their original post/entry order so users can track a single horse
+  const sortedHorses = horses;
 
   return (
     <div className="card-flat" style={{ overflow: 'hidden' }}>
@@ -69,7 +65,7 @@ export default function RaceReplay({ race }) {
           // Primary: distance covered (always advances forward across gates)
           const baseProgress = raceProgress * 85 + 5; // all horses span 5% to 90% across the race
           // Secondary: spread grows mid-race so rank differences are visible, collapses at finish
-          const spreadCurve = isFinal ? 0 : 10 * raceProgress * (1 - raceProgress) * 4; // bell curve, peaks at ~10% mid-race
+          const spreadCurve = isFinal ? 0 : 8.5 * raceProgress * (1 - raceProgress) * 4; // bell curve, peaks at ~8.5% mid-race
           const rankSpread = ((position - 1) / Math.max(1, race.fieldSize - 1)) * spreadCurve;
           const barWidth = Math.max(5, baseProgress - rankSpread);
           const isLeader = position === 1;
